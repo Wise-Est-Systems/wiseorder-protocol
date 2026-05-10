@@ -1,0 +1,31 @@
+[package]
+name = "wiseorder_rust_verifier"
+version = "0.1.0"
+edition = "2021"
+description = "First-party independent Rust verifier track for WiseOrder Protocol v0.1.0."
+publish = false
+
+# Independence rule: this crate MUST NOT import or shell out to the Python
+# runtime. Allowed dependencies are general-purpose Rust crates only; nothing
+# named intellagent_*, wiseata_*, or winstack_* may appear here.
+
+[[bin]]
+name = "rust_verifier"
+path = "src/main.rs"
+
+[dependencies]
+# Default feature set on serde_json provides BTreeMap-backed Map<String,Value>
+# (sorted-key iteration) and compact to_string output. We intentionally do
+# NOT enable `preserve_order` — it would break sorted-key canonicalization.
+serde      = { version = "1", features = ["derive"] }
+serde_json = { version = "1", default-features = false, features = ["std"] }
+sha2       = { version = "0.10", default-features = false }
+
+[dev-dependencies]
+serde      = { version = "1", features = ["derive"] }
+serde_json = { version = "1", default-features = false, features = ["std"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1

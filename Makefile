@@ -1,4 +1,4 @@
-.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run
+.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints
 
 PYTHON ?= python3
 
@@ -222,6 +222,19 @@ report-inventory:
 	@echo ""
 	@echo "See reports/canonical/README.md for the canonical/archived rule."
 
+# v0.1 first-party independent Rust verifier track. NOT included in
+# `make ci` per WORK ORDER 012. Verifies vectors + corpus + the three
+# frozen fingerprints via a Rust binary that does not import Python.
+# Spec: docs/release/IMPLEMENTATION_TRACKER.md §2.1.
+rust-verifier-check:
+	cargo test --manifest-path rust_verifier/Cargo.toml --quiet
+	cargo run  --manifest-path rust_verifier/Cargo.toml --quiet -- verify-vectors
+	cargo run  --manifest-path rust_verifier/Cargo.toml --quiet -- verify-corpus
+
+# v0.1 Rust verifier fingerprint check (subset). NOT in `make ci`.
+rust-verifier-fingerprints:
+	cargo run --manifest-path rust_verifier/Cargo.toml --quiet -- fingerprints
+
 # v0.1 dry-run archiver. Prints what files would be moved from live runtime
 # directories into reports/archive/. Modifies nothing. Useful before periodic
 # cleanup. NOT included in `make ci`.
@@ -247,5 +260,5 @@ archive-reports-dry-run:
 	@echo "Would move into: reports/archive/<runtime>/"
 	@echo "Run 'make repo-health' to see current archive counts."
 
-ci: no-pseudocode test conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check
-	@echo "CI: documentation code standard + tooling tests + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape all passed."
+ci: no-pseudocode test conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check
+	@echo "CI: documentation code standard + tooling tests + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier (first-party independent track; cargo test covers all 3 frozen fingerprints) all passed."

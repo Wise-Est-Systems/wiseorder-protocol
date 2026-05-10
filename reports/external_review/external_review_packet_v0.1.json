@@ -1,0 +1,93 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "external_review_packet",
+  "report_version": "1.0",
+  "work_order": "013",
+  "timestamp_utc": "2026-05-10T19:30:00Z",
+  "purpose": "Promote first-party Rust verifier into make ci and publish the minimum external review packet (reviewer-facing summary + quickstart + third-party verifier brief).",
+  "commands_run": [
+    {"command": "cargo test --manifest-path rust_verifier/Cargo.toml",                                    "rc": 0, "result": "PASS — 26 tests"},
+    {"command": "cargo run  --manifest-path rust_verifier/Cargo.toml -- verify-vectors",                  "rc": 0, "result": "PASS — 33/33 vectors"},
+    {"command": "cargo run  --manifest-path rust_verifier/Cargo.toml -- verify-corpus",                   "rc": 0, "result": "PASS — 10/10 corpus entries"},
+    {"command": "cargo run  --manifest-path rust_verifier/Cargo.toml -- fingerprints",                    "rc": 0, "result": "PASS — OVERALL: MATCH"},
+    {"command": "make rust-verifier-check",                                                               "rc": 0, "result": "PASS"},
+    {"command": "make rust-verifier-fingerprints",                                                        "rc": 0, "result": "PASS"},
+    {"command": "make ci",                                                                                "rc": 0, "result": "PASS — 10 stages"},
+    {"command": "make demo",                                                                              "rc": 0, "result": "PASS — 6 steps + 3 fingerprints MATCH"},
+    {"command": "git status --short",                                                                     "rc": 0, "result": "captured pre-commit working tree"}
+  ],
+  "ci_stages_after_promotion": [
+    {"stage": "no-pseudocode",            "result": "PASS"},
+    {"stage": "test",                     "result": "PASS — 271 tests"},
+    {"stage": "conformance",              "result": "PASS — 33 vectors"},
+    {"stage": "interop",                  "result": "PASS — 3 fixtures"},
+    {"stage": "canonicalization-check",   "result": "PASS — 10 corpus entries"},
+    {"stage": "minimal-verifier-check",   "result": "PASS — 33 vectors via Python independent re-derivation"},
+    {"stage": "replay-diff-check",        "result": "PASS — 9 self-check fixtures"},
+    {"stage": "binary-fixture-check",     "result": "PASS — 4 fixtures"},
+    {"stage": "sandbox-escape-check",     "result": "PASS — 29 attempts (25 hostile refused, 4 controls allowed)"},
+    {"stage": "rust-verifier-check",      "result": "PASS — cargo test (26), verify-vectors (33/33), verify-corpus (10/10) — first-party independent track"}
+  ],
+  "make_ci_result": {"rc": 0, "result": "PASS"},
+  "make_demo_result": {"rc": 0, "result": "PASS"},
+  "rust_verifier_result": {
+    "cargo_test_passed": 26,
+    "cargo_test_failed": 0,
+    "verify_vectors": "33/33 PASS",
+    "verify_corpus": "10/10 PASS",
+    "fingerprints_overall": "MATCH",
+    "classification": "FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK",
+    "is_third_party_validation": false
+  },
+  "frozen_fingerprint_results": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "files_created": [
+    "docs/release/EXTERNAL_REVIEW_PACKET_v0.1.md",
+    "docs/release/REVIEW_QUICKSTART.md",
+    "docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md",
+    "reports/external_review/external_review_packet_v0.1.md",
+    "reports/external_review/external_review_packet_v0.1.json"
+  ],
+  "files_modified": [
+    "Makefile (ci target now includes rust-verifier-check; summary message updated)",
+    "README.md (added pointers to the three new review docs and the external-validation status)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "intellagent_runtime/**",
+    "frozen fingerprint values"
+  ],
+  "external_validation_status": "NOT_COMPLETE",
+  "external_validation_components": {
+    "first_party_independent_track_exists": true,
+    "first_party_independent_track_language": "Rust 1.94",
+    "first_party_independent_track_reproduces_all_fingerprints": true,
+    "non_first_party_verifier_exists": false,
+    "external_audit_performed": false,
+    "production_deployment_exists": false
+  },
+  "remaining_gap": "A verifier authored, owned, and operated by a party other than Wise.Est Systems that reproduces all three frozen fingerprints. The Rust track established under WO 012 closes the 'is it re-implementable in another language?' question. It does not close the ownership question. Per docs/release/IMPLEMENTATION_TRACKER.md §1 and docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md, this gap is closed only by an external party publishing a reproducible verifier and submitting per the brief.",
+  "next_build_task": "Seed a real third-party verifier track. The Rust track has established the formula; an external implementer can now follow docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md to build, e.g., a TypeScript or Go verifier under their own repository ownership. The first-party project's role becomes: review submissions, register accepted ones in IMPLEMENTATIONS.md, and maintain the brief.",
+  "overall_result": "PASS"
+}

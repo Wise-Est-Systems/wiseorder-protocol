@@ -111,6 +111,14 @@ make canonicalization-check  # → 10 corpus entries verified
 
 See [`SPEC_LOCK_v0.1.md`](./SPEC_LOCK_v0.1.md), [`docs/release/CROSS_MACHINE_REPLAY_REPORT.md`](./docs/release/CROSS_MACHINE_REPLAY_REPORT.md), [`docs/release/IMPLEMENTATION_TRACKER.md`](./docs/release/IMPLEMENTATION_TRACKER.md), and [`docs/audits/AUDIT_SCOPE_v0.1.md`](./docs/audits/AUDIT_SCOPE_v0.1.md) for the freeze rules, independent-implementation requirements, and the surface map for hostile review.
 
+**For external reviewers and prospective third-party implementers:**
+
+- [`docs/release/EXTERNAL_REVIEW_PACKET_v0.1.md`](./docs/release/EXTERNAL_REVIEW_PACKET_v0.1.md) — what v0.1.0 is, what it isn't, what's implemented, what's first-party only, and what counts as successful external validation.
+- [`docs/release/REVIEW_QUICKSTART.md`](./docs/release/REVIEW_QUICKSTART.md) — commands only; reproduce CI, demo, and fingerprints from a cold clone.
+- [`docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md`](./docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md) — formal requirements + disqualification conditions for a third-party verifier submission.
+
+External-validation status: **NOT_COMPLETE**. The Rust verifier under `rust_verifier/` is a `FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK`, not third-party validation.
+
 The operational governed-execution demo (proposer → review → execution → refusal-or-approval → replay manifest):
 
 ```bash

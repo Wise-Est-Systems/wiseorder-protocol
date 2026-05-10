@@ -1,0 +1,118 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "rust_verifier_track",
+  "report_version": "1.0",
+  "work_order": "012",
+  "timestamp_utc": "2026-05-10T19:00:00Z",
+  "rust_toolchain_version": "cargo 1.94.1 (29ea6fb6a 2026-03-24); rustc 1.94.1 (e408947bf 2026-03-25)",
+  "rust_dependencies_used": [
+    {"name": "serde",      "version": "1",    "features": ["derive"]},
+    {"name": "serde_json", "version": "1",    "features": ["std"], "note": "default-features = false; preserve_order is INTENTIONALLY NOT enabled because the canonicalization scheme requires sorted-key Map<String, Value> iteration"},
+    {"name": "sha2",       "version": "0.10", "features": []}
+  ],
+  "vectors_discovered": 33,
+  "vectors_passed": 33,
+  "vectors_failed": 0,
+  "corpus_entries_discovered": 10,
+  "corpus_entries_passed": 10,
+  "corpus_entries_failed": 0,
+  "fingerprint_results": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "parity_status": "FULL_PARITY_v0.1.0",
+  "python_runtime_imported": false,
+  "first_party_independence_status": "FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK",
+  "third_party_validation_status": false,
+  "tests": {
+    "unit_tests": {
+      "jcs_module": 6,
+      "vectors_module": 4,
+      "fingerprints_module": 3,
+      "total": 13
+    },
+    "integration_tests": 13,
+    "total_tests": 26,
+    "tests_passed": 26,
+    "tests_failed": 0,
+    "covered_behaviors": [
+      "reads all vectors",
+      "rejects malformed vector structure",
+      "rejects unsupported protocol version",
+      "reproduces all vector verdicts",
+      "reads all canonicalization corpus entries",
+      "reproduces corpus hashes",
+      "reproduces vectors suite fingerprint",
+      "reproduces manifests suite fingerprint",
+      "reproduces corpus fingerprint",
+      "produces deterministic output across two runs",
+      "does not import, shell out to, or depend on Python runtime"
+    ]
+  },
+  "deterministic_runs": {
+    "fingerprints_two_runs_byte_identical": true,
+    "verify_vectors_two_runs_byte_identical": true,
+    "verify_corpus_two_runs_byte_identical": true
+  },
+  "subcommands_run": [
+    {"cmd": "cargo test --manifest-path rust_verifier/Cargo.toml", "rc": 0},
+    {"cmd": "cargo run  --manifest-path rust_verifier/Cargo.toml -- verify-vectors", "rc": 0},
+    {"cmd": "cargo run  --manifest-path rust_verifier/Cargo.toml -- verify-corpus",  "rc": 0},
+    {"cmd": "cargo run  --manifest-path rust_verifier/Cargo.toml -- fingerprints",   "rc": 0},
+    {"cmd": "make rust-verifier-check",        "rc": 0},
+    {"cmd": "make rust-verifier-fingerprints", "rc": 0},
+    {"cmd": "make ci",                         "rc": 0},
+    {"cmd": "make demo",                       "rc": 0}
+  ],
+  "makefile_targets_added": [
+    {"target": "rust-verifier-check",        "in_ci": false, "by_design": true, "reason": "WORK ORDER 012 §required_makefile_targets — do not add to make ci yet"},
+    {"target": "rust-verifier-fingerprints", "in_ci": false, "by_design": true, "reason": "same"}
+  ],
+  "files_created": [
+    "rust_verifier/Cargo.toml",
+    "rust_verifier/src/main.rs",
+    "rust_verifier/src/jcs.rs",
+    "rust_verifier/src/vectors.rs",
+    "rust_verifier/src/fingerprints.rs",
+    "rust_verifier/tests/integration.rs",
+    "reports/rust_verifier/rust_verifier_v0.1.0.md",
+    "reports/rust_verifier/rust_verifier_v0.1.0.json"
+  ],
+  "files_modified": [
+    "Makefile"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "intellagent_runtime/**",
+    "tools/**"
+  ],
+  "known_limitations": [
+    "Independence is logical (separate language, no Python imports, derived from spec) but not organizational — the crate ships in the same repository under the same first-party owner. This does NOT constitute third-party validation per IMPLEMENTATION_TRACKER.md §1.",
+    "Canonicalization parity is exercised against the 10 committed corpus entries; the corpus does not include every JCS edge case (e.g., very small/large floats requiring shortest-roundtrip, non-BMP characters interacting with UTF-16 surrogate-pair ordering, control-char escapes inside string values). Out-of-corpus inputs MAY diverge from the Python verifier; if observed, that divergence is a Rust-vs-Python canonicalization gap to be filed and fixed, not a v0.1.0 protocol issue.",
+    "The CLI reads from a hard-coded repo-root layout (parent of CARGO_MANIFEST_DIR). It does not accept a --repo-root flag yet.",
+    "Number serialization relies on serde_json's default Display for serde_json::Number, which uses Ryu / shortest-roundtrip; this matches Python repr for every float in the current corpus but is not exhaustively cross-validated.",
+    "The Rust verifier is not yet wired into make ci, per WORK ORDER 012 prohibition. Promotion is a separate work order."
+  ],
+  "largest_remaining_external_validation_gap": "True third-party validation: a verifier authored, owned, and operated by a non-first-party party (i.e., not Wise.Est Systems). The Rust track established here demonstrates that the spec is implementable in a second language from a different module surface, but it does not change ownership. See IMPLEMENTATION_TRACKER.md §1 and §6.",
+  "next_code_task": "Either (a) promote the Rust verifier into make ci once stability is observed across at least one more cold run, or (b) seed an actual third-party implementation track (TypeScript or Go) under an independent repository owned by a non-first-party party, per IMPLEMENTATION_TRACKER.md §2.{2,3}.",
+  "overall_result": "PASS"
+}

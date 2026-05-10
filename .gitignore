@@ -47,3 +47,9 @@ dist/
 # Canonical evidence is kept under reports/<runtime>/<runtime>_v0.{1,2}.{json,md}
 # and at the top of reports/.
 reports/archive/
+
+# Rust verifier build artifacts (WORK ORDER 012). Sources under rust_verifier/
+# (Cargo.toml, src/, tests/) ARE tracked; the build cache is not.
+rust_verifier/target/
+rust_verifier/Cargo.lock
+**/*.rs.bk
