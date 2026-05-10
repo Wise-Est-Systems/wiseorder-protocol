@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WiseOrder Protocol v0.1.0</title>
+<meta name="description" content="WiseOrder Protocol — governed execution infrastructure: replayable, deterministic, bounded, verifiable.">
+<style>
+  :root {
+    --fg: #111;
+    --muted: #555;
+    --bg: #fff;
+    --rule: #ddd;
+    --code-bg: #f6f6f6;
+    --link: #0a4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font: 16px/1.55 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    color: var(--fg);
+    background: var(--bg);
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 6rem;
+  }
+  h1 { font-size: 1.6rem; margin: 0 0 0.5rem; }
+  h2 { font-size: 1.05rem; margin: 2.5rem 0 0.75rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  h3 { font-size: 0.95rem; margin: 1.25rem 0 0.5rem; }
+  p, li { color: var(--fg); }
+  a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
+  a:hover { text-decoration: none; }
+  code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; font-size: 0.9em; }
+  pre { background: var(--code-bg); padding: 0.75rem 1rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.5; border-radius: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 0.5rem 0 1rem; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.5rem 0.6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th { font-weight: 600; }
+  ul, ol { padding-left: 1.4rem; }
+  li { margin: 0.2rem 0; }
+  .tagline { color: var(--muted); margin: 0 0 1.5rem; font-size: 0.95rem; }
+  .four { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.25rem 0 1.5rem; }
+  .four span { background: var(--code-bg); padding: 4px 10px; border-radius: 3px; font-size: 0.85rem; }
+  .label { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 0.78rem; font-weight: 600; }
+  .label.impl { background: #e6f4ea; color: #1e5b34; }
+  .label.partial { background: #fff4cc; color: #8a6500; }
+  .label.policy { background: #eee; color: #555; }
+  .label.future { background: #e8eaff; color: #2a3a8a; }
+  .label.unsupported { background: #fde8e8; color: #8a1f1f; }
+  footer { margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); color: var(--muted); font-size: 0.85rem; }
+  footer p { margin: 0.4rem 0; }
+</style>
+</head>
+<body>
+
+<h1>WiseOrder Protocol v0.1.0</h1>
+<p class="tagline">Governed execution infrastructure for systems where cognition becomes consequence.</p>
+<div class="four">
+  <span>Replayable</span>
+  <span>Deterministic</span>
+  <span>Bounded</span>
+  <span>Verifiable</span>
+</div>
+
+<p>WiseOrder is a protocol layer for classifying claims, assigning verification regimes, governing action, and producing auditable epistemic artifacts. It is not a model. It is not a runtime. It is the rules that an implementation MUST satisfy.</p>
+
+<p>This site is informational. The authoritative artifacts are <a href="https://github.com/" rel="noopener">in the repository</a>: the specification, the vector suite, the schemas, the conformance report, and the reference implementation.</p>
+
+<h2>Specification</h2>
+<p>v0.1.0 canonical text:</p>
+<ul>
+  <li><a href="../SPEC.md"><code>SPEC.md</code></a> — the kernel specification.</li>
+  <li><a href="../SPEC_LOCK_v0.1.md"><code>SPEC_LOCK_v0.1.md</code></a> — frozen reference semantics; defines the version-increment rule.</li>
+  <li><a href="../STATUS-REGISTRY.md"><code>STATUS-REGISTRY.md</code></a> — per-class status tokens.</li>
+  <li><a href="../ARTIFACTS.md"><code>ARTIFACTS.md</code></a> — JSON schemas for Class A / B / C / D artifacts.</li>
+</ul>
+<p>The four-class taxonomy:</p>
+<table>
+  <tr><th>Class</th><th>Regime</th><th>Allowed verdicts</th></tr>
+  <tr><td>A</td><td>Deterministic verification</td><td><code>VERIFIED</code> · <code>TAMPERED</code> · <code>INVALID</code></td></tr>
+  <tr><td>B</td><td>Instrumented empirical verification</td><td><code>SUPPORTED</code> · <code>CONFLICTED</code> · <code>INSUFFICIENT_EVIDENCE</code> · <code>INVALID</code></td></tr>
+  <tr><td>C</td><td>Protocol-bound consensus</td><td><code>CONSENSUS_PENDING</code> · <code>CONSENSUS_VALID</code> · <code>CONSENSUS_FAILED</code> · <code>INVALID</code></td></tr>
+  <tr><td>D</td><td>Interpretive governance</td><td><code>CONDUCT_VALID</code> · <code>CONDUCT_INVALID</code></td></tr>
+</table>
+
+<h2>Vectors</h2>
+<p>33 conformance vectors, all passing in the reference implementation: 23 baseline + 10 adversarial. Vectors determine conformance; prose explains it.</p>
+<p>Suite fingerprint at v0.1.0 lock:</p>
+<pre>vectors_suite_sha256: sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f</pre>
+<p>Adversarial vectors cover canonicalization corruption, replay drift, signature mismatch, authority escalation, invalid lifecycle transition, forged closure chain, malformed manifests, replay poisoning, forbidden coupling, and out-of-order transitions.</p>
+<p>See <a href="../vectors/"><code>vectors/</code></a>.</p>
+
+<h2>Verifier</h2>
+<p>Reference implementation: <a href="../intellagent_runtime/"><code>intellagent_runtime/</code></a> (Python, ~2,574 LoC). Runtime + tooling: <a href="../tools/"><code>tools/</code></a> (~5,100 LoC).</p>
+<p>To reproduce conformance from a clean checkout:</p>
+<pre>python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+make conformance
+make interop
+make canonicalization-check</pre>
+<p>An independent implementation MUST reproduce the suite fingerprint above and the corpus fingerprint below, byte-for-byte:</p>
+<pre>corpus_sha256:    sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09
+manifests_sha256: sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29</pre>
+
+<h2>Demo</h2>
+<p>The pipeline runtime executes a fully governed workflow: <strong>proposer → review gate → bounded executor</strong>, with sealed refusal artifacts at every refusal site.</p>
+<pre>make pipeline-check         # 8 fixtures, both branches
+make pipeline-run-fixture   # one canonical valid run, end-to-end</pre>
+<p>Eight live fixtures cover both branches:</p>
+<ul>
+  <li>Safe: valid pipeline executes admitted commands; produces replayable execution manifest.</li>
+  <li>Unsafe: reviewer rejection, mutated proposal hash, forbidden command, wrong executor identity. Each produces a sealed refusal artifact; the executor is NOT invoked.</li>
+</ul>
+<p>See <a href="../docs/runtime/OPERATIONAL_DEMO_v0.1.md"><code>docs/runtime/OPERATIONAL_DEMO_v0.1.md</code></a> for live captured hashes.</p>
+
+<h2>Interoperability</h2>
+<p>3 interop fixtures bind declared implementations to vector outputs:</p>
+<ul>
+  <li><code>winstack-class-a-valid-001</code> · Winstack · Class A</li>
+  <li><code>winstack-class-b-valid-001</code> · Winstack · Class B</li>
+  <li><code>wiseata-class-b-valid-001</code> · WISEATA · Class B</li>
+</ul>
+<p>All implementations declared so far are first-party. External validation requires an independent implementation. See <a href="../docs/release/IMPLEMENTATION_TRACKER.md"><code>docs/release/IMPLEMENTATION_TRACKER.md</code></a>.</p>
+
+<h2>Conformance</h2>
+<p>Conformance is class-scoped, not binary. An implementation MAY be conformant for one or more classes. The token <code>PARTIALLY CONFORMANT</code> is NOT a protocol status.</p>
+<p>v0.1.0 status:</p>
+<table>
+  <tr><th>Item</th><th>Value</th></tr>
+  <tr><td>Vectors</td><td>33 published; 100% pass</td></tr>
+  <tr><td>Implementations declared</td><td>2 (both first-party; both <code>NOT_AUDITED</code>)</td></tr>
+  <tr><td>Cross-machine slots closed</td><td>1 of 3 (macOS)</td></tr>
+  <tr><td>Independent implementations</td><td>0</td></tr>
+  <tr><td>External audits</td><td>0</td></tr>
+  <tr><td>Production deployments</td><td>0</td></tr>
+</table>
+
+<h2>Implementation status</h2>
+<p>The <a href="../docs/audits/AUDIT_SCOPE_v0.1.md"><code>docs/audits/AUDIT_SCOPE_v0.1.md</code></a> document is the authoritative surface map. Summary:</p>
+<table>
+  <tr><th>Surface</th><th>Status</th></tr>
+  <tr><td>Class A / B / C / D verification kernel</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>RFC 8785 JCS canonicalization</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>Commit-chain verification (CC1–CC4)</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>Refusal sealing</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>Authorization gate (AG1–AG3)</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>Pipeline runtime (proposer → review → executor)</td><td><span class="label impl">implemented</span></td></tr>
+  <tr><td>OS isolation (Linux)</td><td><span class="label partial">partial</span></td></tr>
+  <tr><td>Workforce execution kernel</td><td><span class="label partial">partial</span></td></tr>
+  <tr><td>Authority / Correction / Replay / Trust / Validation Laws</td><td><span class="label policy">policy-only</span></td></tr>
+  <tr><td>Forbidden Surfaces, Waiver Mechanism</td><td><span class="label policy">policy-only</span></td></tr>
+  <tr><td>Workflow / Input grammars</td><td><span class="label policy">policy-only</span></td></tr>
+  <tr><td>Adoption Ladder, Dependency Gradient</td><td><span class="label policy">policy-only</span></td></tr>
+  <tr><td>Revocation, supersession, consensus reversal, protocol negotiation</td><td><span class="label future">future</span></td></tr>
+  <tr><td>Networked execution, multi-tenant isolation, hardware attestation</td><td><span class="label unsupported">unsupported</span></td></tr>
+  <tr><td>AGI, consciousness, autonomy</td><td><span class="label unsupported">unsupported</span></td></tr>
+</table>
+
+<h2>Known limitations</h2>
+<ol>
+  <li>No independent implementation. Both declared implementations are first-party.</li>
+  <li>No external audit. Both implementations report <code>audit_status: NOT_AUDITED</code>.</li>
+  <li>No production deployment, no operational scars, no adversarial load.</li>
+  <li>Cross-machine replay verified only on macOS. Linux and second-machine slots are open.</li>
+  <li>OS isolation is macOS-only in v0.1.0.</li>
+  <li>Signing is out-of-band. v0.1.0 does not specify a signature mechanism.</li>
+  <li>Roughly 30% of the spec corpus is backed by executing implementation; the remaining 70% is canon written ahead of code.</li>
+  <li>Vector suite is breadth-oriented (33 vectors), not exhaustive.</li>
+</ol>
+<p>This list is published deliberately. A reviewer who restates one of these items has not found a new finding.</p>
+
+<h2>What this is not</h2>
+<ul>
+  <li>Not a model. The protocol does not contain a neural network.</li>
+  <li>Not a network service. The reference runtime is single-host with no outbound HTTP.</li>
+  <li>Not a moral system. WiseOrder governs the <em>form</em> a claim must take to be admissible; substantive correctness lives elsewhere.</li>
+  <li>Not a claim of AGI, consciousness, autonomy, or universal trust. Every Non-Goals section in every document says so explicitly.</li>
+</ul>
+
+<footer>
+  <p>v0.1.0 · 2026-05-10 · adopted as draft canon on 2026-05-06 · architecture status: locked</p>
+  <p>Authoritative artifacts live in the repository. This site is informational. Where this site and the repository disagree, the repository governs.</p>
+</footer>
+
+</body>
+</html>

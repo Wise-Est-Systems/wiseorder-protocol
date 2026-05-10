@@ -1,0 +1,93 @@
+{
+  "fixtures_checked": [
+    {
+      "artifact_class": "A",
+      "fixture_id": "winstack-class-a-valid-001",
+      "implementation": "Winstack"
+    },
+    {
+      "artifact_class": "B",
+      "fixture_id": "winstack-class-b-valid-001",
+      "implementation": "Winstack"
+    },
+    {
+      "artifact_class": "B",
+      "fixture_id": "wiseata-class-b-valid-001",
+      "implementation": "WISEATA"
+    }
+  ],
+  "interop_results": [
+    {
+      "aligned_vectors": [
+        "class-a-valid-wiseproof"
+      ],
+      "artifact_class": "A",
+      "checks": {
+        "aligned_vectors_class_match": true,
+        "aligned_vectors_exist": true,
+        "artifact_sha256_format": true,
+        "class_in_implementation_classes": true,
+        "manifest_serialization_stable": true,
+        "protocol_version_match": true,
+        "wiseata_class_a_prohibition": true
+      },
+      "failures": [],
+      "fixture_id": "winstack-class-a-valid-001",
+      "implementation": "Winstack",
+      "manifest_path": "interop/fixtures/winstack/winstack-class-a-valid-001.manifest.json",
+      "manifest_sha256": "sha256:926908f3f6ddf9b8f1c426e76cd654e1291d2c28eaf5cd54c8f00286549c3331",
+      "passed": true
+    },
+    {
+      "aligned_vectors": [
+        "class-b-valid-wiseexp"
+      ],
+      "artifact_class": "B",
+      "checks": {
+        "aligned_vectors_class_match": true,
+        "aligned_vectors_exist": true,
+        "artifact_sha256_format": true,
+        "class_in_implementation_classes": true,
+        "manifest_serialization_stable": true,
+        "protocol_version_match": true,
+        "wiseata_class_a_prohibition": true
+      },
+      "failures": [],
+      "fixture_id": "winstack-class-b-valid-001",
+      "implementation": "Winstack",
+      "manifest_path": "interop/fixtures/winstack/winstack-class-b-valid-001.manifest.json",
+      "manifest_sha256": "sha256:744047a62ccd56dbbbe9d8e7d88b4d169da59e2a41d28d150f13910e1acd9943",
+      "passed": true
+    },
+    {
+      "aligned_vectors": [
+        "class-b-valid-wiseexp"
+      ],
+      "artifact_class": "B",
+      "checks": {
+        "aligned_vectors_class_match": true,
+        "aligned_vectors_exist": true,
+        "artifact_sha256_format": true,
+        "class_in_implementation_classes": true,
+        "manifest_serialization_stable": true,
+        "protocol_version_match": true,
+        "wiseata_class_a_prohibition": true
+      },
+      "failures": [],
+      "fixture_id": "wiseata-class-b-valid-001",
+      "implementation": "WISEATA",
+      "manifest_path": "interop/fixtures/wiseata/wiseata-class-b-valid-001.manifest.json",
+      "manifest_sha256": "sha256:240369c7425c28417f0357588fbd0b660fa15b9050ef81c72067ff6cd5a70bfa",
+      "passed": true
+    }
+  ],
+  "manifests_suite_sha256": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+  "overall_status": "PASS",
+  "protocol": "wiseorder",
+  "summary": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "version": "0.1.0"
+}

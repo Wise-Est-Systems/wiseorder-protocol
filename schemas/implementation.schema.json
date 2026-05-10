@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wiseorder/0.1.0/implementation.schema.json",
+  "title": "WiseOrder Protocol v0.1.0 Implementation Declaration",
+  "description": "Structural schema for an implementation declaration as published in IMPLEMENTATIONS.md. Cross-declaration rules (WISEATA MUST NOT declare Class A under v0.1.0; CONFORMANT requires evidence pointing at BOTH a passing conformance report AND a passing interop report; FAILED requires notes) are enforced by tools/validate_implementations.py in addition to this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "implementation",
+    "protocol",
+    "version",
+    "classes_supported",
+    "audit_status"
+  ],
+  "properties": {
+    "implementation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol": { "const": "wiseorder" },
+    "version": { "const": "0.1.0" },
+    "classes_supported": {
+      "type": "array",
+      "items": { "enum": ["A", "B", "C", "D"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "audit_status": {
+      "enum": ["NOT_AUDITED", "CONFORMANT", "FAILED"]
+    },
+    "notes": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["conformance_report", "interop_report"],
+      "properties": {
+        "conformance_report": { "type": "string", "minLength": 1 },
+        "interop_report": { "type": "string", "minLength": 1 },
+        "report_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "audited_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "audit_status": { "const": "CONFORMANT" } },
+        "required": ["audit_status"]
+      },
+      "then": { "required": ["evidence"] }
+    },
+    {
+      "if": {
+        "properties": { "audit_status": { "const": "FAILED" } },
+        "required": ["audit_status"]
+      },
+      "then": { "required": ["notes"] }
+    }
+  ]
+}

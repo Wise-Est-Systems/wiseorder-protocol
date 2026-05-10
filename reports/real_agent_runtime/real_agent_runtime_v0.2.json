@@ -1,0 +1,123 @@
+{
+  "all_passed": true,
+  "case_count": 10,
+  "execute_allowed_commands": [
+    "pwd",
+    "ls",
+    "find",
+    "cat",
+    ".venv/bin/python tools/check_no_pseudocode.py",
+    ".venv/bin/python tools/check_workforce.py",
+    ".venv/bin/python tools/real_agent_runtime.py check",
+    "make no-pseudocode",
+    "make workforce-check",
+    "make real-agent-check"
+  ],
+  "execute_output_byte_cap": 65536,
+  "execute_self_check_results": [
+    {
+      "case": "execute_allowed_command_succeeds",
+      "command_results_len": 1,
+      "exit_status": 0,
+      "first_exit": 0,
+      "first_status": "ok",
+      "pass": true,
+      "repo_unchanged": true
+    },
+    {
+      "blocked_count": 3,
+      "case": "forbidden_command_blocked_before_subprocess",
+      "pass": true,
+      "repo_unchanged": true,
+      "statuses": [
+        "blocked",
+        "blocked",
+        "blocked"
+      ]
+    },
+    {
+      "case": "command_timeout_recorded",
+      "duration_ms": 2,
+      "pass": true,
+      "repo_unchanged": true,
+      "status": "timed_out",
+      "timed_out": true
+    },
+    {
+      "case": "wrong_agent_identity_refused",
+      "codes": [
+        "assigned_to_mismatch"
+      ],
+      "pass": true
+    },
+    {
+      "case": "drafted_work_order_refused",
+      "codes": [
+        "status_not_admissible"
+      ],
+      "pass": true
+    },
+    {
+      "case": "closed_refused_unless_replay_mode",
+      "pass": true,
+      "refused_codes": [
+        "status_not_admissible"
+      ],
+      "replay_mode_set": true,
+      "replay_status": "ok"
+    },
+    {
+      "case": "missing_allowed_files_refused",
+      "codes": [
+        "missing_allowed_files"
+      ],
+      "pass": true
+    },
+    {
+      "case": "missing_forbidden_files_refused",
+      "codes": [
+        "missing_forbidden_files"
+      ],
+      "pass": true
+    },
+    {
+      "case": "source_repo_unchanged_after_execute",
+      "pass": true,
+      "repo_fp_after": "sha256:59638ebdc51fa8d14667eeafdf193e52a83099f22cce0e85ae8c93c8a9574e8e",
+      "repo_fp_before": "sha256:59638ebdc51fa8d14667eeafdf193e52a83099f22cce0e85ae8c93c8a9574e8e"
+    },
+    {
+      "case": "manifest_records_stdout_stderr_exit_duration_cwd",
+      "keys_present": [
+        "cwd",
+        "duration_ms",
+        "exit_code",
+        "stderr",
+        "stdout"
+      ],
+      "pass": true
+    }
+  ],
+  "execute_timeout_default_s": 60.0,
+  "execute_timeout_hard_cap_s": 300.0,
+  "failed_count": 0,
+  "forbidden_command_patterns": [
+    "sudo",
+    "curl",
+    "wget",
+    "ssh",
+    "scp",
+    "git push",
+    "git reset --hard",
+    "git clean",
+    "rm -rf",
+    "chmod",
+    "chown",
+    "open ",
+    "http://",
+    "https://"
+  ],
+  "passed_count": 10,
+  "runtime_version": "v0.2",
+  "timestamp": "2026-05-09T00:48:06Z"
+}

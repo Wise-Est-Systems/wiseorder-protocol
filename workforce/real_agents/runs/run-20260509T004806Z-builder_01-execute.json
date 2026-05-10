@@ -1,0 +1,75 @@
+{
+  "agent_id": "builder-01",
+  "command_results": [
+    {
+      "argv": [
+        "make",
+        "no-pseudocode"
+      ],
+      "command": "make no-pseudocode",
+      "cwd": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260509T004806Z-builder_01-execute-xbqpymuz",
+      "duration_ms": 2,
+      "env_keys": [
+        "LANG",
+        "LC_ALL",
+        "PATH"
+      ],
+      "error": "command exceeded 0.001s wall-clock cap",
+      "exit_code": null,
+      "status": "timed_out",
+      "stderr": "",
+      "stderr_truncated": false,
+      "stdout": "",
+      "stdout_truncated": false,
+      "timed_out": true,
+      "timeout_s": 0.001,
+      "timestamp_end": "2026-05-09T00:48:07Z",
+      "timestamp_start": "2026-05-09T00:48:07Z"
+    }
+  ],
+  "commands_allowed": [
+    "make no-pseudocode"
+  ],
+  "commands_attempted": [
+    "make no-pseudocode"
+  ],
+  "commands_blocked": [],
+  "containment_warnings": [],
+  "dry_run": false,
+  "env_keys": [
+    "LANG",
+    "LC_ALL",
+    "PATH"
+  ],
+  "exit_status": 1,
+  "fallback_policy_only": true,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [],
+  "gates_run": [],
+  "mode": "execute",
+  "network_denied_by_strategy": false,
+  "os_level_isolation_active": false,
+  "policy_violations": [
+    {
+      "code": "command_timed_out",
+      "command": "make no-pseudocode",
+      "reason": "command exceeded 0.001s wall-clock cap"
+    }
+  ],
+  "replay_mode": false,
+  "repo_fingerprint_after": "sha256:59638ebdc51fa8d14667eeafdf193e52a83099f22cce0e85ae8c93c8a9574e8e",
+  "repo_fingerprint_before": "sha256:59638ebdc51fa8d14667eeafdf193e52a83099f22cce0e85ae8c93c8a9574e8e",
+  "resource_limits_applied": [],
+  "run_id": "run-20260509T004806Z-builder_01-execute",
+  "runtime_version": "v0.1",
+  "sandbox_files_changed": [],
+  "sandbox_fingerprint_after": "sha256:abe36de360d91954ea222b73554f7ee076da2bd5709098098ded9dc825829151",
+  "sandbox_fingerprint_before": "sha256:abe36de360d91954ea222b73554f7ee076da2bd5709098098ded9dc825829151",
+  "sandbox_path": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260509T004806Z-builder_01-execute-xbqpymuz",
+  "sandbox_strategy": "policy-only",
+  "timestamp_end": "2026-05-09T00:48:07Z",
+  "timestamp_start": "2026-05-09T00:48:06Z",
+  "work_order_id": "WO-FIX-EXECUTE-001"
+}

@@ -1,0 +1,14 @@
+work_order_id: "WO-FIX-PROPOSER-NORATIONALE-005"
+status: "approved"
+assigned_to: "canon_guardian-01"
+objective: ""
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+forbidden_files:
+  - "runtime/**"
+  - "vectors/**"
+  - "intellagent_runtime/**"
+required_gates:
+  - "make no-pseudocode"

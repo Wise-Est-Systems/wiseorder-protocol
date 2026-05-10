@@ -1,0 +1,106 @@
+# WORK ORDER — WO-2026-05-07-003 (CLOSED)
+# Foundation Milestone Release (release + continuity operation only)
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md.
+#
+# Closure note: this work order required no amendment of allowed_files or
+# forbidden_files. All recorded deviations were either non-forbidden reads or
+# environment observations and did not require a human-owner waiver. The
+# original drafted/approved/assigned content (objective, allowed_files,
+# forbidden_files, constraints, expected_outputs, required_gates,
+# rollback_plan, human_approval_required) is preserved verbatim per
+# WORKFORCE-EXECUTION-RUNTIME-v0.1 §21 immutability. Only `status` and
+# `status_history` are extended at closure.
+
+work_order_id: "WO-2026-05-07-003"
+agent_role: "release"
+assigned_to: "release-01"
+objective: "Release the foundation-milestone bundle: roadmaps, translation layer, workforce runtime, sandbox stress suite, hardening v0.2, supporting reports, validator changes, and Makefile changes — all already implemented under prior actions — and produce the milestone report at reports/MILESTONE-FOUNDATION-v0.1.md."
+
+allowed_files:
+  - "MASTER-ROADMAP-v0.1.md"
+  - "TRANSLATION-LAYER-v0.1.md"
+  - "WORKFORCE-EXECUTION-RUNTIME-v0.1.md"
+  - "WORKFORCE-SANDBOX-STRESS-v0.1.md"
+  - "WORKFORCE-HARDENING-v0.2.md"
+  - "tools/check_workforce.py"
+  - "tools/workforce_sandbox_stress.py"
+  - "Makefile"
+  - "workforce/**"
+  - "reports/**"
+
+forbidden_files:
+  - "SPEC.md"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "intellagent_runtime/**"
+  - "tests/**"
+  - "interop/**"
+  - "schemas/**"
+
+constraints:
+  - "release-and-continuity operation only"
+  - "no new runtime behavior"
+  - "no new validator semantics"
+  - "no new governance semantics"
+  - "no new canonicalization semantics"
+  - "no new protocol primitives"
+  - "no edits to existing runtime, vectors, canonicalization, tests, interop, or schemas"
+  - "all artifacts in allowed_files were authored under prior work orders or direct human-owner authoring actions; this order does not modify them, only bundles them"
+
+expected_outputs:
+  - "reports/MILESTONE-FOUNDATION-v0.1.md"
+  - "workforce/work_orders/open/WO-2026-05-07-003.yaml"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make workforce-stress"
+  - "make ci"
+
+rollback_plan:
+  - "delete reports/MILESTONE-FOUNDATION-v0.1.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-003.yaml to workforce/work_orders/rejected/WO-2026-05-07-003.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-003/postmortem.md"
+  - "no other artifacts are touched by rollback; the prior milestone artifacts remain in place because they were authored under prior actions"
+
+human_approval_required: true
+
+status: "closed"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T08:00:00Z"
+    note: "Drafted by human owner; release-and-continuity work order for the foundation milestone."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T08:00:00Z"
+    note: "Approved by human owner concurrent with drafting; release role; no implementation impact; awaiting execution against the four required gates."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T08:00:00Z"
+    note: "Assigned to identity release-01 for execution of the gate sequence and production of the milestone report."
+  - state: "executed"
+    actor: "release-01"
+    timestamp: "2026-05-07T08:30:00Z"
+    note: "Release-01 confirmed existence and integrity of the bundled artifacts (MASTER-ROADMAP-v0.1.md, TRANSLATION-LAYER-v0.1.md, WORKFORCE-EXECUTION-RUNTIME-v0.1.md, WORKFORCE-SANDBOX-STRESS-v0.1.md, WORKFORCE-HARDENING-v0.2.md, tools/check_workforce.py, tools/workforce_sandbox_stress.py, Makefile changes, workforce/ tree) and verified that reports/MILESTONE-FOUNDATION-v0.1.md was produced under prior authoring actions consistent with the work order's release-and-continuity scope. No bundled artifact was modified; the action is bundling and validation only."
+  - state: "self-verified"
+    actor: "release-01"
+    timestamp: "2026-05-08T00:42:00Z"
+    note: "Self-verification block written at workforce/action_logs/WO-2026-05-07-003-release.self_verification.md. All ten questions answered explicitly; no scope violations against allowed_files on writes; no reads of forbidden_files; no semantic drift; no canon alteration; no security-posture change; risk notes disclosed in advance of gate execution."
+  - state: "gate-checked"
+    actor: "release-01"
+    timestamp: "2026-05-08T00:43:54Z"
+    note: "Required gates run under the canonical interpreter PYTHON=.venv/bin/python: make no-pseudocode (exit 0; 42 markdown files scanned; no pseudocode markers); make workforce-check (exit 0; 3 work orders, 2 action logs at run, 1 closed); make workforce-stress (exit 0; 900 deterministic checks; coverage_gap=0; cross-sandbox identity holds); make ci (exit 0; 135/135 tests; 23/23 vectors; 3/3 interop fixtures; canonicalization corpus_sha256 sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09 stable). Captured in workforce/action_logs/WO-2026-05-07-003-release.yaml."
+  - state: "reviewed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T00:48:00Z"
+    note: "Human owner reviewed action log, self-verification block, and gate outputs. Reviewer Agent independent signoff is recorded as a known v0.1 enforcement gap per the WO-2026-05-07-001 operational lesson L-1 fallback (human-owner-as-reviewer when no second reviewer identity exists). No deviation requires amendment of allowed_files or forbidden_files; the reads recorded as deviations are non-forbidden top-level documents and the make-ci environment observation is operational, not architectural."
+  - state: "human_approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T00:50:00Z"
+    note: "Human owner grants closure approval on the basis of: milestone artifact reports/MILESTONE-FOUNDATION-v0.1.md exists and bundles the artifacts named in allowed_files; action log and self-verification are complete; required gates green at execution time and re-runnable at closure time; no bundled artifact was modified; rollback plan intact; closure summary to be written at workforce/reports/WO-2026-05-07-003-closure-summary.md."
+  - state: "closed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T00:52:00Z"
+    note: "Work order closed. File moved from workforce/work_orders/open/ to workforce/work_orders/closed/. Closure summary at workforce/reports/WO-2026-05-07-003-closure-summary.md. Closure action log at workforce/action_logs/WO-2026-05-07-003-closure.yaml. Predecessor execution log at workforce/action_logs/WO-2026-05-07-003-release.yaml. Replay continuity preserved: every state transition recorded with actor, timestamp, and note; both action logs reference each other by id."

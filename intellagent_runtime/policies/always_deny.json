@@ -1,0 +1,5 @@
+{
+  "source_id": "always_deny",
+  "kind": "always_deny",
+  "rationale": "Test policy: refuses every action it is asked to authorize. Used to verify that the authorization gate honors source policy independently of kernel verdicts."
+}

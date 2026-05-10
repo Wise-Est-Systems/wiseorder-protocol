@@ -1,0 +1,50 @@
+{
+  "vector_id": "class-c-consensus-pending",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "A Class C artifact with declared protocol, required_quorum, and eligible_attesters, where the consensus process is open but the required quorum has not yet been reached, MUST receive CONSENSUS_PENDING status.",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb",
+        "attester:cccc"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:00Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Consensus has not reached the required quorum."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-06T12:00:01Z"
+    }
+  },
+  "expected_status": "CONSENSUS_PENDING",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §3 Class C: with required_quorum=2 and only one eligible attestation received, the process is open but the quorum is unmet → CONSENSUS_PENDING. Exercises C1 (rules declared before collection), C4 (quorum semantics preserved as auditable metadata), and AG1 (action_policy.action_allowed remains false even pending consensus)."
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wiseorder/0.1.0/manifest.schema.json",
+  "title": "WiseOrder Protocol v0.1.0 Interop Manifest",
+  "description": "Generated manifest derived deterministically from a fixture source. Manifests are committed and used as evidence inputs for audit_status=CONFORMANT declarations. Cross-layer rules (alignment with vectors, F-1 enforcement, byte-stability) are enforced by interop/scripts/run_interop_checks.py in addition to this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "implementation",
+    "protocol",
+    "version",
+    "artifact_class",
+    "fixture_id",
+    "artifact_sha256",
+    "generated_at",
+    "aligned_vectors"
+  ],
+  "properties": {
+    "implementation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol": { "const": "wiseorder" },
+    "version": { "const": "0.1.0" },
+    "artifact_class": { "enum": ["A", "B", "C", "D"] },
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "artifact_sha256": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1
+    },
+    "aligned_vectors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

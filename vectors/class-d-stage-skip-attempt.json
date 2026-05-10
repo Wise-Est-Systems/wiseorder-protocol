@@ -1,0 +1,83 @@
+{
+  "vector_id": "class-d-stage-skip-attempt",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "Adversarial invalid lifecycle transition: a Class D conduct artifact whose commit_chain skips from stage 1 directly to stage 3, omitting stage 2 entirely, MUST be rejected as CONDUCT_INVALID. Lifecycle stages MUST be contiguous and monotonically increasing.",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "this strategy is recommended despite a skipped commit-chain stage",
+    "values_frame": {
+      "optimizing_for": ["speed of decision"],
+      "not_optimizing_for": ["completeness of conduct"]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Defensible alternative.",
+        "rejected_because": "Stated tradeoff."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "premise" }
+    ],
+    "recommended_action": {
+      "kind": "ship",
+      "summary": "Ship without considering alternatives."
+    },
+    "reversibility_score": 0.5,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "self-generated counterargument" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-skip-2026-05-10",
+      "review_after": "2026-08-10T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "content": {
+          "optimizing_for": ["speed of decision"],
+          "not_optimizing_for": ["completeness of conduct"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-10T11:08:00Z"
+      },
+      {
+        "stage": 3,
+        "name": "reasoning_trace_commit",
+        "hash": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+        "content": {
+          "reasoning_trace_summary": ["premise stated"]
+        },
+        "depends_on": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "created_at": "2026-05-10T11:08:02Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_INVALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants CC2, CC3, CC4: later stages MUST declare dependency on prior stage hashes, missing commit stages MUST invalidate process proof, and commit ordering MUST remain externally auditable. The artifact jumps from stage 1 to stage 3 with no stage 2 emitted. While stage 3's depends_on names stage 1's hash, the stage numbering itself declares a missing intermediate stage — either stage 2 was skipped (CC3 violation: missing commit stages MUST invalidate process proof) or the stage numbering is fabricated (CC4 violation: ordering must be auditable). Mitigates an invalid-lifecycle-transition attack where an attacker compresses required commit stages to bypass conduct surface fields. Status MUST be CONDUCT_INVALID."
+}

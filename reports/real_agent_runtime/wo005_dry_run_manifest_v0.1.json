@@ -1,0 +1,60 @@
+{
+  "agent_id": "canon_guardian-01",
+  "commands_allowed": [],
+  "commands_attempted": [],
+  "commands_blocked": [],
+  "dry_run": true,
+  "exit_status": 1,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [],
+  "gates_run": [],
+  "policy_violations": [
+    {
+      "code": "status_not_admissible",
+      "reason": "work order WO-2026-05-07-005 status 'closed' is not admissible for canon_guardian-01 (allowed: ['approved', 'assigned'])"
+    }
+  ],
+  "repo_fingerprint_after": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "repo_fingerprint_before": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "run_id": "run-20260508T134314Z-canon_guardian_01",
+  "runtime_version": "v0.1",
+  "sandbox_path": "",
+  "timestamp_end": "2026-05-08T13:43:14Z",
+  "timestamp_start": "2026-05-08T13:43:14Z",
+  "work_order_id": "WO-2026-05-07-005",
+  "post_admission_policy_simulation": {
+    "note": "Independent harness exercising public classify_command / classify_read / classify_write functions of tools/real_agent_runtime.py against the declared scope of WO-2026-05-07-005. The runtime itself refused this work order at admission (status_not_admissible); the simulation below records what the policy layer WOULD have classified had admission been accepted, projected against the work order's recorded allowed_files / forbidden_files / required_gates and the canon_guardian-01 identity. No subprocess was spawned; no command was executed; no file outside reports/real_agent_runtime/ was written.",
+    "command_results": [
+      {"command": "pwd",                       "allowed": true,  "reason": "matches allowed command 'pwd'"},
+      {"command": "ls",                        "allowed": true,  "reason": "matches allowed command 'ls'"},
+      {"command": "make no-pseudocode",        "allowed": true,  "reason": "matches allowed command 'make no-pseudocode'"},
+      {"command": "make workforce-check",      "allowed": true,  "reason": "matches allowed command 'make workforce-check'"},
+      {"command": "make ci",                   "allowed": false, "reason": "not in allowed command list"},
+      {"command": "curl https://example.com",  "allowed": false, "reason": "matches forbidden pattern 'curl'"},
+      {"command": "git push origin main",      "allowed": false, "reason": "matches forbidden pattern 'git push'"}
+    ],
+    "read_results": [
+      {"path": "SPEC.md",                                              "allowed": false, "reason": "forbidden_files pattern 'SPEC.md' matched"},
+      {"path": "Makefile",                                             "allowed": false, "reason": "forbidden_files pattern 'Makefile' matched"},
+      {"path": "tools/check_workforce.py",                             "allowed": false, "reason": "forbidden_files pattern 'tools/**' matched"},
+      {"path": "vectors/v1.json",                                      "allowed": false, "reason": "forbidden_files pattern 'vectors/**' matched"},
+      {"path": "intellagent_runtime/kernel.py",                        "allowed": false, "reason": "forbidden_files pattern 'intellagent_runtime/**' matched"},
+      {"path": "runtime/something.py",                                 "allowed": false, "reason": "forbidden_files pattern 'runtime/**' matched"},
+      {"path": "WAIVER-MECHANISM-v0.1.md",                             "allowed": true,  "reason": "read not denied"},
+      {"path": "workforce/work_orders/closed/WO-2026-05-07-005.yaml",  "allowed": true,  "reason": "read not denied"},
+      {"path": "reports/DOC-COMPLETION-AUDIT-v0.1.md",                 "allowed": true,  "reason": "read not denied"}
+    ],
+    "write_results": [
+      {"path": "/etc/passwd",                                                                              "allowed": false, "reason": "write target outside sandbox or reports/real_agent_runtime/"},
+      {"path": "/tmp/outside_sandbox.txt",                                                                 "allowed": false, "reason": "write target outside sandbox or reports/real_agent_runtime/"},
+      {"path": "SPEC.md",                                                                                  "allowed": false, "reason": "write target outside sandbox or reports/real_agent_runtime/"},
+      {"path": "Makefile",                                                                                 "allowed": false, "reason": "write target outside sandbox or reports/real_agent_runtime/"},
+      {"path": "reports/real_agent_runtime/wo005_dry_run_report_v0.1.md",                                  "allowed": true,  "reason": "allowed_files pattern '*.md' matched"},
+      {"path": "<sandbox>/WAIVER-MECHANISM-v0.1.md",                                                       "allowed": true,  "reason": "allowed_files pattern '*.md' matched"},
+      {"path": "<sandbox>/runtime/something.py",                                                           "allowed": false, "reason": "write target not in allowed_files"},
+      {"path": "<sandbox>/workforce/work_orders/open/WO-NEW.yaml",                                         "allowed": false, "reason": "write target not in allowed_files"}
+    ]
+  }
+}

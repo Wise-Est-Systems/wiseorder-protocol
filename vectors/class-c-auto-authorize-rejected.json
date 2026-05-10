@@ -1,0 +1,58 @@
+{
+  "vector_id": "class-c-auto-authorize-rejected",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "A Class C artifact that sets action_policy.action_allowed=true on the basis of CONSENSUS_VALID alone, without a separate execution authorization source, MUST be rejected as INVALID. Consensus is not authorization (AG1).",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb",
+        "attester:cccc"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:00Z",
+        "eligible": true
+      },
+      {
+        "attester_id": "attester:bbbb",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:30Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": true,
+      "action_compelled": false,
+      "reason": "CONSENSUS_VALID is sufficient to authorize execution.",
+      "authorization_source": null
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-06T12:00:31Z"
+    },
+    "status": "CONSENSUS_VALID"
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant AG1 and threat AG-1: a conformant implementation MUST NOT treat VERIFIED, CONSENSUS_VALID, or CONDUCT_VALID as automatic execution authorization. The artifact above sets action_allowed=true with reason citing 'CONSENSUS_VALID is sufficient' and authorization_source=null — the textbook contrapositive of AG1. A conformant verifier MUST reject the artifact as INVALID rather than honoring its declared CONSENSUS_VALID status. Even though quorum was reached with eligible attesters, the auto-authorization claim makes the artifact structurally non-conformant. Authorization requires a separate, declared authorization_source (AG3)."
+}

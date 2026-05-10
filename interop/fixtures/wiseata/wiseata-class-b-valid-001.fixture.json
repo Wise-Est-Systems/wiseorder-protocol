@@ -1,0 +1,34 @@
+{
+  "fixture_id": "wiseata-class-b-valid-001",
+  "implementation": "WISEATA",
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "artifact_class": "B",
+  "aligned_vectors": ["class-b-valid-wiseexp"],
+  "generated_at": "2026-05-06T12:00:00Z",
+  "artifact": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "WISEATA-emitted Class B artifact for interop alignment with class-b-valid-wiseexp",
+    "sources": [
+      { "id": "wiseata-wiseproof-record", "kind": "wiseproof", "uri": "wiseata://proof/abc" },
+      { "id": "wiseata-wiseexp-record", "kind": "wiseexp", "uri": "wiseata://exp/abc" }
+    ],
+    "timestamps": [
+      { "source_id": "wiseata-wiseproof-record", "value": "2026-05-06T12:00:00Z" },
+      { "source_id": "wiseata-wiseexp-record", "value": "2026-05-06T12:00:01Z" }
+    ],
+    "observations": [
+      { "source_id": "wiseata-wiseproof-record", "result": "wiseproof_VERIFIED", "supports_claim": true },
+      { "source_id": "wiseata-wiseexp-record", "result": "byte_layer.size_match=true", "supports_claim": true }
+    ],
+    "structural_diff": {
+      "byte": { "size_match": true, "digest_match": true },
+      "frequency": { "histogram_match": true }
+    },
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T12:00:02Z"
+    }
+  }
+}

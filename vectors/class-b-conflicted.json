@@ -1,0 +1,65 @@
+{
+  "vector_id": "class-b-conflicted",
+  "protocol_version": "0.1.0",
+  "class": "B",
+  "description": "A Class B artifact in which sources disagree MUST receive CONFLICTED status, and the contradicting observations MUST be preserved in the artifact rather than suppressed.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "sources": [
+      {
+        "id": "src-runtime-log",
+        "kind": "log",
+        "uri": "file:///var/log/runtime.log"
+      },
+      {
+        "id": "src-external-monitor",
+        "kind": "external_monitor",
+        "uri": "https://example/monitor/aaaa"
+      }
+    ],
+    "timestamps": [
+      {
+        "source_id": "src-runtime-log",
+        "value": "2026-05-06T12:00:00Z"
+      },
+      {
+        "source_id": "src-external-monitor",
+        "value": "2026-05-06T12:00:01Z"
+      }
+    ],
+    "observations": [
+      {
+        "source_id": "src-runtime-log",
+        "result": "exit_code=0",
+        "supports_claim": true
+      },
+      {
+        "source_id": "src-external-monitor",
+        "result": "process_terminated_with_signal=9",
+        "supports_claim": false
+      }
+    ],
+    "structural_diff": {
+      "byte": { "size_match": true, "digest_match": false }
+    },
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T12:00:02Z"
+    }
+  },
+  "expected_status": "CONFLICTED",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant B2: a conformant implementation MUST preserve contradictory evidence if encountered. Both contradicting observations remain present under their declared source_ids; neither is removed. Status MUST be CONFLICTED. Mitigates threat B-1 (contradictory evidence suppression). Exercises B1, B2, B3."
+}

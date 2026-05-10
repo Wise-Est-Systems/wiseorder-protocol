@@ -1,0 +1,72 @@
+{
+  "all_passed": true,
+  "fixtures": [
+    {
+      "decision": "approved",
+      "detail": "decision=approved, scope=3, reasons=[], exit=0",
+      "name": "valid_proposal_approved",
+      "passed": true,
+      "review_hash": "sha256:d09364db528cb9cf77c772aaa5a5a36aee5682f21599df43080d8d45f1156528",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-VALID-001-FIXED-20260509T004804753815Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, hash_verified=False, reasons=['deterministic_hash_mismatch']",
+      "name": "bad_hash_rejected",
+      "passed": true,
+      "review_hash": "sha256:68c0e268b57161849cdca89188b5f312f1c2b2f72bfe0febcfda702bc5a89db4",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-VALID-001-FIXED-20260509T004804754877Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, reasons=['forbidden_command']",
+      "name": "forbidden_command_rejected",
+      "passed": true,
+      "review_hash": "sha256:1be746ebbb751c3063dbfc936069c3b7afab87fa8b9a7fde66126760254f815a",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-FORBIDDEN-003-FIXED-20260509T004804755209Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, reasons=['too_many_commands']",
+      "name": "too_many_commands_rejected",
+      "passed": true,
+      "review_hash": "sha256:06b42a130af1c33bdde9eb4babeeb6258dc752c266553d5068e01ea41fe6a848",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-TOOMANY-004-FIXED-20260509T004804755505Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, reasons=['empty_rationale']",
+      "name": "empty_rationale_rejected",
+      "passed": true,
+      "review_hash": "sha256:7bb95207699d77af82437339aed1c772a269d57e91e91341439cf94f970e76f2",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-NORATIONALE-005-FIXED-20260509T004804755772Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, reasons=['wrong_work_order_id']",
+      "name": "wrong_work_order_id_rejected",
+      "passed": true,
+      "review_hash": "sha256:7ddeb001291d3220018ce7c71ce8e7a8d40445e0a116dde7fb89dd3b7bf7ef0e",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-WRONGWO-006-FIXED-20260509T004804756097Z"
+    },
+    {
+      "decision": "rejected",
+      "detail": "decision=rejected, reasons=['unknown_proposer']",
+      "name": "unknown_proposer_rejected",
+      "passed": true,
+      "review_hash": "sha256:8817f430297e7b925097d21343b4d441f0d388364071a4650a00e9bc7de52e00",
+      "review_id": "review-review_gate_01-proposal-unknown_99-WO-FIX-REVIEW-UNKNOWN-007-FIXED-20260509T004804756337Z"
+    },
+    {
+      "decision": "approved",
+      "detail": "first_hash=sha256:bb4968fc843847934aa3f2bebfa10287d73ec12e48b35b976dbc62dd2bdce491, second_hash=sha256:bb4968fc843847934aa3f2bebfa10287d73ec12e48b35b976dbc62dd2bdce491, ids_differ=True, timestamps_differ=True",
+      "name": "review_artifact_hash_stable",
+      "passed": true,
+      "review_hash": "sha256:bb4968fc843847934aa3f2bebfa10287d73ec12e48b35b976dbc62dd2bdce491",
+      "review_id": "review-review_gate_01-proposal-canon_guardian_01-WO-FIX-REVIEW-STABLE-008-FIXED-20260509T004804756550Z"
+    }
+  ],
+  "runtime": "review_gate_runtime",
+  "runtime_version": "v0.1",
+  "timestamp": "2026-05-09T00:48:04.756846Z"
+}

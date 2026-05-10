@@ -1,0 +1,110 @@
+# WORK ORDER — WO-2026-05-07-004 (CLOSED)
+# Constitutional-Closure Audit (canon_guardian, audit-only)
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md.
+#
+# Closure note: this work order required no amendment of allowed_files or
+# forbidden_files. No runtime, validator, governance-rule, canonicalization-
+# corpus, protocol-primitive, or build-tooling change occurred. The original
+# drafted/approved/assigned content (objective, allowed_files, forbidden_files,
+# constraints, expected_outputs, required_gates, rollback_plan,
+# human_approval_required) is preserved verbatim per WORKFORCE-EXECUTION-
+# RUNTIME-v0.1 §21 immutability. Only `status` and `status_history` are
+# extended at closure.
+
+work_order_id: "WO-2026-05-07-004"
+agent_role: "canon_guardian"
+assigned_to: "canon_guardian-01"
+objective: "Audit existing canon to identify minimum remaining required documents, semantic overlap, contradiction risk, missing governance surfaces, and the exact stop condition where execution/hardening supersedes further document expansion."
+
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/corpus/**"
+  - "tools/**"
+  - "Makefile"
+
+constraints:
+  - "audit-only operation"
+  - "no runtime modification"
+  - "no validator modification"
+  - "no new primitives"
+  - "no new governance layers"
+  - "no new cognition classes"
+  - "canon_guardian role only"
+  - "no implementation patches"
+  - "no edits to top-level .md documents under audit; reads only"
+  - "required actions performed by the assignee, in order: (1) read all top-level .md documents; (2) classify each document by operational role; (3) identify semantic overlap; (4) identify contradiction risk; (5) identify missing governance surfaces; (6) identify surfaces already sufficiently governed; (7) identify documents that should never be created; (8) determine whether constitutional closure is approaching; (9) produce final recommended remaining-doc queue; (10) define hard stop condition for document expansion"
+  - "deliverable reports/DOC-COMPLETION-AUDIT-v0.1.md must contain the following sections, in order, each non-empty: 1. Purpose; 2. Current Document Inventory; 3. Functional Classification; 4. Existing Constitutional Laws; 5. Existing Operational Specs; 6. Existing Roadmaps; 7. Existing Translation Docs; 8. Existing Pressure Docs; 9. Existing Release Docs; 10. Overlap Analysis; 11. Contradiction Risk; 12. Missing Surfaces; 13. Redundant Surface Warnings; 14. Documents That Should NOT Be Created; 15. Final Required Document List; 16. Priority Order; 17. Closure Criteria; 18. Final Assessment"
+  - "deliverable must explicitly define: total core constitutional laws; total supporting specs; load-bearing documents; supporting-only documents; required remaining governance surfaces; optional remaining governance surfaces; drift-producing document categories; exact meaning of 'first constitutional closure'"
+  - "deliverable must include a section titled exactly 'What Is Missing For Closure?'"
+  - "deliverable must include a section titled exactly 'What Should Not Be Added?'"
+  - "deliverable must include a section titled exactly 'Recommended Next 10 Documents Max' containing at most 10 entries"
+  - "each entry in 'Recommended Next 10 Documents Max' must include all of: document name; purpose; contradiction boundaries; necessity justification; closure relevance; priority"
+  - "deliverable must state the document-writing termination rule: the document-writing phase must terminate once the remaining governance surfaces are bounded and replayable; after closure, operational execution, hardening, replay validation, interoperability validation, sandbox enforcement, and release continuity become dominant priorities"
+  - "deliverable must report: (1) artifact path DOC-COMPLETION-AUDIT-v0.1.md; (2) top-level document count; (3) final remaining-doc queue; (4) forbidden future-doc categories; (5) constitutional-closure assessment; (6) explicit stop condition"
+  - "closure criteria: audit artifact exists; remaining governance surfaces bounded; overlap risks identified; contradiction risks identified; recommended queue contains ≤10 documents; stop condition explicit; both required gates green"
+
+expected_outputs:
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+  - "workforce/work_orders/open/WO-2026-05-07-004.yaml"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+rollback_plan:
+  - "delete reports/DOC-COMPLETION-AUDIT-v0.1.md"
+  - "delete workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-004.yaml to workforce/work_orders/rejected/WO-2026-05-07-004.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-004/postmortem.md"
+
+human_approval_required: true
+
+status: "closed"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T09:00:00Z"
+    note: "Drafted by human owner; canon_guardian role; constitutional-closure audit scope; audit-only with no runtime, validator, primitive, governance-layer, or cognition-class changes; deliverable is reports/DOC-COMPLETION-AUDIT-v0.1.md plus action-log pair; required gates are make no-pseudocode and make workforce-check; awaiting approval and assignment."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T09:05:00Z"
+    note: "Approved by human owner. Audit-only scope, allowed_files, forbidden_files, required_gates, expected_outputs, and closure criteria preserved verbatim from drafted state. No runtime semantics, validator semantics, new law documents, or document-queue expansion beyond the audit scope are authorized."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-07T09:06:00Z"
+    note: "Assigned to identity canon_guardian-01 for execution of the ten required actions and production of reports/DOC-COMPLETION-AUDIT-v0.1.md plus the action-log pair. Execution does not begin under this transition; assignment only."
+  - state: "executed"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T01:25:00Z"
+    note: "Canon_guardian-01 performed the ten required actions in order: (1) read all 35 top-level .md documents; (2) classified each by operational role into eight buckets; (3) identified four overlap risks (O-1..O-4) all mitigated by explicit scope clauses or 'in case of conflict, X governs' rules; (4) identified four contradiction risks (C-1..C-4) all between document and runtime reality, governed by SPEC-EVOLUTION-POLICY-v0.1.md, none between two documents; (5) identified eight missing governance surfaces (M-1..M-8); (6) identified six redundant surfaces (R-1..R-6); (7) identified ten forbidden future-doc categories; (8) constitutional closure assessment is 'approaching'; (9) bounded queue of at most ten remaining documents produced with all six required sub-fields per entry; (10) hard stop condition stated verbatim. Audit deliverable produced at reports/DOC-COMPLETION-AUDIT-v0.1.md."
+  - state: "self-verified"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T01:25:30Z"
+    note: "Self-verification block written at workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md. All ten questions answered explicitly; no scope violations against allowed_files on writes; no reads of forbidden_files; required gates green; no semantic drift; no canon alteration; no security-posture change; one risk-note deviation disclosed about entry 10's smaller-scope form."
+  - state: "gate-checked"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T01:26:00Z"
+    note: "Required gates run under PYTHON=.venv/bin/python: make no-pseudocode (exit 0; 42 markdown files scanned; no pseudocode markers); make workforce-check (exit 0; 3 work orders, 5 action logs, 2 closed at run time; new canon_guardian execution log parses with required fields). Captured in workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml."
+  - state: "reviewed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:30:00Z"
+    note: "Human owner reviewed audit deliverable, action log, and self-verification block. Reviewer Agent independent signoff is recorded as a known v0.1 enforcement gap per the WO-2026-05-07-001 operational lesson L-1 fallback (human-owner-as-reviewer when no second reviewer identity exists). The audit's recommendation that REVIEWER-IDENTITY-v0.1.md be authored as a P1 closure document is acknowledged but not authorized by this closure. No deviation requires amendment of allowed_files or forbidden_files."
+  - state: "human_approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:32:00Z"
+    note: "Human owner grants closure approval on the basis of: audit deliverable exists at reports/DOC-COMPLETION-AUDIT-v0.1.md and contains all 18 required sections plus the three named sections (What Is Missing For Closure?, What Should Not Be Added?, Recommended Next 10 Documents Max); bounded queue contains exactly 10 entries each with all six required sub-fields; stop condition stated verbatim; both required gates green at execution time and re-runnable at closure time; no canon, runtime, validator, governance, primitive, or cognition-class change occurred; rollback plan intact. Closure summary to be written at workforce/reports/WO-2026-05-07-004-closure-summary.md."
+  - state: "closed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:33:00Z"
+    note: "Work order closed. File moved from workforce/work_orders/open/ to workforce/work_orders/closed/. Closure summary at workforce/reports/WO-2026-05-07-004-closure-summary.md. Closure action log at workforce/action_logs/WO-2026-05-07-004-closure.yaml. Predecessor execution log at workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml. Replay continuity preserved: every state transition recorded with actor, timestamp, and note; both action logs reference each other by id; the audit's bounded queue and stop condition are the closure-time anchors for the document-expansion phase termination."

@@ -1,0 +1,41 @@
+# Assignment action log for WO-2026-05-07-006.
+# Records the approved->assigned status transition and assigned_to field write.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Predecessor: workforce/action_logs/WO-2026-05-07-006-approval.yaml.
+
+action_id: "AL-2026-05-07-006-assignment"
+work_order_id: "WO-2026-05-07-006"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T02:34:00Z"
+timestamp_end: "2026-05-08T02:36:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-approval.yaml"
+
+files_changed:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml modified"
+  - "workforce/action_logs/WO-2026-05-07-006-assignment.yaml created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: 43 markdown files scanned; clean."
+  - "make workforce-check: 5 work orders, 10 action logs, 4 closed; assigned WO-006 (assigned_to canon_guardian-01) in open/ parses with all required fields; status_history includes drafted, approved, and assigned entries."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "Assignment transition fills the assigned_to field (previously empty) with canon_guardian-01 and appends one status_history entry. The assigned_to field write is the single sanctioned content change for the assignment transition; all other content fields preserved verbatim per WORKFORCE-EXECUTION-RUNTIME-v0.1 §21 immutability."
+
+rollback_notes: "Rollback at this stage would require re-drafting; the rollback plan in the WO yaml does not specifically cover post-assignment rollback because assignment is a precursor to execution, and rollback after execution begins is governed by the execution-phase rollback plan."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"

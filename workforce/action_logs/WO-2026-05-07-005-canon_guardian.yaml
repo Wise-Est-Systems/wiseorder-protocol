@@ -1,0 +1,60 @@
+# Action log — execution record for WO-2026-05-07-005.
+# Append-only. Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+#
+# Scope note: WO-2026-05-07-005 is an authoring-only canon_guardian work
+# order producing the first P1 constitutional-closure document
+# (WAIVER-MECHANISM-v0.1.md) identified by reports/DOC-COMPLETION-AUDIT-v0.1.md
+# §15 entry 2. The deliverable is a top-level governance instrument; this
+# log records exactly the reads, writes, commands, and gate runs performed
+# under the authoring task. No runtime, validator, workflow, authority, or
+# canon redesign was performed; no SPEC.md or other forbidden_files entry
+# was read or written.
+
+action_id: "AL-2026-05-07-005-canon_guardian"
+work_order_id: "WO-2026-05-07-005"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T01:50:00Z"
+timestamp_end: "2026-05-08T02:10:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-005.yaml"
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-003.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-004.yaml"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-003-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-004-closure-summary.md"
+  - "workforce/templates/action_log.yaml"
+  - "workforce/templates/self_verification.md"
+
+files_changed:
+  - "WAIVER-MECHANISM-v0.1.md created"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned the markdown corpus including the new top-level WAIVER-MECHANISM-v0.1.md; no pseudocode markers found in Python code blocks (the deliverable contains no Python code blocks at all)."
+  - "make workforce-check: required directory layout present; templates intact; all work-order YAML files (open and closed) parse with required fields; all action-log YAML files parse with required fields; closed WO-001, WO-003, WO-004 satisfy closure validation; lifecycle order monotonic; new canon_guardian execution log AL-2026-05-07-005 parses with required fields."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "The deliverable WAIVER-MECHANISM-v0.1.md formalizes a mechanism that has been used in practice (WO-2026-05-07-001 V-1 and V-3 closures used closure-time amendments to forbidden_files). The document does not extend authority; it bounds and names an exception class that already exists. Implementations of the validator's enforcement of failure classes F-1 through F-14 are not authorized by this work order; each requires its own hardening cycle work order under WORKFORCE-HARDENING-v0.2.md."
+  - "The waiver record schema in §12 specifies optional original_state_hash and post_waiver_state_hash fields that become required at v0.2 under AGENT-IDENTITY-v0.1.md (the audit's P3 entry). v0.1 waivers without those fields remain valid at v0.1 closure-time. Forward-compatibility is bounded and named in §17."
+  - "All open follow-up items from prior closures (FU-1 through FU-15) and missing surfaces M-2 through M-8 from the audit remain unauthorized. This work order closes only M-1 / FU-1 (the waiver-mechanism gap); each remaining audit-recommended document requires its own drafted, approved, and assigned governance work order."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback (no second reviewer identity exists in v0.1). The audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap; that document is not authorized by this closure."
+
+rollback_notes: "Rollback plan documented in the work order. Not executed; gates green and deliverable complete. If human owner denies closure, executing the rollback removes WAIVER-MECHANISM-v0.1.md and the two action-log artifacts, and moves the work order to rejected/. No other top-level document is touched by rollback."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"

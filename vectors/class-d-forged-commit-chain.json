@@ -1,0 +1,83 @@
+{
+  "vector_id": "class-d-forged-commit-chain",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "Adversarial forged closure chain: a Class D conduct artifact whose stage 2 hash is byte-identical to stage 1's hash (a forged collision under different content) MUST be rejected as CONDUCT_INVALID. Distinct stage content MUST yield distinct stage hashes; identical hashes under non-identical preimages are either a hash collision or a forgery and MUST NOT be accepted.",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "this strategy is recommended on the basis of a forged commit chain",
+    "values_frame": {
+      "optimizing_for": ["throughput at all costs"],
+      "not_optimizing_for": ["reversibility"]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Defensible alternative.",
+        "rejected_because": "Stated tradeoff."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "speed dominates" }
+    ],
+    "recommended_action": {
+      "kind": "execute_immediately",
+      "summary": "Skip review."
+    },
+    "reversibility_score": 0.1,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "self-generated counterargument" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-forged-2026-05-10",
+      "review_after": "2026-08-10T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "content": {
+          "optimizing_for": ["throughput at all costs"],
+          "not_optimizing_for": ["reversibility"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-10T11:07:00Z"
+      },
+      {
+        "stage": 2,
+        "name": "alternatives_commit",
+        "hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "content": {
+          "alternatives_summary": ["alt-1 stated"]
+        },
+        "depends_on": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "created_at": "2026-05-10T11:07:01Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_INVALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants CC1, CC2: a hash without its preimage is unauditable, and later stages MUST declare dependency on prior stage hashes. Stage 1 and stage 2 declare distinct content (values_frame vs alternatives_summary) but identical hashes. Under SHA-256 over distinct canonicalized content this is structurally impossible without (a) a SHA-256 collision (vanishingly improbable) or (b) a forgery (the more likely explanation). A conformant verifier MUST treat an identical-hash-different-content claim as a structural defect and emit CONDUCT_INVALID. Mitigates threat D-1 (post-hoc rationalization) by closing the loophole of declaring a 'committed' stage chain whose internal hashes do not actually witness the declared content."
+}

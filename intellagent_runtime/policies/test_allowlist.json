@@ -1,0 +1,9 @@
+{
+  "source_id": "test_allowlist",
+  "kind": "allowlist",
+  "rationale": "Test policy: allowlists specific (kind, target) pairs. Used to verify that the authorization gate can authorize a specific action under an explicit policy.",
+  "allowed": [
+    {"kind": "log", "target": "any"},
+    {"kind": "write_file", "target": "/tmp/sandbox/test.txt"}
+  ]
+}

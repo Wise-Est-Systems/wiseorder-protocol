@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wiseorder/0.1.0/vector.schema.json",
+  "title": "WiseOrder Protocol v0.1.0 Conformance Vector",
+  "description": "Structural schema for a single conformance vector. Every vector under vectors/*.json MUST validate. Cross-vector consistency rules (Class A JCS, Class D not VERIFIED, telemetry rejection) are enforced by tools/validate_vectors.py in addition to this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vector_id",
+    "protocol_version",
+    "class",
+    "description",
+    "input",
+    "expected_status",
+    "expected_artifact_fields",
+    "why"
+  ],
+  "properties": {
+    "vector_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "protocol_version": {
+      "const": "0.1.0"
+    },
+    "class": {
+      "enum": ["A", "B", "C", "D"]
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input": {
+      "type": "object"
+    },
+    "expected_status": {
+      "enum": [
+        "VERIFIED",
+        "TAMPERED",
+        "INVALID",
+        "SUPPORTED",
+        "CONFLICTED",
+        "INSUFFICIENT_EVIDENCE",
+        "CONSENSUS_PENDING",
+        "CONSENSUS_VALID",
+        "CONSENSUS_FAILED",
+        "CONDUCT_VALID",
+        "CONDUCT_INVALID"
+      ]
+    },
+    "expected_artifact_fields": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "why": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "class": { "const": "A" } }, "required": ["class"] },
+      "then": {
+        "properties": {
+          "expected_status": { "enum": ["VERIFIED", "TAMPERED", "INVALID"] }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "class": { "const": "B" } }, "required": ["class"] },
+      "then": {
+        "properties": {
+          "expected_status": {
+            "enum": ["SUPPORTED", "CONFLICTED", "INSUFFICIENT_EVIDENCE", "INVALID"]
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "class": { "const": "C" } }, "required": ["class"] },
+      "then": {
+        "properties": {
+          "expected_status": {
+            "enum": ["CONSENSUS_PENDING", "CONSENSUS_VALID", "CONSENSUS_FAILED", "INVALID"]
+          }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "class": { "const": "D" } }, "required": ["class"] },
+      "then": {
+        "properties": {
+          "expected_status": { "enum": ["CONDUCT_VALID", "CONDUCT_INVALID"] }
+        }
+      }
+    }
+  ]
+}

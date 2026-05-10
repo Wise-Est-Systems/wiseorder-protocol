@@ -1,0 +1,85 @@
+{
+  "vector_id": "class-d-action-compelled-without-quorum",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "Adversarial forbidden coupling: a Class D conduct artifact whose recommended_action declares 'compelled' execution at low reversibility while no Class C consensus artifact is referenced as authorization MUST be rejected as CONDUCT_INVALID. A Class D conduct verdict MUST NOT compel an irreversible action without a separately governed authorization source.",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "this strategy compels immediate, irreversible action solely on the basis of a conduct artifact",
+    "values_frame": {
+      "optimizing_for": ["expediency"],
+      "not_optimizing_for": ["reversibility", "authorization separation"]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Defensible alternative.",
+        "rejected_because": "Stated tradeoff."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "premise" }
+    ],
+    "recommended_action": {
+      "kind": "compelled_irreversible_execution",
+      "summary": "Execute immediately without awaiting consensus or authorization.",
+      "compelled": true,
+      "authorization_source": null
+    },
+    "reversibility_score": 0.05,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "self-generated counterargument" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-compelled-2026-05-10",
+      "review_after": "2026-08-10T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "content": {
+          "optimizing_for": ["expediency"],
+          "not_optimizing_for": ["reversibility", "authorization separation"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-10T11:09:00Z"
+      },
+      {
+        "stage": 2,
+        "name": "alternatives_commit",
+        "hash": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+        "content": {
+          "alternatives_summary": ["alt-1 stated"]
+        },
+        "depends_on": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+        "created_at": "2026-05-10T11:09:01Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_INVALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants AG1, AG2, AG3 and D1: verification status MUST NOT auto-authorize action; execution authorization MUST remain separately governable; authorization source MUST be preserved as auditable metadata; a Class D artifact MUST expose what it optimized for and what it explicitly refused to optimize for. The artifact declares a compelled, irreversible action with reversibility_score=0.05 and authorization_source=null. This is the Class D analogue of threat AG-1 (auto-authorization) extended into the conduct surface: a conduct artifact attempting to compel execution by virtue of its own existence, without separate authorization governance. Mitigates a forbidden-command-injection attack at the conduct layer. Status MUST be CONDUCT_INVALID. Exercises AG1, AG3, D1, and the v0.1.0 separation between recommendation (conduct) and authorization (Class C or external)."
+}

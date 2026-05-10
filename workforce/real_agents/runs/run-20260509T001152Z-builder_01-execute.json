@@ -1,0 +1,72 @@
+{
+  "agent_id": "builder-01",
+  "command_results": [
+    {
+      "argv": [
+        "pwd"
+      ],
+      "command": "pwd",
+      "cwd": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260509T001152Z-builder_01-execute-qzdnn1w1",
+      "duration_ms": 2,
+      "env_keys": [
+        "LANG",
+        "LC_ALL",
+        "PATH"
+      ],
+      "error": null,
+      "exit_code": 0,
+      "status": "ok",
+      "stderr": "",
+      "stderr_truncated": false,
+      "stdout": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260509T001152Z-builder_01-execute-qzdnn1w1\n",
+      "stdout_truncated": false,
+      "timed_out": false,
+      "timeout_s": 30.0,
+      "timestamp_end": "2026-05-09T00:11:52Z",
+      "timestamp_start": "2026-05-09T00:11:52Z"
+    }
+  ],
+  "commands_allowed": [
+    "pwd"
+  ],
+  "commands_attempted": [
+    "pwd"
+  ],
+  "commands_blocked": [],
+  "containment_warnings": [],
+  "dry_run": false,
+  "env_keys": [
+    "LANG",
+    "LC_ALL",
+    "PATH"
+  ],
+  "exit_status": 0,
+  "fallback_policy_only": true,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [
+    "pwd"
+  ],
+  "gates_run": [
+    "pwd"
+  ],
+  "mode": "execute",
+  "network_denied_by_strategy": false,
+  "os_level_isolation_active": false,
+  "policy_violations": [],
+  "replay_mode": false,
+  "repo_fingerprint_after": "sha256:e74951d959afeb36d572a96a27529ec5b7ec9c822148eeb44d2dcd5fd3587030",
+  "repo_fingerprint_before": "sha256:e74951d959afeb36d572a96a27529ec5b7ec9c822148eeb44d2dcd5fd3587030",
+  "resource_limits_applied": [],
+  "run_id": "run-20260509T001152Z-builder_01-execute",
+  "runtime_version": "v0.1",
+  "sandbox_files_changed": [],
+  "sandbox_fingerprint_after": "sha256:c3dd778042f63c7c58e10983b402629611aea53a22e998df68f6708520da90b3",
+  "sandbox_fingerprint_before": "sha256:c3dd778042f63c7c58e10983b402629611aea53a22e998df68f6708520da90b3",
+  "sandbox_path": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260509T001152Z-builder_01-execute-qzdnn1w1",
+  "sandbox_strategy": "policy-only",
+  "timestamp_end": "2026-05-09T00:11:52Z",
+  "timestamp_start": "2026-05-09T00:11:52Z",
+  "work_order_id": "WO-FIX-PIPELINE-STABLE-007"
+}

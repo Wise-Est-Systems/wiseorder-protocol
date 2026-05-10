@@ -1,0 +1,61 @@
+# Closure action log — successor to AL-2026-05-07-005-canon_guardian.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Append-only. Records the closure-cycle operations: file move, status_history
+# append, closure summary creation, and closure-time gate re-run.
+#
+# Predecessor action log (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml
+#
+# Predecessor self-verification (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md
+
+action_id: "AL-2026-05-07-005-closure"
+work_order_id: "WO-2026-05-07-005"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T02:12:00Z"
+timestamp_end: "2026-05-08T02:18:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-005.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"
+  - "WAIVER-MECHANISM-v0.1.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-003.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-004.yaml"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-003-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-004-closure-summary.md"
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+
+files_changed:
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml created"
+  - "workforce/work_orders/open/WO-2026-05-07-005.yaml deleted"
+  - "workforce/action_logs/WO-2026-05-07-005-closure.yaml created"
+  - "workforce/reports/WO-2026-05-07-005-closure-summary.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 43 markdown files including WAIVER-MECHANISM-v0.1.md; no pseudocode markers found in Python code blocks (the deliverable's only fenced block is a non-Python schema sketch and is not flagged)."
+  - "make workforce-check: required directory layout present; templates intact; closed WO-2026-05-07-005 satisfies closure validation against allowed_files, forbidden_files, required_gates, action-log presence, self-verification presence, and human-approval closure entry; lifecycle order monotonic; both predecessor and closure action logs parse with required fields; reported 4 work orders, 8 action logs, 4 closed."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "The deliverable WAIVER-MECHANISM-v0.1.md formalizes a mechanism that is currently practiced but unattested by validator code. The validator's enforcement of failure classes F-1 through F-14 is not yet implemented; that enforcement requires its own hardening cycle work order under WORKFORCE-HARDENING-v0.2.md and is not authorized by this work order or this closure."
+  - "All open follow-up items from prior closures (FU-1 through FU-15) other than M-1 / FU-1 (which this closure terminates) remain unauthorized. The audit's P1 batch advances by one closure (M-1 / FU-1); two P1 entries remain (REVIEWER-IDENTITY-v0.1.md, AUDIT-READ-GRANTS-v0.1.md), three P2 entries remain, three P3 entries remain, one P0 entry remains."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback. The audit's next P1 entry (REVIEWER-IDENTITY-v0.1.md) addresses this gap; that document is not authorized by this closure."
+
+rollback_notes: "Rollback plan documented in the closed work order. Not executed; gates green and human-owner closure approval recorded in status_history. If post-closure inspection reveals a material defect in the deliverable, a successor correction work order is required; this work order is not reopened."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"

@@ -1,0 +1,32 @@
+{
+  "vector_id": "class-a-canonicalization-scheme-corruption",
+  "protocol_version": "0.1.0",
+  "class": "A",
+  "description": "Adversarial: a Class A artifact whose canonicalization is declared as a near-look-alike string ('RFC8785-JCS-v2') that is NOT the protocol-defined scheme MUST receive INVALID. v0.1.0 freezes canonicalization to the literal string 'RFC8785-JCS'. Look-alike scheme strings MUST NOT be honored.",
+  "input": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "this artifact matches its declared origin digest under a corrupted canonicalization scheme name",
+    "canonicalization": "RFC8785-JCS-v2",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "observed_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "proof": {
+      "type": "integrity_proof",
+      "created_at": "2026-05-10T11:00:00Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "canonicalization",
+    "algorithm",
+    "expected_digest",
+    "observed_digest",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §4 freezes canonicalization to the literal scheme 'RFC8785-JCS'. SPEC_LOCK_v0.1.md §2.1 freezes the scheme string under v0.1.0. A conformant implementation MUST reject any artifact declaring a non-literal scheme — including near-look-alikes such as 'RFC8785-JCS-v2', 'RFC8785-JCS/2', or 'rfc8785-jcs'. Mitigates threat A-1 (canonicalization corruption): an attacker who can convince a verifier to accept a look-alike scheme name controls the canonical bytes the digest is computed over and can therefore produce arbitrary 'verified' digests. Status MUST be INVALID. Exercises CS1 (artifact-declared scheme MUST match) and the v0.1.0 freeze rule that the scheme string is byte-literal."
+}

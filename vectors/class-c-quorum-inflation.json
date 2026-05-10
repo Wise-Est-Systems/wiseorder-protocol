@@ -1,0 +1,52 @@
+{
+  "vector_id": "class-c-quorum-inflation",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "Adversarial authority escalation: a Class C artifact whose evidence contains exactly one eligible attestation but whose action_policy claims action_allowed=true on the basis of a spuriously inflated quorum count MUST be rejected as INVALID. Quorum is defined by protocol.required_quorum and counted only over eligible attestations; the action policy MUST NOT contradict the structural quorum count.",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals (quorum inflated by attacker)",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb",
+        "attester:cccc"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-10T11:04:00Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": true,
+      "action_compelled": false,
+      "reason": "Quorum reached by counting attester:aaaa twice in distinct attestation roles.",
+      "authorization_source": "self-declared-quorum-inflation"
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-10T11:04:01Z"
+    },
+    "status": "CONSENSUS_VALID"
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants C1, C3, C4 and AG1: consensus rules are declared before attestation collection (C1); consensus validity MUST NOT imply execution authorization (C3); quorum semantics MUST be auditable (C4); action_allowed MUST NOT be inferred from a *_VALID status alone (AG1). The artifact declares required_quorum=2 with one eligible attestation, then claims action_allowed=true by inflating the count. The structural quorum is 1, which is below required_quorum, so even the consensus claim itself is false. The artifact is doubly non-conformant: structurally (quorum below threshold) and authority-wise (action authorized on a fabricated basis). Mitigates threat AG-1 (auto-authorization) extended into authority escalation. Status MUST be INVALID."
+}

@@ -1,0 +1,21 @@
+work_order_id: "WO-FIX-PIPELINE-RUN-FIXTURE"
+agent_role: "builder"
+assigned_to: "builder-01"
+objective: "Pipeline self-check fixture: run an allowlisted command inside an executor sandbox."
+
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "SPEC.md"
+
+status: "approved"
+
+required_gates:
+  - "pwd"

@@ -1,0 +1,117 @@
+# WORK ORDER — WO-2026-05-07-010 (OPEN)
+# Implement REAL-AGENT-RUNTIME-v0.3.md and add OS-level sandbox execution
+# (builder, P3+ hardening cycle, successor to WO-2026-05-07-009).
+#
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md,
+# WORKFORCE-HARDENING-v0.2.md, REAL-AGENT-RUNTIME-v0.1.md, REAL-AGENT-RUNTIME-v0.2.md.
+#
+# Scope note: builder hardening cycle. v0.3 promotes the v0.2 bounded
+# subprocess-execution surface from policy-layer-only to OS-level when an
+# OS-level sandbox tool is detected and successfully probed. Detection is
+# best-effort and never silent: when no OS-level tool is available the
+# runtime falls back to v0.2 policy-only behavior and marks the manifest's
+# os_level_isolation_active=false, fallback_policy_only=true, with explicit
+# containment_warnings. v0.3 must NEVER report a fallback run as sandboxed
+# execution. v0.1 dry-run, v0.2 execute, v0.2 self-check all preserved
+# verbatim. real-agent-* targets remain out of make ci.
+
+work_order_id: "WO-2026-05-07-010"
+agent_role: "builder"
+assigned_to: "builder-01"
+objective: "Implement REAL-AGENT-RUNTIME-v0.3 by adding an OS-level sandbox-execution path on top of the v0.2 bounded subprocess surface. Detect the host OS sandbox strategy (macOS sandbox-exec; Linux bwrap, firejail, or Docker; otherwise policy-only fallback). Probe the detected strategy before claiming it. When a real strategy is active, wrap allowlisted commands so the sandbox tool denies network and filesystem writes outside the per-run sandbox copy. When no tool is available, fall back to v0.2 behavior and mark the manifest explicitly: os_level_isolation_active=false, fallback_policy_only=true. Author REAL-AGENT-RUNTIME-v0.3.md with the 16 required sections plus the six explicit-state items. Add Makefile targets real-agent-sandbox-check and real-agent-sandbox-dry-run, neither added to make ci. Preserve every v0.1 and v0.2 refusal behavior."
+
+allowed_files:
+  - "REAL-AGENT-RUNTIME-v0.1.md"
+  - "REAL-AGENT-RUNTIME-v0.2.md"
+  - "REAL-AGENT-RUNTIME-v0.3.md"
+  - "tools/real_agent_runtime.py"
+  - "tests/**"
+  - "reports/real_agent_runtime/**"
+  - "workforce/**"
+  - "Makefile"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "SPEC.md"
+
+constraints:
+  - "v0.1 dry-run semantics preserved verbatim"
+  - "v0.2 execute semantics preserved verbatim"
+  - "v0.2 execute-mode allowlist and forbidden-pattern set preserved"
+  - "no autonomous AI agents created"
+  - "no model calls"
+  - "no background daemons"
+  - "no network access (the runtime never opens sockets, and where the strategy supports it the sandbox itself denies network)"
+  - "no weakening of any v0.1 or v0.2 refusal behavior"
+  - "no modification of WiseOrder semantics"
+  - "no modification of SPEC.md"
+  - "no modification of vectors or canonicalization corpus"
+  - "real-agent-* targets not added to make ci"
+  - "OS-level isolation is supported only when a real sandbox strategy is detected AND probed successfully"
+  - "fallback mode (policy-only) MUST be marked explicitly in the manifest and MUST NEVER be reported as sandboxed execution"
+  - "policy-only enforcement is not OS isolation; the v0.3 docs must say so"
+  - "no model planning exists; the runtime executes only commands sourced from required_gates or the operator's --command argument"
+  - "no autonomous agent loop exists; v0.3 remains a one-shot CLI"
+  - "no background workers exist; v0.3 introduces no daemon"
+  - "execute-sandboxed mode runs only allowlisted commands"
+  - "execute-sandboxed mode runs commands only inside the sandbox copy"
+  - "execute-sandboxed mode blocks forbidden commands BEFORE invoking subprocess (regardless of whether sandbox-tool wrapping would block them)"
+  - "execute-sandboxed mode captures stdout, stderr, exit_code, duration_ms, cwd, and timeout-on-true for every attempt"
+  - "execute-sandboxed mode times out every command with a bounded wall-clock cap"
+  - "execute-sandboxed mode fails closed on any policy violation"
+  - "execute-sandboxed mode produces a machine-checkable run manifest with the v0.2 fields plus the new v0.3 fields: sandbox_strategy, os_level_isolation_active, network_denied_by_strategy, resource_limits_applied, fallback_policy_only, containment_warnings"
+  - "deliverable REAL-AGENT-RUNTIME-v0.3.md must contain the following sections, in order, each non-empty: 1. Purpose; 2. Why Policy Enforcement Is Not Enough; 3. v0.3 Scope; 4. OS-Level Sandbox Strategy; 5. macOS Sandbox Behavior; 6. Linux Sandbox Behavior; 7. Fallback Policy-Only Mode; 8. Network Denial; 9. Resource Boundaries; 10. Manifest Requirements; 11. What v0.3 Proves; 12. What v0.3 Does Not Prove; 13. Failure Modes; 14. Security Non-Guarantees; 15. Future Hardening; 16. Final Law"
+  - "deliverable must explicitly state: policy-only enforcement is not OS isolation; fallback mode must never be reported as sandboxed execution; OS-level isolation is supported only when a real sandbox strategy is detected and used; no model planning exists yet; no autonomous agent loop exists yet; no background workers exist yet"
+  - "execute-sandboxed self-check fixture suite covers: sandbox strategy detection works; fallback mode is explicit; forbidden command blocked before sandbox execution; allowed command executes only in sandbox; source repo fingerprint unchanged; manifest records isolation status; network command refused before execution; write outside sandbox refused; timeout recorded; missing sandbox tool does not silently claim OS isolation"
+  - "closure criteria: v0.3 documentation exists; sandbox strategy detection works; fallback is explicit and honest; manifest records containment reality; source repo remains unchanged; required gates green; work order moved to closed state; replay continuity preserved"
+
+expected_outputs:
+  - "REAL-AGENT-RUNTIME-v0.3.md"
+  - "tools/real_agent_runtime.py (extended; v0.1 dry-run and v0.2 execute preserved verbatim)"
+  - "Makefile (added real-agent-sandbox-check and real-agent-sandbox-dry-run targets; not in make ci)"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.3.md"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.3.json"
+  - "workforce/action_logs/WO-2026-05-07-010-builder.yaml"
+  - "workforce/action_logs/WO-2026-05-07-010-builder.self_verification.md"
+  - "workforce/action_logs/WO-2026-05-07-010-closure.yaml"
+  - "workforce/reports/WO-2026-05-07-010-closure-summary.md"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make real-agent-check"
+  - "make real-agent-dry-run"
+  - "make real-agent-sandbox-check"
+  - "make real-agent-sandbox-dry-run"
+
+rollback_plan:
+  - "delete REAL-AGENT-RUNTIME-v0.3.md"
+  - "revert tools/real_agent_runtime.py to its WO-009-era state (v0.1 dry-run + v0.2 execute only)"
+  - "revert Makefile (remove real-agent-sandbox-* targets)"
+  - "delete reports/real_agent_runtime/real_agent_runtime_v0.3.md"
+  - "delete reports/real_agent_runtime/real_agent_runtime_v0.3.json"
+  - "delete workforce/action_logs/WO-2026-05-07-010-builder.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-010-builder.self_verification.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-010.yaml to workforce/work_orders/rejected/WO-2026-05-07-010.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-010/postmortem.md"
+
+human_approval_required: true
+
+status: "assigned"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:30:00Z"
+    note: "Drafted by human owner. Builder hardening cycle that promotes the v0.2 bounded-subprocess runtime to v0.3 with OS-level sandbox execution where available. Allowed_files restrict writes to the named runtime spec files (v0.1, v0.2, v0.3), the runtime tool, tests/**, reports/real_agent_runtime/**, workforce/**, and the Makefile. Forbidden_files include SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, and canonicalization/**. Required gates extend the v0.2 set with two new sandbox gates: real-agent-sandbox-check and real-agent-sandbox-dry-run. Neither is added to make ci. Awaiting approval and assignment."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:31:00Z"
+    note: "Approved by human owner. Allowed_files, forbidden_files, constraints, expected_outputs, required_gates (six gates: make no-pseudocode + make workforce-check + make real-agent-check + make real-agent-dry-run + make real-agent-sandbox-check + make real-agent-sandbox-dry-run), rollback_plan, and closure criteria preserved verbatim from drafted state. The v0.1 dry-run and v0.2 execute semantics MUST remain unchanged; v0.3 adds an OS-level sandbox execution path under the existing admission, command-policy, and filesystem-policy layers. No autonomy, no models, no background daemons, no network access. Fallback to policy-only is honest and explicit; the manifest MUST never claim sandboxed execution when fallback fired. real-agent-sandbox-* are NOT to be added to make ci."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:32:00Z"
+    note: "Assigned to identity builder-01 for execution of the runtime upgrade and production of REAL-AGENT-RUNTIME-v0.3.md, the extended tools/real_agent_runtime.py with execute-sandboxed mode and strategy detection, the new Makefile targets real-agent-sandbox-check and real-agent-sandbox-dry-run, the v0.3 reports under reports/real_agent_runtime/, and the action-log pair (workforce/action_logs/WO-2026-05-07-010-builder.yaml and workforce/action_logs/WO-2026-05-07-010-builder.self_verification.md). Execution does not begin under this transition; assignment only. The assignee MUST honor the constraints, MUST NOT touch SPEC.md or any other forbidden_files entry, MUST preserve every v0.1 and v0.2 refusal behavior, MUST satisfy all six required gates at execution time and at closure time."

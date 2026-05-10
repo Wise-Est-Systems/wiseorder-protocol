@@ -1,0 +1,18 @@
+{
+  "canonicalization": "python-json-sortkeys-compact-utf8",
+  "corpus_sha256": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+  "digest_algorithm": "SHA-256",
+  "digests": {
+    "001-simple-object": "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777",
+    "002-nested-object": "sha256:310c8a7d102c42bccdce3dbe93679b1bdee5ba93fe0088d72442bd1137d065a4",
+    "003-array-order": "sha256:9be807071b880f4cb6fc9e11a5378070b8e34d422d02a7b9a3bc26f93728a46b",
+    "004-unicode": "sha256:b864161cbf0fdec23533d01e0321be2922d970b880f2c822ae3d2b75a8e645bf",
+    "005-number-integer": "sha256:b012160ef09d7ed5f8baaabfef12687eb0c984b199eddb74c683b2f032a3990a",
+    "006-number-float": "sha256:bf0cb2540e31a904101736dece5c7f22d65107cbd76d727a7f67bf18db96c3d1",
+    "007-bool-null": "sha256:db0dfe05c5573d7362beafadecdad53bb665dbecf1368028e802caa632b98595",
+    "008-key-order": "sha256:0dc3871fec7149824c9980d7d1a982044d38794ee903e6b039dcf7d045b22202",
+    "009-whitespace": "sha256:d1c40b6003b090da5b711364e003898dcba25c7d465d999386dfe72a84918f9c",
+    "010-wiseorder-class-a": "sha256:3360c9765cf95e8d4704ca6e49eea26b9cd247fd1e860dc767bf2b510bf8a602"
+  },
+  "schema_version": "0.1.0"
+}

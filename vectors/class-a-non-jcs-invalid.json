@@ -1,0 +1,27 @@
+{
+  "vector_id": "class-a-non-jcs-invalid",
+  "protocol_version": "0.1.0",
+  "class": "A",
+  "description": "A Class A artifact declaring a canonicalization scheme other than RFC8785-JCS MUST receive INVALID status under WiseOrder v0.1.0.",
+  "input": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "this artifact matches its declared origin digest",
+    "canonicalization": "WISEATA-CANONICAL-V1",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "observed_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "canonicalization",
+    "algorithm",
+    "expected_digest",
+    "observed_digest",
+    "status"
+  ],
+  "why": "Artifact canonicalization scheme is not RFC8785-JCS. WiseOrder Protocol v0.1.0 §4 (CS1, CS3) registers only RFC8785-JCS for Class A integrity operations. Future versions MAY register additional canonicalization schemes; v0.1.0 remains JCS-only."
+}

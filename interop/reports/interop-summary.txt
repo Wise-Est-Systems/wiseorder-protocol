@@ -1,0 +1,13 @@
+WiseOrder Protocol v0.1.0 — Interoperability Summary
+============================================================
+protocol:                 wiseorder
+version:                  0.1.0
+overall_status:           PASS
+manifests_suite_sha256:   sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29
+
+PASS | winstack-class-a-valid-001               | Winstack   | class=A | vectors=class-a-valid-wiseproof
+PASS | winstack-class-b-valid-001               | Winstack   | class=B | vectors=class-b-valid-wiseexp
+PASS | wiseata-class-b-valid-001                | WISEATA    | class=B | vectors=class-b-valid-wiseexp
+
+Summary: 3 fixtures, 3 passed, 0 failed.
+============================================================

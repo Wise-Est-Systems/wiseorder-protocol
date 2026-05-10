@@ -1,0 +1,44 @@
+# Draft action log for WO-2026-05-07-006.
+# Records the drafting transition from absent to drafted state.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Companion logs: approval, assignment, canon_guardian (execution), closure.
+
+action_id: "AL-2026-05-07-006-draft"
+work_order_id: "WO-2026-05-07-006"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T02:29:00Z"
+timestamp_end: "2026-05-08T02:32:00Z"
+
+files_read:
+  - "workforce/templates/work_order.yaml"
+  - "workforce/templates/action_log.yaml"
+  - "workforce/templates/self_verification.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml"
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+
+files_changed:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-006-draft.yaml created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 43 markdown files; no pseudocode markers in any Python code block."
+  - "make workforce-check: 5 work orders, 8 action logs, 4 closed; new drafted WO-006 in open/ parses with all required fields."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "This action log records the drafting transition; the WO is in the drafted state and has not been approved or assigned. Subsequent transitions (approval, assignment, execution, closure) are recorded in their own action logs per the work order's lifecycle artifacts requirement."
+
+rollback_notes: "No rollback required at this stage. If the work order is rejected post-drafting, the rollback plan in the WO yaml moves it to rejected/ and removes this action log alongside the others."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"

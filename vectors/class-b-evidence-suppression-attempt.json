@@ -1,0 +1,53 @@
+{
+  "vector_id": "class-b-evidence-suppression-attempt",
+  "protocol_version": "0.1.0",
+  "class": "B",
+  "description": "Adversarial: a Class B artifact that declares three evidence sources but emits observations from only two — with timestamps indicating the third source produced output that was deliberately omitted — MUST be rejected as INVALID. Selective omission of declared instrumentation is a structural violation of B1 (sources MUST be declared explicitly) and B2 (contradictions MUST be preserved); a missing observation under a declared source is a contradiction the verifier cannot suppress.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result, despite a missing observation from a declared source",
+    "sources": [
+      { "id": "src-instr-a", "kind": "execution_trace", "uri": "trace://run/a" },
+      { "id": "src-instr-b", "kind": "execution_trace", "uri": "trace://run/b" },
+      { "id": "src-instr-c", "kind": "execution_trace", "uri": "trace://run/c" }
+    ],
+    "timestamps": [
+      "2026-05-10T11:03:00Z",
+      "2026-05-10T11:03:01Z",
+      "2026-05-10T11:03:02Z"
+    ],
+    "observations": [
+      {
+        "source_id": "src-instr-a",
+        "input_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "observed_result_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      },
+      {
+        "source_id": "src-instr-b",
+        "input_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "observed_result_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    ],
+    "structural_diff": {
+      "src-instr-c": "declared in sources and timestamps, no observation emitted — selective suppression"
+    },
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-10T11:03:03Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants B1 and B2: sources MUST be declared explicitly, and contradictory evidence (including the contradiction between declared instrumentation and missing observation) MUST be preserved. The artifact declares three sources and three timestamps, but emits observations from only two. The third source's observation was either suppressed (B2 violation) or never collected despite being declared (B1 violation). Either way, the artifact is structurally non-conformant. Mitigates threat B-1 (contradictory evidence suppression) by treating selective omission as a structural defect rather than as a count of evidence in favor of SUPPORTED."
+}

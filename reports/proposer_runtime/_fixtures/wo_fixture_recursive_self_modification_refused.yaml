@@ -1,0 +1,12 @@
+work_order_id: "WO-FIX-PROPOSER-SELFMOD-003"
+status: "approved"
+assigned_to: "canon_guardian-01"
+objective: "Run the v0.1 documentation conformance gate."
+allowed_files:
+  - "**"
+forbidden_files:
+  - "runtime/**"
+  - "vectors/**"
+  - "intellagent_runtime/**"
+required_gates:
+  - "cat tools/proposer_runtime.py"

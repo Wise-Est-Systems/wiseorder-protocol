@@ -1,0 +1,22 @@
+{
+  "fixture_id": "winstack-class-a-valid-001",
+  "implementation": "Winstack",
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "artifact_class": "A",
+  "aligned_vectors": ["class-a-valid-wiseproof"],
+  "generated_at": "2026-05-06T12:00:00Z",
+  "artifact": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "Winstack-emitted Class A artifact for interop alignment with class-a-valid-wiseproof",
+    "canonicalization": "RFC8785-JCS",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "observed_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+    "proof": {
+      "type": "integrity_proof",
+      "created_at": "2026-05-06T12:00:00Z"
+    }
+  }
+}

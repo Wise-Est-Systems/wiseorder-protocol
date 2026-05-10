@@ -1,0 +1,39 @@
+# Proposer Runtime v0.1 self-check
+
+- timestamp: `2026-05-09T00:48:03.740724Z`
+- all_passed: `True`
+
+## Fixtures
+
+- `forbidden_command_proposal_refused` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-FORBIDDEN-001-20260509T004803738340Z`
+  - deterministic_hash: `sha256:74c3dd03d42a93685cc5017b8872010e44cc5150d90ffdd9e95b95aecb73704a`
+  - detail: policy_rejections=['network_proposal', 'forbidden_pattern', 'empty_proposal'], exit_status=1
+- `proposal_outside_allowed_files_refused` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-PATHOUT-002-20260509T004803739126Z`
+  - deterministic_hash: `sha256:39ffe804c70404afadcea91820193df5fe7db04d40c876ecf47c51d3f575d77f`
+  - detail: policy_rejections=['path_outside_allowed_files', 'empty_proposal'], exit_status=1
+- `recursive_self_modification_refused` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-SELFMOD-003-20260509T004803739443Z`
+  - deterministic_hash: `sha256:f7ee6be7e1f0c5f0d82fb2c5545c1284e54b3afd4bd8dff4f63c92df96b8e47b`
+  - detail: policy_rejections=['recursive_self_modification', 'empty_proposal'], exit_status=1
+- `network_proposal_refused` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-NETWORK-004-20260509T004803739763Z`
+  - deterministic_hash: `sha256:6c344badab81bdf26d329160a1411609942c8632c10e0acd58f74dbeea0d6fcf`
+  - detail: policy_rejections=['network_proposal', 'forbidden_pattern', 'empty_proposal'], exit_status=1
+- `empty_rationale_refused` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-NORATIONALE-005-20260509T004803739980Z`
+  - deterministic_hash: `sha256:92c4406316483cc6cbb0a70335bc693d7b96da048b374929642e06b68d79526c`
+  - detail: policy_rejections=['empty_rationale'], rationale='', exit_status=1
+- `cap_truncates_to_three` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-CAP-006-20260509T004803740177Z`
+  - deterministic_hash: `sha256:b6f5645cfe577672b8975a51467fef728900743a0f79a84884eb8669856655b5`
+  - detail: proposed=['cat', 'find', 'ls'], policy_rejections=['cap_exceeded'], exit_status=0
+- `deterministic_hash_stable` — **PASS**
+  - proposal_id: `proposal-canon_guardian_01-WO-FIX-PROPOSER-DETERM-007-20260509T004803740418Z`
+  - deterministic_hash: `sha256:6a72328c9dc65554e47f96b344aac723cba55f9f2df36b81b0dae99700aded06`
+  - detail: first_hash=sha256:6a72328c9dc65554e47f96b344aac723cba55f9f2df36b81b0dae99700aded06, second_hash=sha256:6a72328c9dc65554e47f96b344aac723cba55f9f2df36b81b0dae99700aded06, timestamps_differ=True
+
+## Execution boundary law
+
+> The proposer may suggest work but possesses zero execution authority. All execution authority remains exclusively with admitted executor identities under runtime policy enforcement.

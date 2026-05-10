@@ -1,0 +1,42 @@
+{
+  "vector_id": "class-b-missing-sources",
+  "protocol_version": "0.1.0",
+  "class": "B",
+  "description": "A Class B artifact omitting the required sources field MUST receive INVALID status. Evidence sources must be explicitly declared (B1).",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "timestamps": [
+      {
+        "source_id": "src-runtime-log",
+        "value": "2026-05-06T12:00:00Z"
+      }
+    ],
+    "observations": [
+      {
+        "source_id": "src-runtime-log",
+        "result": "exit_code=0",
+        "supports_claim": true
+      }
+    ],
+    "structural_diff": {},
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T12:00:02Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant B1: a Class B artifact MUST declare all evidence sources explicitly. The artifact above references src-runtime-log in timestamps and observations but omits the sources field entirely — there is no declared registry of evidence sources. A conformant verifier MUST reject the artifact as INVALID. Without B1, evidence is untraceable; the artifact fails before its observation content can be evaluated for SUPPORTED/CONFLICTED/INSUFFICIENT_EVIDENCE. This vector closes the only Class B status (INVALID) not previously reached by the conformance set."
+}

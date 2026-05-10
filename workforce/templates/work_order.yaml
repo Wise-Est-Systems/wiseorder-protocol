@@ -1,0 +1,41 @@
+# work_order template — copy, do not edit in place.
+# Schema is normative per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §4, §7, §14.
+# Every field is required. Empty, ambiguous, or contradictory fields invalidate the work order.
+
+work_order_id: "WO-YYYY-MM-DD-NNN"
+agent_role: "builder"   # one of: canon_guardian | builder | test | docs | reviewer | security | release | outreach
+assigned_to: ""         # stable agent identity string; empty until status >= assigned
+objective: ""           # single-sentence goal; one duty only
+
+allowed_files:          # explicit paths or globs; deny-by-default outside this list; non-empty
+  - ""
+
+forbidden_files:        # explicit paths the agent must not read or write; overrides allowed_files
+  - ""
+
+constraints:            # invariants, scope limits, prohibitions specific to this work order
+  - ""
+
+expected_outputs:       # files produced, reports generated, tests added
+  - ""
+
+required_gates:         # ordered list of gates that must pass before submission
+  - "make no-pseudocode"
+  - "make canonicalization-check"
+  - "pytest tests/ -v"
+  - "make conformance"
+  - "make interop"
+  - "make ci"
+
+rollback_plan:          # non-empty, executable steps; restores files_changed to assigned-state
+  - ""
+
+human_approval_required: true   # true | false; closure requires recorded approver if true
+
+status: "drafted"       # drafted | approved | assigned | executed | self-verified | gate-checked | reviewed | closed | rejected
+
+status_history:         # append-only; each transition records actor, timestamp (ISO-8601 UTC), note
+  - state: "drafted"
+    actor: ""
+    timestamp: ""
+    note: ""

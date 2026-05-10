@@ -1,0 +1,67 @@
+{
+  "vector_id": "class-d-no-alternatives",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "A Class D conduct artifact whose alternatives array is empty MUST receive CONDUCT_INVALID. At least one defensible alternative is required (D2).",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "the recommended strategy is to ship F-1 as a class-scoped governance correction",
+    "values_frame": {
+      "optimizing_for": ["ecosystem coherence at genesis"],
+      "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+    },
+    "alternatives": [],
+    "reasoning_trace": [
+      { "step": 1, "claim": "single-rule lock at genesis is upstream" }
+    ],
+    "recommended_action": {
+      "kind": "governance_correction",
+      "summary": "Reduce WISEATA classes_supported."
+    },
+    "reversibility_score": 0.9,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "thin Class A adoption is a real risk" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-f1-2026-05-06",
+      "review_after": "2026-08-06T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "content": {
+          "optimizing_for": ["ecosystem coherence at genesis"],
+          "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-06T12:00:00Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_INVALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant D2: a conformant implementation MUST generate at least one defensible alternative. With alternatives=[] the artifact fails D2 → CONDUCT_INVALID. Mitigates the failure mode of threat D-1 (post-hoc rationalization without forced alternative consideration). Exercises D2."
+}

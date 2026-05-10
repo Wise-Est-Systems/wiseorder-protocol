@@ -1,0 +1,37 @@
+# action_log template — copy, do not edit in place.
+# Schema is normative per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Append-only. One file per executed work order. Corrections are new logs that reference this one.
+
+action_id: "AL-YYYY-MM-DD-NNN"
+work_order_id: "WO-YYYY-MM-DD-NNN"
+agent_role: ""
+timestamp_start: ""     # ISO-8601 UTC
+timestamp_end: ""       # ISO-8601 UTC
+
+files_read:             # complete list, no omissions, including files merely opened
+  - ""
+
+files_changed:          # complete list with change kind appended after a space
+  - ""                  # example entry: "path/to/file.py modified"
+
+commands_run:           # complete list with exit code appended after a space
+  - ""                  # example entry: "make no-pseudocode 0"
+
+command_outputs_summary:  # short text summary per command; full outputs under workforce/reports/<action_id>/
+  - ""
+
+gates_passed:           # subset of required_gates; each entry references captured fingerprint or report path
+  - ""
+
+gates_failed:           # subset of required_gates; each entry references captured output path
+  - ""
+
+deviations:             # every departure from the work order's stated plan, with reason
+  - ""
+
+risk_notes:             # residual risks the agent is aware of
+  - ""
+
+rollback_notes: ""      # state of the rollback plan; whether rollback was executed
+
+self_verification_statement: ""   # path to the self-verification block, e.g. workforce/action_logs/AL-...self_verification.md

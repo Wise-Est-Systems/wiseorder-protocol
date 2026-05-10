@@ -1,0 +1,39 @@
+{
+  "fixtures_processed": [
+    {
+      "artifact_sha256": "sha256:1409237aac25ee5fe3d530e887879c7c49f8fe9c7799c7b585c84da46c2f7352",
+      "failures": [],
+      "fixture_id": "winstack-class-a-valid-001",
+      "fixture_path": "interop/fixtures/winstack/winstack-class-a-valid-001.fixture.json",
+      "manifest_path": "interop/fixtures/winstack/winstack-class-a-valid-001.manifest.json",
+      "manifest_sha256": "sha256:926908f3f6ddf9b8f1c426e76cd654e1291d2c28eaf5cd54c8f00286549c3331",
+      "passed": true
+    },
+    {
+      "artifact_sha256": "sha256:480e9a1d49986b03c03a82c8457eb072859267858eba40f93dc3b515f90c8b67",
+      "failures": [],
+      "fixture_id": "winstack-class-b-valid-001",
+      "fixture_path": "interop/fixtures/winstack/winstack-class-b-valid-001.fixture.json",
+      "manifest_path": "interop/fixtures/winstack/winstack-class-b-valid-001.manifest.json",
+      "manifest_sha256": "sha256:744047a62ccd56dbbbe9d8e7d88b4d169da59e2a41d28d150f13910e1acd9943",
+      "passed": true
+    },
+    {
+      "artifact_sha256": "sha256:8662d681baef006f45aa98d3b80584a7c0a4daa78279389a7ce3971cc94ab062",
+      "failures": [],
+      "fixture_id": "wiseata-class-b-valid-001",
+      "fixture_path": "interop/fixtures/wiseata/wiseata-class-b-valid-001.fixture.json",
+      "manifest_path": "interop/fixtures/wiseata/wiseata-class-b-valid-001.manifest.json",
+      "manifest_sha256": "sha256:240369c7425c28417f0357588fbd0b660fa15b9050ef81c72067ff6cd5a70bfa",
+      "passed": true
+    }
+  ],
+  "overall_status": "PASS",
+  "protocol": "wiseorder",
+  "summary": {
+    "failed": 0,
+    "passed": 3,
+    "total": 3
+  },
+  "version": "0.1.0"
+}

@@ -1,0 +1,41 @@
+{
+  "agent_id": "canon_guardian-01",
+  "command_results": [],
+  "commands_allowed": [
+    "make no-pseudocode",
+    "make workforce-check"
+  ],
+  "commands_attempted": [
+    "make no-pseudocode",
+    "make workforce-check"
+  ],
+  "commands_blocked": [],
+  "dry_run": true,
+  "env_keys": [],
+  "exit_status": 0,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [
+    "make no-pseudocode",
+    "make workforce-check"
+  ],
+  "gates_run": [
+    "make no-pseudocode",
+    "make workforce-check"
+  ],
+  "mode": "dry-run",
+  "policy_violations": [],
+  "replay_mode": false,
+  "repo_fingerprint_after": "sha256:e242e729c8e93ad3a2960ff4e9051f4cda0d4519f6e060fb99668a364a9e31ae",
+  "repo_fingerprint_before": "sha256:e242e729c8e93ad3a2960ff4e9051f4cda0d4519f6e060fb99668a364a9e31ae",
+  "run_id": "run-20260508T141819Z-canon_guardian_01",
+  "runtime_version": "v0.1",
+  "sandbox_files_changed": [],
+  "sandbox_fingerprint_after": "",
+  "sandbox_fingerprint_before": "",
+  "sandbox_path": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260508T141819Z-canon_guardian_01-yfsrx9my",
+  "timestamp_end": "2026-05-08T14:18:19Z",
+  "timestamp_start": "2026-05-08T14:18:19Z",
+  "work_order_id": "WO-FIXTURE-DRY-RUN-001"
+}

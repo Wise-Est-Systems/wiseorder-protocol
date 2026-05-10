@@ -1,0 +1,108 @@
+# WORK ORDER — WO-2026-05-07-005 (CLOSED)
+# Author WAIVER-MECHANISM-v0.1.md (canon_guardian, P1 closure document)
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md.
+#
+# Closure note: this work order required no amendment of allowed_files or
+# forbidden_files. The deliverable WAIVER-MECHANISM-v0.1.md (the document
+# this work order produced) is itself the canonical specification of the
+# waiver mechanism that future work orders may invoke; this work order
+# does not invoke any waiver. The original drafted/approved/assigned
+# content is preserved verbatim per WORKFORCE-EXECUTION-RUNTIME-v0.1 §21
+# immutability. Only `status` and `status_history` are extended at closure.
+
+work_order_id: "WO-2026-05-07-005"
+agent_role: "canon_guardian"
+assigned_to: "canon_guardian-01"
+objective: "Author WAIVER-MECHANISM-v0.1.md as the first P1 constitutional-closure document identified by DOC-COMPLETION-AUDIT-v0.1.md, defining the only admissible mechanism for scoped, replayable, human-approved operational exceptions without mutating constitutional legitimacy."
+
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "tools/**"
+  - "Makefile"
+  - "SPEC.md"
+
+constraints:
+  - "authoring-only operation"
+  - "no runtime semantic redesign"
+  - "no validator semantic redesign"
+  - "no workflow semantic redesign"
+  - "no authority semantic redesign"
+  - "no canon redefinition"
+  - "no expansion of the remaining-doc queue beyond the bounded ten identified in reports/DOC-COMPLETION-AUDIT-v0.1.md §15"
+  - "no edits to top-level .md documents other than the named deliverable"
+  - "no read or write of SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, or Makefile under this work order"
+  - "canon_guardian role only"
+  - "deliverable WAIVER-MECHANISM-v0.1.md must contain the following sections, in order, each non-empty: 1. Purpose; 2. Why Waivers Exist; 3. Waiver Scope; 4. Waiver Non-Authority; 5. Human Approval Requirements; 6. Allowed Files Waiver; 7. Forbidden Files Waiver; 8. Read-Only Waiver; 9. Closure-Time Waiver; 10. Canon-Touch Waiver; 11. Validator Conflict Waiver; 12. Waiver Record Requirements; 13. Waiver Replay Requirements; 14. Waiver Failure Classes; 15. Invalid Waivers; 16. Forbidden Waiver Claims; 17. Long-Term Compatibility; 18. Non-Goals; 19. Final Law"
+  - "deliverable must define explicitly: waivers are recorded exceptions, not authority expansion; waivers preserve replay continuity; waivers cannot weaken validator legitimacy; waivers cannot silently mutate canon; waivers cannot erase failure history"
+  - "deliverable must include a section titled exactly 'What Waivers Cannot Permit' enumerating at minimum: hidden file changes; unlogged commands; runtime semantic mutation; validator weakening; silent canonicalization changes; release without gates; undefined authority; hidden persistence"
+  - "deliverable must specify the waiver record schema sufficient to satisfy WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8 audit-trail requirements: actor, timestamp (ISO-8601 UTC), justification, scope, original-state hash, post-waiver-state hash, predecessor work-order id, replay invariants preserved"
+  - "deliverable must specify that a waiver is valid only when (a) recorded as a status_history entry of state 'amended' on the affected work order with non-empty actor and non-empty justification; (b) the original deviation is preserved verbatim in the action log; (c) the closure summary documents the procedural exception; (d) the waiver does not weaken any required gate; (e) the waiver does not silently mutate canon, runtime, validator, or canonicalization semantics"
+  - "deliverable must specify that an invalid waiver is any waiver that hides change, weakens enforcement, or breaks replay continuity, and that the validator MUST refuse closure of any work order whose waiver claim fails any of those tests"
+  - "closure criteria: deliverable exists at top-level WAIVER-MECHANISM-v0.1.md; replay continuity preserved; waiver semantics bounded; no canon contradiction introduced; both required gates green at execution time and closure time"
+
+expected_outputs:
+  - "WAIVER-MECHANISM-v0.1.md"
+  - "workforce/work_orders/open/WO-2026-05-07-005.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+rollback_plan:
+  - "delete WAIVER-MECHANISM-v0.1.md"
+  - "delete workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-005.yaml to workforce/work_orders/rejected/WO-2026-05-07-005.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-005/postmortem.md"
+
+human_approval_required: true
+
+status: "closed"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:40:00Z"
+    note: "Drafted by human owner. Authors WAIVER-MECHANISM-v0.1.md as the first P1 constitutional-closure document per reports/DOC-COMPLETION-AUDIT-v0.1.md §15 entry 2 (priority P1, addresses M-1 / FU-1). Authoring-only scope: no runtime, validator, workflow, authority, or canon redesign; no expansion of the remaining-doc queue beyond the bounded ten identified by the audit. Allowed_files restrict writes to top-level *.md, workforce/**, and reports/**. Forbidden_files include SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, and Makefile. Required gates are make no-pseudocode and make workforce-check. Awaiting approval and assignment."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:45:00Z"
+    note: "Approved by human owner. Authoring-only scope, allowed_files, forbidden_files (including SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, Makefile), required_gates (make no-pseudocode + make workforce-check), expected_outputs, rollback_plan, and closure criteria preserved verbatim from drafted state. No runtime semantic redesign, no validator semantic redesign, no workflow semantic redesign, no authority semantic redesign, no canon redefinition, and no expansion of the remaining-doc queue beyond the bounded ten identified by reports/DOC-COMPLETION-AUDIT-v0.1.md §15 are authorized. Audit-only governance boundaries preserved."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T01:46:00Z"
+    note: "Assigned to identity canon_guardian-01 for execution of the authoring task and production of WAIVER-MECHANISM-v0.1.md plus the action-log pair (workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml and workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md). Execution does not begin under this transition; assignment only. The assignee MUST honor the constraints, MUST NOT touch SPEC.md or any other forbidden_files entry, MUST produce the deliverable with all 19 required sections plus the named 'What Waivers Cannot Permit' section, and MUST satisfy both required gates at execution time and at closure time."
+  - state: "executed"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T02:05:00Z"
+    note: "Canon_guardian-01 authored the deliverable WAIVER-MECHANISM-v0.1.md at the top-level path, containing all 19 required sections in order plus the named section 'What Waivers Cannot Permit' with all eight required forbidden-claim entries. The five must-define elements (waivers as recorded exceptions, replay-continuity preservation, validator-legitimacy preservation, no silent canon mutation, no failure-history erasure) are explicitly stated in §1, §4, §13, §15, §16, and §19. The waiver record schema is specified in §12 with the v0.1 / v0.2 hash-field forward-compatibility surface bounded in §17. Validity conditions (a) through (e) are specified in §5, §12, §14, and §15. Invalid-waiver semantics are specified in §14, §15, and §16. No SPEC.md or other forbidden_files entry was read or written; no canon mutation occurred; no validator weakening occurred; no security-posture change occurred."
+  - state: "self-verified"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T02:08:00Z"
+    note: "Self-verification block written at workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md. All ten questions answered explicitly; question 3 answered yes (no forbidden_files reads); question 5 answered no (no pseudocode); question 6 answered no (no semantic drift); question 7 answered no (no canon alteration); question 8 answered no (no security-posture change); risk notes disclosed; deviations field empty."
+  - state: "gate-checked"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T02:09:00Z"
+    note: "Required gates run under PYTHON=.venv/bin/python: make no-pseudocode (exit 0; 43 markdown files scanned including the new WAIVER-MECHANISM-v0.1.md; no pseudocode markers in any Python code block); make workforce-check (exit 0; 4 work orders, 7 action logs, 3 closed at run time; new canon_guardian execution log AL-2026-05-07-005 parses with required fields). Captured in workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml."
+  - state: "reviewed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:12:00Z"
+    note: "Human owner reviewed deliverable, action log, and self-verification block. Reviewer Agent independent signoff is recorded as a known v0.1 enforcement gap per the WO-2026-05-07-001 operational lesson L-1 fallback (human-owner-as-reviewer when no second reviewer identity exists); the audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap and is the next P1 closure document. The deliverable's content (19 sections + named subsection + waiver record schema + validity conditions + invalid-waiver semantics) is judged sufficient to terminate missing surface M-1 / FU-1; no canon contradiction is introduced; replay continuity is preserved; both required gates green. No deviation requires amendment of allowed_files or forbidden_files."
+  - state: "human_approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:14:00Z"
+    note: "Human owner grants closure approval on the basis of: deliverable WAIVER-MECHANISM-v0.1.md exists at top-level path; all 19 required sections in order with non-empty content; named 'What Waivers Cannot Permit' section enumerates all eight required forbidden-claim entries; the five must-define elements are explicitly stated; waiver record schema specified in §12 with forward-compatibility surface bounded in §17; validity conditions (a)–(e) specified; invalid-waiver semantics specified; both required gates green at execution time and re-runnable at closure time; no canon, runtime, validator, governance, primitive, or cognition-class change occurred; rollback plan intact. Closure summary to be written at workforce/reports/WO-2026-05-07-005-closure-summary.md."
+  - state: "closed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:15:00Z"
+    note: "Work order closed. File moved from workforce/work_orders/open/ to workforce/work_orders/closed/. Closure summary at workforce/reports/WO-2026-05-07-005-closure-summary.md. Closure action log at workforce/action_logs/WO-2026-05-07-005-closure.yaml. Predecessor execution log at workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml. Replay continuity preserved: every state transition recorded with actor, timestamp, and note; both action logs reference each other by id; the deliverable is the canonical specification of the waiver mechanism that future work orders may invoke. The audit's bounded queue advances by one (entry 2 of 10 closed); nine remain (3 P1 - 1 closed = 2 P1 + 3 P2 + 3 P3 + 1 P0)."

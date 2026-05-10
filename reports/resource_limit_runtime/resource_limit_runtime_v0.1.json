@@ -1,0 +1,82 @@
+{
+  "all_passed": true,
+  "fixtures": [
+    {
+      "detail": "status=ok, exit=0, rlimits_applied={'cpu': True, 'memory': False, 'fd': True, 'nproc': True}",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004814114655Z-allowed_pwd_succeeds.json",
+      "name": "allowed_pwd_succeeds",
+      "passed": true
+    },
+    {
+      "detail": "truncated=True, len=65536, hash=sha256:bf718b6f653bebc18\u2026",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004814122375Z-stdout_flood_truncates_deterministically.json",
+      "name": "stdout_flood_truncates_deterministically",
+      "passed": true
+    },
+    {
+      "detail": "status=timed_out, killed=True, duration=504ms",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004814144111Z-sleep_timeout_kills_process_group.json",
+      "name": "sleep_timeout_kills_process_group",
+      "passed": true
+    },
+    {
+      "detail": "killed=True, child_pid=34179, child_alive=False",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004814652073Z-nested_child_must_not_survive_parent_death.json",
+      "name": "nested_child_must_not_survive_parent_death",
+      "passed": true
+    },
+    {
+      "detail": "exit=7, fd_applied=True, stderr_head=OPEN-FAIL-AT-29: OSError: [Errno 24] Too many open files: 'fd_29.txt'",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815769917Z-fd_exhaustion_rejected.json",
+      "name": "fd_exhaustion_rejected",
+      "passed": true
+    },
+    {
+      "detail": "macOS/post-hoc path: applied=False, peak_rss=268222464, violations=['memory_overrun']",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815830771Z-memory_exhaustion_handled.json",
+      "name": "memory_exhaustion_handled",
+      "passed": true
+    },
+    {
+      "detail": "exit=8, nproc_applied=True, stderr_head=FORK-BLOCKED: [Errno 35] Resource temporarily unavailable",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815887179Z-fork_attempt_rejected.json",
+      "name": "fork_attempt_rejected",
+      "passed": true
+    },
+    {
+      "detail": "final_status=rejected_pre_exec, code=command_count_overflow, results_len=0",
+      "manifest": null,
+      "name": "excessive_command_count_rejected_pre_exec",
+      "passed": true
+    },
+    {
+      "detail": "sandbox_size=2097152, limit=1048576, violations=['sandbox_size_overrun']",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815913386Z-sandbox_size_over_limit_detected.json",
+      "name": "sandbox_size_over_limit_detected",
+      "passed": true
+    },
+    {
+      "detail": "before==after: True, status=ok",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815936234Z-repo_fingerprint_unchanged.json",
+      "name": "repo_fingerprint_unchanged",
+      "passed": true
+    },
+    {
+      "detail": "missing_fields=[]",
+      "manifest": "/Users/thekingflame/Desktop/wiseorder-protocol/reports/resource_limit_runtime/runs/run-20260509T004815944240Z-manifest_resource_fields_populated.json",
+      "name": "manifest_resource_fields_populated",
+      "passed": true
+    },
+    {
+      "detail": "hash1=sha256:bf718b6f653bebc18\u2026, hash2=sha256:bf718b6f653bebc18\u2026, equal=True",
+      "manifest": null,
+      "name": "deterministic_truncation_hashes_stable",
+      "passed": true
+    }
+  ],
+  "isolation_mode": "sandbox-exec+rlimits",
+  "platform": "Darwin",
+  "runtime": "resource_limit_runtime",
+  "runtime_version": "v0.1",
+  "timestamp": "2026-05-09T00:48:15.994364Z"
+}

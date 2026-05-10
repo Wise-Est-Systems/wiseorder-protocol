@@ -1,0 +1,59 @@
+{
+  "vector_id": "class-c-same-consensus-different-action-policy",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "A Class C artifact with valid consensus may have action_policy.action_allowed=false because authorization is separately governed by a declared external policy source. Status remains CONSENSUS_VALID; the action policy is an independent domain (AG2).",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb",
+        "attester:cccc"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:00Z",
+        "eligible": true
+      },
+      {
+        "attester_id": "attester:bbbb",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:30Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Authorization is separately governed; the declared external policy source has not granted execution authorization despite consensus.",
+      "authorization_source": "external_policy:org/security/change_window_v1",
+      "policy_decision": "deny",
+      "policy_rationale": "Outside change window; authorization deferred to next window."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-06T12:00:31Z"
+    }
+  },
+  "expected_status": "CONSENSUS_VALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant AG2: execution authorization MUST remain separately governable. Consensus and action_policy are independent domains: required_quorum=2 is met by eligible attesters (CONSENSUS_VALID), AND the declared external authorization_source ('external_policy:org/security/change_window_v1') has independently denied authorization (action_allowed=false). The artifact remains CONSENSUS_VALID; the policy decision is preserved as auditable metadata per AG3 (authorization_source, policy_decision, policy_rationale). The same consensus could yield different action_policy outcomes under different declared authorization sources without changing consensus status — this is the operational shape of AG2. Paired with class-c-consensus-valid (which also yields CONSENSUS_VALID with action_allowed=false but cites AG1 in its reason): same consensus, different policy contexts, same consensus status."
+}

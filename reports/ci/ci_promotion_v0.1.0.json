@@ -1,0 +1,134 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "ci_promotion",
+  "report_version": "1.0",
+  "timestamp_utc": "2026-05-10T18:09:27Z",
+  "purpose": "WORK ORDER 009 — promote stable code-first checks into make ci and prove cold reproducibility.",
+  "ci_targets_added": [
+    "minimal-verifier-check",
+    "replay-diff-check",
+    "binary-fixture-check",
+    "sandbox-escape-check"
+  ],
+  "ci_target_order": [
+    "no-pseudocode",
+    "test",
+    "conformance",
+    "interop",
+    "canonicalization-check",
+    "minimal-verifier-check",
+    "replay-diff-check",
+    "binary-fixture-check",
+    "sandbox-escape-check"
+  ],
+  "commands": [
+    {
+      "command": "git status --short",
+      "rc": 128,
+      "result": "not_a_git_repository",
+      "note": "Repository is not under git version control. Recorded honestly per WORK ORDER 009 §4 (do not bypass)."
+    },
+    {
+      "command": "make ci",
+      "rc": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "python -m pytest",
+      "rc": 0,
+      "result": "PASS",
+      "tests_passed": 271,
+      "tests_failed": 0
+    },
+    {
+      "command": "make demo",
+      "rc": 0,
+      "result": "PASS",
+      "steps_passed": 6,
+      "steps_failed": 0
+    }
+  ],
+  "ci_stages": [
+    {"stage": "no-pseudocode", "result": "PASS", "detail": "62 markdown files scanned; 0 pseudocode markers"},
+    {"stage": "test", "result": "PASS", "tests_passed": 271, "tests_failed": 0},
+    {"stage": "conformance", "result": "PASS", "vectors_total": 33, "vectors_passed": 33, "vectors_failed": 0, "implementations_passed": 2, "implementations_failed": 0},
+    {"stage": "interop", "result": "PASS", "fixtures_total": 3, "fixtures_passed": 3, "fixtures_failed": 0},
+    {"stage": "canonicalization-check", "result": "PASS", "corpus_entries": 10},
+    {"stage": "minimal-verifier-check", "result": "PASS", "vectors_total": 33, "vectors_passed": 33, "vectors_failed": 0, "note": "independent re-derivation; does not import intellagent_runtime"},
+    {"stage": "replay-diff-check", "result": "PASS", "self_check_fixtures": 9},
+    {"stage": "binary-fixture-check", "result": "PASS", "fixtures_total": 4, "fixtures_passed": 4, "fixtures_failed": 0},
+    {"stage": "sandbox-escape-check", "result": "PASS", "attempts_total": 29, "hostile_refused": 25, "controls_allowed": 4}
+  ],
+  "vector_summary": {
+    "total": 33,
+    "baseline": 23,
+    "adversarial": 10,
+    "passed": 33,
+    "failed": 0
+  },
+  "adversarial_vectors": [
+    "class-a-canonicalization-scheme-corruption",
+    "class-a-algorithm-downgrade",
+    "class-b-replay-drift",
+    "class-b-evidence-suppression-attempt",
+    "class-c-quorum-inflation",
+    "class-c-attestation-replay",
+    "class-c-protocol-version-mismatch",
+    "class-d-forged-commit-chain",
+    "class-d-stage-skip-attempt",
+    "class-d-action-compelled-without-quorum"
+  ],
+  "binary_fixture_verdicts": [
+    {"name": "valid", "expected_verdict": "VERIFIED", "derived_verdict": "VERIFIED", "passed": true, "size": 1056},
+    {"name": "corrupted", "expected_verdict": "TAMPERED", "derived_verdict": "TAMPERED", "passed": true, "size": 1056},
+    {"name": "truncated", "expected_verdict": "TAMPERED", "derived_verdict": "TAMPERED", "passed": true, "size": 1040},
+    {"name": "byte_mutated", "expected_verdict": "TAMPERED", "derived_verdict": "TAMPERED", "passed": true, "size": 1056}
+  ],
+  "sandbox_escape_verdicts": {
+    "categories_covered": [
+      "symlink_breakout",
+      "path_traversal",
+      "forbidden_env",
+      "forbidden_network",
+      "recursive_subprocess",
+      "output_flood",
+      "control_allow"
+    ],
+    "hostile_attempts_refused": 25,
+    "control_attempts_allowed": 4,
+    "total_attempts": 29,
+    "all_passed": true
+  },
+  "frozen_fingerprints": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "transient_failures": [],
+  "files_modified": ["Makefile"],
+  "files_created": [
+    "reports/ci/ci_promotion_v0.1.0.md",
+    "reports/ci/ci_promotion_v0.1.0.json"
+  ],
+  "repo_status": {
+    "git_repository": false,
+    "note": "Repository is not under git version control at the time of this report; git status --short returned exit code 128. The four target files (Makefile and the two reports) are present on the filesystem and verified by command output above."
+  },
+  "ci_now_covers_code_first_layer": true,
+  "overall_result": "PASS",
+  "next_code_task": "Begin first independent verifier implementation track in Rust per IMPLEMENTATION_TRACKER.md §2.1. The Rust verifier MUST NOT import or translate intellagent_runtime; it MUST be derived from SPEC.md, SPEC_LOCK_v0.1.0, schemas/, and the published vector and canonicalization corpora. Acceptance criterion: produces vectors_suite_sha256 == sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f, manifests_suite_sha256 == sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29, corpus_sha256 == sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09 byte-for-byte."
+}

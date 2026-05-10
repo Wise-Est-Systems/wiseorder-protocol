@@ -1,0 +1,12 @@
+{
+  "aligned_vectors": [
+    "class-b-valid-wiseexp"
+  ],
+  "artifact_class": "B",
+  "artifact_sha256": "sha256:480e9a1d49986b03c03a82c8457eb072859267858eba40f93dc3b515f90c8b67",
+  "fixture_id": "winstack-class-b-valid-001",
+  "generated_at": "2026-05-06T12:00:00Z",
+  "implementation": "Winstack",
+  "protocol": "wiseorder",
+  "version": "0.1.0"
+}

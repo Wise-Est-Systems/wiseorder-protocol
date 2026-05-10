@@ -1,0 +1,52 @@
+{
+  "agent_id": "canon_guardian-01",
+  "allowed_command_matches": [
+    "cat",
+    "find",
+    "ls"
+  ],
+  "commands_proposed": [
+    {
+      "allowed_command_match": "cat",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "cat"
+      ],
+      "command": "cat",
+      "rationale": "Reviewer-gate fixture rationale."
+    },
+    {
+      "allowed_command_match": "find",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "find"
+      ],
+      "command": "find",
+      "rationale": "Reviewer-gate fixture rationale."
+    },
+    {
+      "allowed_command_match": "ls",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "ls"
+      ],
+      "command": "ls",
+      "rationale": "Reviewer-gate fixture rationale."
+    }
+  ],
+  "commands_rejected": [],
+  "deterministic_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "exit_status": 0,
+  "policy_rejections": [],
+  "proposal_id": "proposal-canon_guardian_01-WO-FIX-REVIEW-VALID-001-FIXED",
+  "rationale": "Reviewer-gate fixture rationale.",
+  "runtime_version": "v0.1",
+  "timestamp": "2026-05-08T22:00:00.000000Z",
+  "work_order_id": "WO-FIX-REVIEW-VALID-001"
+}

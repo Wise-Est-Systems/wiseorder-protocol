@@ -1,0 +1,56 @@
+{
+  "vector_id": "class-c-consensus-valid",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "A Class C artifact in which the required_quorum is reached using only attestations from eligible_attesters MUST receive CONSENSUS_VALID status. This status MUST NOT auto-authorize execution (AG1).",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb",
+        "attester:cccc"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:00Z",
+        "eligible": true
+      },
+      {
+        "attester_id": "attester:bbbb",
+        "attestation": "approve",
+        "received_at": "2026-05-06T12:00:30Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Consensus reached, but execution authorization is separately governed (AG1)."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-06T12:00:31Z"
+    }
+  },
+  "expected_status": "CONSENSUS_VALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §3 Class C: required_quorum=2 met by two attestations from eligible attesters → CONSENSUS_VALID. Exercises C1 (rules declared before collection), C2 (only eligible attesters counted), C3 (consensus validity does NOT imply execution authorization — action_allowed remains false), C4, AG1, AG3. Mitigates threat AG-1 (auto-authorization)."
+}

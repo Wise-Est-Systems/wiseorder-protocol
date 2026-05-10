@@ -1,0 +1,140 @@
+# WORK ORDER — WO-2026-05-07-009 (OPEN)
+# Author REAL-AGENT-RUNTIME-v0.2.md and extend tools/real_agent_runtime.py
+# with bounded subprocess execute mode (builder, P3 hardening cycle).
+#
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md,
+# WORKFORCE-HARDENING-v0.2.md, REAL-AGENT-RUNTIME-v0.1.md.
+#
+# Scope note: builder upgrade. Adds local subprocess execution under existing
+# admission, command-policy, and filesystem-policy semantics; preserves v0.1
+# dry-run behavior verbatim; does not introduce autonomy, models, daemons, or
+# network access. v0.2 remains policy-layer containment (kernel isolation
+# remains future enforcement R-2). Required gates include both v0.1 gates and
+# the three runtime gates: real-agent-check, real-agent-dry-run, and the new
+# real-agent-execute-check. The new gate is NOT added to make ci.
+
+work_order_id: "WO-2026-05-07-009"
+agent_role: "builder"
+assigned_to: "builder-01"
+objective: "Upgrade REAL-AGENT-RUNTIME-v0.1 from dry-run policy classification into REAL-AGENT-RUNTIME-v0.2 by extending tools/real_agent_runtime.py with a bounded local-subprocess execute mode under the existing admission, command-policy, filesystem-policy, and manifest layers. Author REAL-AGENT-RUNTIME-v0.2.md as the normative spec for the new mode. Preserve every v0.1 refusal behavior. Do not enable autonomy, models, background daemons, or network access. Do not weaken any existing rule. Add a make target real-agent-execute-check that exercises the new mode against built-in fixtures and is NOT included in make ci."
+
+allowed_files:
+  - "REAL-AGENT-RUNTIME-v0.1.md"
+  - "REAL-AGENT-RUNTIME-v0.2.md"
+  - "tools/real_agent_runtime.py"
+  - "tests/**"
+  - "reports/real_agent_runtime/**"
+  - "workforce/**"
+  - "Makefile"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "SPEC.md"
+
+constraints:
+  - "v0.1 dry-run semantics preserved verbatim"
+  - "no autonomous AI agents created"
+  - "no model calls"
+  - "no background daemons"
+  - "no network access"
+  - "no unscoped execution"
+  - "no writes outside sandbox or reports/real_agent_runtime/"
+  - "no weakening of any v0.1 refusal behavior"
+  - "no modification of WiseOrder semantics"
+  - "no modification of Intellagent semantics"
+  - "no modification of SPEC.md"
+  - "no modification of vectors or canonicalization corpus"
+  - "real-agent-* targets not added to make ci"
+  - "execute mode runs only allowlisted commands"
+  - "execute mode runs commands only inside the sandbox copy"
+  - "execute mode blocks forbidden commands BEFORE subprocess invocation"
+  - "execute mode captures stdout, stderr, exit_code, duration_ms, cwd, and timeout-on-true for every attempt"
+  - "execute mode times out every command with a bounded wall-clock cap"
+  - "execute mode fails closed on any policy violation"
+  - "execute mode produces a machine-checkable run manifest (the v0.1 16-field set, plus v0.2 execute-mode extensions)"
+  - "subprocess invocations use Python stdlib subprocess.run only"
+  - "subprocess cwd is the sandbox root"
+  - "subprocess env is minimal: PATH, LC_ALL=C, LANG=C, optional PYTHONPATH only when required by the command"
+  - "list args (no shell=True) unless impossible; current allowlist requires no shell=True"
+  - "source repo fingerprint pre-execution must equal source repo fingerprint post-execution"
+  - "sandbox changes are fingerprinted and recorded in the manifest"
+  - "deliverable REAL-AGENT-RUNTIME-v0.2.md must contain the following sections, in order, each non-empty: 1. Purpose; 2. Difference Between v0.1 Dry-Run And v0.2 Execute Mode; 3. What Becomes Real In v0.2; 4. What Remains Not Real; 5. Work Order Admission; 6. Subprocess Execution Boundary; 7. Sandbox Boundary; 8. Command Policy; 9. Filesystem Policy; 10. Environment Policy; 11. Manifest Requirements; 12. Timeout Requirements; 13. Failure Modes; 14. Security Non-Guarantees; 15. Required Tests; 16. Future OS Isolation; 17. Final Law"
+  - "deliverable must explicitly state: v0.2 creates real local subprocess execution; v0.2 does not create autonomous AI planning; v0.2 does not create background agents; v0.2 does not provide kernel-level isolation; v0.2 is still policy-layer containment, not OS-level containment; agents become real only as bounded worker processes executing approved work orders in sandbox copies"
+  - "execute-mode v0.2 allowlist is exactly: pwd; ls; find; cat; .venv/bin/python tools/check_no_pseudocode.py; .venv/bin/python tools/check_workforce.py; .venv/bin/python tools/real_agent_runtime.py check; make no-pseudocode; make workforce-check; make real-agent-check"
+  - "forbidden command patterns are exactly the v0.1 set: sudo; curl; wget; ssh; scp; git push; git reset --hard; git clean; rm -rf; chmod; chown; open<space>; http://; https://"
+  - "execute-mode self-check fixture suite covers: execute allowed command succeeds; forbidden command blocked before subprocess; command timeout recorded; wrong agent identity refused; drafted work order refused; closed work order refused unless explicit replay mode used; missing allowed_files refused; missing forbidden_files refused; source repo unchanged after execute mode; manifest records stdout/stderr/exit/duration/cwd"
+  - "closure criteria: execute mode exists; subprocess execution works for allowlisted commands; forbidden commands blocked before subprocess; source repo unchanged during execute tests; manifests include command results; timeout behavior tested; reports/real_agent_runtime/real_agent_runtime_v0.2.{md,json} exist; all required gates green; work order moved to closed/; replay continuity preserved"
+
+expected_outputs:
+  - "REAL-AGENT-RUNTIME-v0.2.md"
+  - "tools/real_agent_runtime.py (extended; v0.1 dry-run preserved verbatim)"
+  - "Makefile (added real-agent-execute-check target; not in make ci)"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.md"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.json"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.yaml"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md"
+  - "workforce/action_logs/WO-2026-05-07-009-closure.yaml"
+  - "workforce/reports/WO-2026-05-07-009-closure-summary.md"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make real-agent-check"
+  - "make real-agent-dry-run"
+  - "make real-agent-execute-check"
+
+rollback_plan:
+  - "delete REAL-AGENT-RUNTIME-v0.2.md"
+  - "revert tools/real_agent_runtime.py to its WO-005-era state (v0.1 dry-run only)"
+  - "revert Makefile (remove real-agent-execute-check target)"
+  - "delete reports/real_agent_runtime/real_agent_runtime_v0.2.md"
+  - "delete reports/real_agent_runtime/real_agent_runtime_v0.2.json"
+  - "delete workforce/action_logs/WO-2026-05-07-009-builder.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-009.yaml to workforce/work_orders/rejected/WO-2026-05-07-009.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-009/postmortem.md"
+
+human_approval_required: true
+
+status: "closed"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T13:55:00Z"
+    note: "Drafted by human owner. Builder hardening cycle that promotes the v0.1 dry-run runtime to v0.2 with bounded local-subprocess execution. Allowed_files restrict writes to the named runtime spec files, the runtime tool, tests/**, reports/real_agent_runtime/**, workforce/**, and the Makefile. Forbidden_files include SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, and canonicalization/**. Required gates extend the v0.1 set with real-agent-check, real-agent-dry-run, and the new real-agent-execute-check. The new target is NOT added to make ci. Awaiting approval and assignment."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T13:56:00Z"
+    note: "Approved by human owner. Allowed_files, forbidden_files, constraints, expected_outputs, required_gates (five gates: make no-pseudocode + make workforce-check + make real-agent-check + make real-agent-dry-run + make real-agent-execute-check), rollback_plan, and closure criteria preserved verbatim from drafted state. The v0.1 dry-run semantics MUST remain unchanged; v0.2 adds an execute mode under the existing admission, command-policy, and filesystem-policy layers. No autonomy, no models, no background daemons, no network access, no kernel-level isolation are authorized; v0.2 remains policy-layer containment. real-agent-execute-check is NOT to be added to make ci."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T13:57:00Z"
+    note: "Assigned to identity builder-01 for execution of the runtime upgrade and production of REAL-AGENT-RUNTIME-v0.2.md, the extended tools/real_agent_runtime.py with execute mode, the new Makefile target real-agent-execute-check, the v0.2 reports under reports/real_agent_runtime/, and the action-log pair (workforce/action_logs/WO-2026-05-07-009-builder.yaml and workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md). Execution does not begin under this transition; assignment only. The assignee MUST honor the constraints, MUST NOT touch SPEC.md or any other forbidden_files entry, MUST preserve every v0.1 refusal behavior, MUST satisfy all five required gates at execution time and at closure time."
+  - state: "executed"
+    actor: "builder-01"
+    timestamp: "2026-05-08T14:08:00Z"
+    note: "Builder-01 extended tools/real_agent_runtime.py with the v0.2 execute-mode surface (EXECUTE_ALLOWED_COMMANDS, EXECUTE_TIMEOUT_DEFAULT_S, EXECUTE_TIMEOUT_HARD_CAP_S, EXECUTE_OUTPUT_BYTE_CAP, classify_execute_command, _resolve_command_argv, _minimal_env, _truncate_bytes, execute_command, _walk_tree_files, tree_fingerprint, tree_change_set, execute_run, ten _execute_case_* fixtures, run_execute_self_check, render_execute_report_md, write_execute_reports, cmd_execute, cmd_execute_check; extended RunManifest with mode/replay_mode/command_results/sandbox_fingerprint_before/sandbox_fingerprint_after/sandbox_files_changed/env_keys; extended main() with execute and execute-check subcommands). v0.1 dry-run code paths and refusal codes preserved verbatim. Authored REAL-AGENT-RUNTIME-v0.2.md with the 17 required sections plus the six explicit-state items (v0.2 creates real local subprocess execution; v0.2 does not create autonomous AI planning; v0.2 does not create background agents; v0.2 does not provide kernel-level isolation; v0.2 is still policy-layer containment, not OS-level containment; agents become real only as bounded worker processes executing approved work orders in sandbox copies). Extended Makefile with .PHONY entries for real-agent-execute and real-agent-execute-check, with both new targets defined and explicitly NOT added to make ci. Wrote v0.2 reports at reports/real_agent_runtime/real_agent_runtime_v0.2.{md,json} via the make real-agent-execute-check gate (10/10 fixtures pass)."
+  - state: "self-verified"
+    actor: "builder-01"
+    timestamp: "2026-05-08T14:14:00Z"
+    note: "Self-verification block written at workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md. All ten questions answered explicitly; question 3 answered yes (no forbidden_files reads — runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, SPEC.md untouched); question 5 answered no (no pseudocode); question 6 answered no (no semantic drift; v0.1 refusal codes preserved verbatim; new codes are bounded to the new failure surface); question 7 answered no (no canon alteration); question 8 answered no (minimal env propagates only PATH/LC_ALL/LANG; no secrets, no network, no AWS/GCP/SSH/GITHUB token propagation; bare interpreter entries dropped from execute allowlist; make real-agent-execute-check NOT in make ci); risk notes disclosed; deviations field empty."
+  - state: "gate-checked"
+    actor: "builder-01"
+    timestamp: "2026-05-08T14:16:00Z"
+    note: "All five required gates run and exited 0: make no-pseudocode (45 markdown files scanned including REAL-AGENT-RUNTIME-v0.2.md; no pseudocode markers); make workforce-check (6 work orders, 13 action logs, 5 closed at execution time; new builder execution log AL-2026-05-07-009 parses with required fields; lifecycle order monotonic); make real-agent-check (10/10 v0.1 admission fixtures pass; configuration check clean); make real-agent-dry-run (built-in dry-run ACCEPTED; 2/2 commands allowed; 0 violations); make real-agent-execute-check (10/10 v0.2 execute-mode fixtures pass — execute_allowed_command_succeeds; forbidden_command_blocked_before_subprocess; command_timeout_recorded; wrong_agent_identity_refused; drafted_work_order_refused; closed_refused_unless_replay_mode; missing_allowed_files_refused; missing_forbidden_files_refused; source_repo_unchanged_after_execute; manifest_records_stdout_stderr_exit_duration_cwd). v0.2 reports written at reports/real_agent_runtime/real_agent_runtime_v0.2.{md,json}. Captured in workforce/action_logs/WO-2026-05-07-009-builder.yaml."
+  - state: "reviewed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:20:00Z"
+    note: "Human owner reviewed the runtime extension, the spec deliverable, the Makefile changes, and both v0.2 reports. Reviewer Agent independent signoff is recorded as the known v0.1/v0.2 enforcement gap per the WO-2026-05-07-001 operational lesson L-1 fallback (human-owner-as-reviewer when no second reviewer identity exists); the audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap and is not authorized by this work order. The deliverable's content (17 sections + six explicit-state items + 10-fixture self-check suite + v0.1 preservation) is judged sufficient to terminate the v0.2 hardening surface for the bounded subprocess-execution scope; no canon contradiction is introduced; replay continuity is preserved; all five required gates green; v0.1 refusal behavior preserved verbatim. No deviation requires amendment of allowed_files or forbidden_files."
+  - state: "human_approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:22:00Z"
+    note: "Human owner grants closure approval on the basis of: deliverable REAL-AGENT-RUNTIME-v0.2.md exists at top-level path; all 17 required sections in order with non-empty content; the six explicit-state commitments are stated verbatim in the headline block and reinforced in §3, §4, §5, §6, §10, and the L-1 through L-10 final-law block; tools/real_agent_runtime.py extended with the execute-mode surface (v0.1 dry-run preserved); Makefile gained real-agent-execute and real-agent-execute-check targets, neither added to make ci; v0.2 reports present; all five required gates green at execution time and re-runnable at closure time; no canon, runtime, validator, governance, or cognition-class change occurred outside the execute-mode surface; rollback plan intact. Closure summary to be written at workforce/reports/WO-2026-05-07-009-closure-summary.md."
+  - state: "closed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T14:25:00Z"
+    note: "Work order closed. File moved from workforce/work_orders/open/ to workforce/work_orders/closed/. Closure summary at workforce/reports/WO-2026-05-07-009-closure-summary.md. Closure action log at workforce/action_logs/WO-2026-05-07-009-closure.yaml. Predecessor execution log at workforce/action_logs/WO-2026-05-07-009-builder.yaml. Replay continuity preserved: every state transition recorded with actor, timestamp, and note; both action logs reference each other; the deliverable REAL-AGENT-RUNTIME-v0.2.md is the canonical specification of the bounded subprocess-execution surface; tools/real_agent_runtime.py is the canonical implementation; both v0.2 reports are the canonical machine-checkable evidence of the 10/10 fixture pass."

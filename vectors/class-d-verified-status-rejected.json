@@ -1,0 +1,74 @@
+{
+  "vector_id": "class-d-verified-status-rejected",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "A Class D conduct artifact whose status is set to VERIFIED MUST be rejected as CONDUCT_INVALID. VERIFIED is not a permitted status for Class D under any circumstance.",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "the recommended strategy is to ship F-1 as a class-scoped governance correction",
+    "values_frame": {
+      "optimizing_for": ["ecosystem coherence at genesis"],
+      "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Defensible alternative.",
+        "rejected_because": "Stated tradeoff."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "single-rule lock at genesis is upstream" }
+    ],
+    "recommended_action": {
+      "kind": "governance_correction",
+      "summary": "Reduce WISEATA classes_supported."
+    },
+    "reversibility_score": 0.9,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "self-generated counterargument" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-f1-2026-05-06",
+      "review_after": "2026-08-06T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "content": {
+          "optimizing_for": ["ecosystem coherence at genesis"],
+          "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-06T12:00:00Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "VERIFIED",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    "status": "VERIFIED"
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant D4: a Class D artifact MUST NOT receive VERIFIED status. The artifact above sets status='VERIFIED' and meta_proof.process_status='VERIFIED', which is forbidden for Class D regardless of any other field's correctness. Permitted Class D statuses per §9 are CONDUCT_VALID and CONDUCT_INVALID only. A conformant verifier MUST reject the status and emit CONDUCT_INVALID. This vector enforces the boundary between deterministic verification (Class A) and interpretive governance (Class D)."
+}

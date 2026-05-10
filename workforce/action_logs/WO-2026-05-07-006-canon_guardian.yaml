@@ -1,0 +1,68 @@
+# Execution action log for WO-2026-05-07-006.
+# Records the canon_guardian-01 execution: read of the seven named files plus
+# supporting context, authoring of reports/NEXT-3-EARNED-MOVES-v0.1.md, and
+# production of the self-verification block.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Predecessors: draft, approval, assignment action logs.
+
+action_id: "AL-2026-05-07-006-canon_guardian"
+work_order_id: "WO-2026-05-07-006"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T02:40:00Z"
+timestamp_end: "2026-05-08T03:05:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml"
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+  - "reports/MILESTONE-FOUNDATION-v0.1.md"
+  - "WORKFORCE-HARDENING-v0.2.md"
+  - "WORKFORCE-SANDBOX-STRESS-v0.1.md"
+  - "VALIDATION-LAW-v0.1.md"
+  - "REPLAY-LAW-v0.1.md"
+  - "TRUST-LAW-v0.1.md"
+  - "WAIVER-MECHANISM-v0.1.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-003.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-004.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-003-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-004-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-005-closure-summary.md"
+  - "RELEASE-STATUS-v0.1.md"
+  - "ADOPTION-LADDER-v0.1.md"
+  - "DEPENDENCY-GRADIENT-v0.1.md"
+  - "CROSS-LANGUAGE-CANONICALIZATION-v0.1.md"
+  - "AGENT-GOVERNANCE-WORKFORCE-v0.1.md"
+  - "WORKFORCE-EXECUTION-RUNTIME-v0.1.md"
+
+files_changed:
+  - "reports/NEXT-3-EARNED-MOVES-v0.1.md created"
+  - "workforce/action_logs/WO-2026-05-07-006-canon_guardian.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 44 markdown files including the new NEXT-3-EARNED-MOVES-v0.1.md; no pseudocode markers in any Python code block."
+  - "make workforce-check: 5 work orders, 12 action logs (4 prior closed + 4 prior closure-related + draft + approval + assignment + new canon_guardian), 4 closed; assigned WO-006 in open/ parses with all required fields; status_history through assigned entry."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "The deliverable identifies three earned moves that are operational and tooling moves (M-1: Makefile pin; M-2: cross-machine harness; M-3: validator-rule migration of waiver failure classes). None expands architecture, redefines canon, invents product, or expands the bounded ten-document queue. M-1 corresponds to the audit's P2 entry CANONICAL-INTERPRETER-v0.1.md; M-3 produces validator enforcement of WAIVER-MECHANISM-v0.1.md §14; M-2 is tooling-and-CI work targeting the longest-running unverified surface."
+  - "The deliverable is independent: it does not adopt prior-closure recommendations as conclusions. It uses the audit's classification but reaches its own ranking against the seven priority axes (replayability, validator legitimacy, sandbox safety, audit continuity, operational reproducibility, release legitimacy, earned dependency readiness)."
+  - "All open follow-up items from prior closures (FU-1 through FU-15) other than the closures already terminated (M-1 / FU-1 by WO-005) remain unauthorized. The three EARN moves identified here are candidate work orders; none is authorized by this work order or this closure."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback (no second reviewer identity exists in v0.1). The audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap; that document is not authorized by this closure."
+
+rollback_notes: "Rollback plan documented in the work order. Not executed; gates green and deliverable complete. If human owner denies closure, executing the rollback removes reports/NEXT-3-EARNED-MOVES-v0.1.md, the five lifecycle action logs, and this self-verification block, and moves the work order to rejected/."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"

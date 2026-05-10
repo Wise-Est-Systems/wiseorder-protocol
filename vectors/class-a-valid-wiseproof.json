@@ -1,0 +1,32 @@
+{
+  "vector_id": "class-a-valid-wiseproof",
+  "protocol_version": "0.1.0",
+  "class": "A",
+  "description": "A complete Class A artifact with RFC8785-JCS canonicalization, SHA-256, and matching expected/observed digests MUST receive VERIFIED status.",
+  "input": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "this artifact matches its declared origin digest",
+    "canonicalization": "RFC8785-JCS",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observed_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "proof": {
+      "type": "integrity_proof",
+      "created_at": "2026-05-06T12:00:00Z"
+    }
+  },
+  "expected_status": "VERIFIED",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "canonicalization",
+    "algorithm",
+    "expected_digest",
+    "observed_digest",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §3 Class A allows VERIFIED, TAMPERED, INVALID. When canonicalized bytes reproduce the declared digest under the registered canonicalization scheme and all required fields are present, status MUST be VERIFIED. Exercises invariants A1, A2, A3, CS1, CS2, CS3."
+}

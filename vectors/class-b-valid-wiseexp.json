@@ -1,0 +1,69 @@
+{
+  "vector_id": "class-b-valid-wiseexp",
+  "protocol_version": "0.1.0",
+  "class": "B",
+  "description": "A complete Class B artifact with declared sources, timestamps, observations, and structural_diff that all affirm the claim with no contradicting record MUST receive SUPPORTED status.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "sources": [
+      {
+        "id": "src-runtime-log",
+        "kind": "log",
+        "uri": "file:///var/log/runtime.log"
+      },
+      {
+        "id": "src-tsa-receipt",
+        "kind": "rfc3161_receipt",
+        "uri": "tsa://example/receipt/aaaa"
+      }
+    ],
+    "timestamps": [
+      {
+        "source_id": "src-runtime-log",
+        "value": "2026-05-06T12:00:00Z"
+      },
+      {
+        "source_id": "src-tsa-receipt",
+        "value": "2026-05-06T12:00:01Z"
+      }
+    ],
+    "observations": [
+      {
+        "source_id": "src-runtime-log",
+        "result": "exit_code=0",
+        "supports_claim": true
+      },
+      {
+        "source_id": "src-tsa-receipt",
+        "result": "timestamp_authority_signature_valid",
+        "supports_claim": true
+      }
+    ],
+    "structural_diff": {
+      "byte": { "size_match": true, "digest_match": true },
+      "positional": { "head_match": true, "tail_match": true, "middle_match": true },
+      "frequency": { "histogram_match": true },
+      "transition": { "bigram_match": true },
+      "structural": { "block_digests_match": true }
+    },
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T12:00:02Z"
+    }
+  },
+  "expected_status": "SUPPORTED",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §3 Class B: when all declared evidence sources affirm the claim with no contradicting record, status MUST be SUPPORTED. Exercises B1 (sources declared explicitly) and B3 (evidence ordering remains auditable)."
+}

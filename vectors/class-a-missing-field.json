@@ -1,0 +1,30 @@
+{
+  "vector_id": "class-a-missing-field",
+  "protocol_version": "0.1.0",
+  "class": "A",
+  "description": "A Class A artifact missing a required field (here: canonicalization) MUST receive INVALID status. Required-field omission is a structural failure independent of digest comparison.",
+  "input": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "this artifact matches its declared origin digest",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observed_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "proof": {
+      "type": "integrity_proof",
+      "created_at": "2026-05-06T12:00:00Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "algorithm",
+    "expected_digest",
+    "observed_digest",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant A2 requires Class A artifacts to declare canonicalization scheme, hash algorithm, expected digest, and observed digest. Omitting the canonicalization field violates A2 and CS1 — status MUST be INVALID regardless of whether the digests would otherwise have matched."
+}

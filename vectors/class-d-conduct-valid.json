@@ -1,0 +1,147 @@
+{
+  "vector_id": "class-d-conduct-valid",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "A Class D conduct artifact with values_frame (both optimizing_for and not_optimizing_for), at least one alternative, reasoning_trace, challenge_surface, reversibility_score, calibration block, and a complete commit_chain with preimage content at every stage and dependency linkage between stages MUST receive CONDUCT_VALID status.",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "the recommended strategy is to ship F-1 as a class-scoped governance correction rather than register a second canonicalization scheme in v0.1.0",
+    "values_frame": {
+      "optimizing_for": [
+        "ecosystem coherence at genesis",
+        "single-rule clarity for downstream implementers"
+      ],
+      "not_optimizing_for": [
+        "preservation of existing WISEATA wire format under v0.1.0",
+        "minimal-change paths for current implementations"
+      ]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Register WISEATA-CANONICAL-V1 as a second Class A canonicalization scheme in v0.x+1.",
+        "rejected_because": "Forks canonicalization at genesis and weakens the single-rule guarantee."
+      },
+      {
+        "id": "alt-2",
+        "summary": "Migrate WISEATA proofs to JCS-encoded JSON before declaring Class A.",
+        "rejected_because": "Out of scope for a governance-only correction; runtime change is gated on a separate decision."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "Multiple canonicalization schemes at v0.1.0 would fragment the ecosystem before convergence." },
+      { "step": 2, "claim": "Class-scoped conformance lets WISEATA participate as Class B today without weakening Class A." },
+      { "step": 3, "claim": "Future versions MAY register additional schemes; the v0.1.0 lock costs nothing irreversible." }
+    ],
+    "recommended_action": {
+      "kind": "governance_correction",
+      "summary": "Reduce WISEATA classes_supported to ['B']; retain Winstack candidate ['A','B']; add JCS-only vector backstop."
+    },
+    "reversibility_score": 0.9,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "If WISEATA never migrates to JCS, Class A adoption remains thin and the lock looks ideological rather than functional." },
+      { "id": "ch-2", "argument": "Single canonicalization may bias the protocol toward JSON-shaped artifacts at the expense of binary-native formats." },
+      { "id": "ch-3", "argument": "A second scheme registered later still requires §4 enumeration and version negotiation — the cost is deferred, not avoided." }
+    ],
+    "calibration": {
+      "calibration_id": "cal-f1-2026-05-06",
+      "review_after": "2026-08-06T00:00:00Z",
+      "success_signals": [
+        "≥2 independent Class A implementations using JCS by review date",
+        "no demand for a second canonicalization scheme from external implementers"
+      ],
+      "failure_signals": [
+        "no Class A implementations achieve conformance",
+        "external implementers blocked by JCS requirement"
+      ]
+    },
+    "commit_chain": [
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "content": {
+          "optimizing_for": [
+            "ecosystem coherence at genesis",
+            "single-rule clarity for downstream implementers"
+          ],
+          "not_optimizing_for": [
+            "preservation of existing WISEATA wire format under v0.1.0",
+            "minimal-change paths for current implementations"
+          ]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-06T12:00:00Z"
+      },
+      {
+        "stage": 2,
+        "name": "alternatives_commit",
+        "hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "content": {
+          "alternatives_summary": [
+            "alt-1 register second scheme",
+            "alt-2 migrate WISEATA to JCS"
+          ]
+        },
+        "depends_on": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "created_at": "2026-05-06T12:00:01Z"
+      },
+      {
+        "stage": 3,
+        "name": "reasoning_commit",
+        "hash": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "content": {
+          "reasoning_trace_summary": "single-rule lock at genesis; class-scoped participation; reversible later"
+        },
+        "depends_on": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "created_at": "2026-05-06T12:00:02Z"
+      },
+      {
+        "stage": 4,
+        "name": "challenge_surface_commit",
+        "hash": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "content": {
+          "counterarguments": [
+            "ch-1 thin Class A adoption",
+            "ch-2 JSON bias",
+            "ch-3 deferred cost"
+          ]
+        },
+        "depends_on": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "created_at": "2026-05-06T12:00:03Z"
+      },
+      {
+        "stage": 5,
+        "name": "recommendation_commit",
+        "hash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "content": {
+          "recommended_action": "governance_correction: reduce WISEATA to ['B']; retain Winstack ['A','B']; add JCS-only vector"
+        },
+        "depends_on": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "created_at": "2026-05-06T12:00:04Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_VALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_VALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §3 Class D: a conduct artifact MUST expose what it optimized for AND what it refused to optimize for (D1), generate ≥1 defensible alternative (D2), include explicit self-generated counterarguments (D3), preserve preimage content at every commit stage (D5/CC1), and link each later stage to its predecessor (CC2/CC4). With all required fields present and the commit chain intact and ordered, status MUST be CONDUCT_VALID. Per D4, Class D MUST NOT receive VERIFIED — only CONDUCT_VALID/CONDUCT_INVALID. Mitigates threat D-1 (post-hoc rationalization). Exercises D1, D2, D3, D4, D5, CC1, CC2, CC4."
+}

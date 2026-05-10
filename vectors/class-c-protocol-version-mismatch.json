@@ -1,0 +1,55 @@
+{
+  "vector_id": "class-c-protocol-version-mismatch",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "Adversarial malformed manifest: a Class C artifact whose protocol.version declares a different protocol version than the artifact's declared protocol_version MUST be rejected as INVALID. Cross-version interpretation of consensus protocols is not negotiated under v0.1.0 (deferred per SPEC §15).",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals under a mismatched protocol version",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.2.0-experimental",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-10T11:06:00Z",
+        "eligible": true
+      },
+      {
+        "attester_id": "attester:bbbb",
+        "attestation": "approve",
+        "received_at": "2026-05-10T11:06:30Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Consensus protocol version does not match artifact protocol version; cross-version negotiation is deferred under v0.1.0."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-10T11:06:31Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §15 explicitly defers protocol negotiation. SPEC_LOCK_v0.1.md §2.1 freezes the protocol_version field at the artifact level to 0.1.0. A consensus protocol declaring its own version ('0.2.0-experimental') under a v0.1.0 artifact is a cross-version manifest that v0.1.0 has no rules to interpret. Mitigates a malformed-manifest attack where an attacker exploits absent negotiation rules to obtain a status the v0.1.0 verifier cannot meaningfully assess. The conservative behavior REQUIRED under v0.1.0 is to reject as INVALID rather than infer a verdict. Exercises C1 (consensus rules MUST be declared before attestation collection — and MUST be declared in the artifact's own protocol version)."
+}

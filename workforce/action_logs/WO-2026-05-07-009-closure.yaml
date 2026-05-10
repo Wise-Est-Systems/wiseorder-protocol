@@ -1,0 +1,76 @@
+# Closure action log — successor to AL-2026-05-07-009-builder.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Append-only. Records the closure-cycle operations: file move, status_history
+# append, closure summary creation, and closure-time gate re-run.
+#
+# Predecessor action log (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-009-builder.yaml
+#
+# Predecessor self-verification (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md
+
+action_id: "AL-2026-05-07-009-closure"
+work_order_id: "WO-2026-05-07-009"
+agent_role: "builder"
+timestamp_start: "2026-05-08T14:20:00Z"
+timestamp_end: "2026-05-08T14:30:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-009.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-009.yaml"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.yaml"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md"
+  - "REAL-AGENT-RUNTIME-v0.1.md"
+  - "REAL-AGENT-RUNTIME-v0.2.md"
+  - "tools/real_agent_runtime.py"
+  - "Makefile"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.1.md"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.1.json"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.md"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.json"
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml"
+  - "workforce/reports/WO-2026-05-07-005-closure-summary.md"
+
+files_changed:
+  - "workforce/work_orders/closed/WO-2026-05-07-009.yaml created (moved from open/)"
+  - "workforce/work_orders/open/WO-2026-05-07-009.yaml deleted (move target)"
+  - "workforce/action_logs/WO-2026-05-07-009-closure.yaml created"
+  - "workforce/reports/WO-2026-05-07-009-closure-summary.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+  - "make real-agent-check 0"
+  - "make real-agent-dry-run 0"
+  - "make real-agent-execute-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 45 markdown files including REAL-AGENT-RUNTIME-v0.2.md; no pseudocode markers found in any Python code block."
+  - "make workforce-check: required directory layout present; templates intact; closed WO-2026-05-07-009 satisfies closure validation against allowed_files, forbidden_files, required_gates, action-log presence, self-verification presence, and human-approval closure entry; lifecycle order monotonic; both predecessor and closure action logs parse with required fields; reported 6 work orders, 14 action logs, 6 closed at closure time."
+  - "make real-agent-check: 10/10 v0.1 admission fixtures pass at closure time; configuration check clean."
+  - "make real-agent-dry-run: built-in dry-run ACCEPTED at closure time; 2/2 commands allowed; 0 violations; manifest written under workforce/real_agents/runs/."
+  - "make real-agent-execute-check: 10/10 v0.2 execute-mode fixtures pass at closure time."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make real-agent-check"
+  - "make real-agent-dry-run"
+  - "make real-agent-execute-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "v0.2 is policy-layer containment, not OS-level containment. Future enforcement (R-2 retargeted to v0.3+) addresses kernel-level isolation; this closure does not authorize that move."
+  - "v0.2 manifests are unsigned JSON; cryptographic attestation (R-3 / AGENT-IDENTITY-v0.1.md) and hash-chained manifests (R-4) remain future enforcement."
+  - "v0.2 bounds wall-clock time only; memory / CPU / FD / process-count limits (R-5) remain future enforcement."
+  - "Manifest-schema validator (R-8) is now retargeted to the v0.2 manifest schema (16 v0.1 fields plus 7 v0.2 extension fields); not authorized by this closure."
+  - "Cross-validation between tools/check_workforce.py and the runtime (R-6) and an adversarial pressure suite for execute mode (R-7) remain future enforcement; not authorized by this closure."
+  - "make real-agent-execute-check is NOT in make ci, in compliance with the work order's constraint and L-9 of REAL-AGENT-RUNTIME-v0.2.md. This closure does not authorize inclusion."
+  - "Reviewer signoff identity for this work order is the human owner under the L-1 fallback. The audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap; that document is not authorized by this closure."
+
+rollback_notes: "Rollback plan documented in the closed work order. Not executed; all five gates green and human-owner closure approval recorded in status_history. If post-closure inspection reveals a material defect in the deliverable, a successor correction work order is required; this work order is not reopened."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md"

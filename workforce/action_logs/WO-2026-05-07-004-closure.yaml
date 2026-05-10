@@ -1,0 +1,60 @@
+# Closure action log — successor to AL-2026-05-07-004-canon_guardian.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Append-only. Records the closure-cycle operations: file move, status_history
+# append, closure summary creation, and closure-time gate re-run.
+#
+# Predecessor action log (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml
+#
+# Predecessor self-verification (preserved verbatim):
+#   workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md
+
+action_id: "AL-2026-05-07-004-closure"
+work_order_id: "WO-2026-05-07-004"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T01:30:00Z"
+timestamp_end: "2026-05-08T01:35:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-004.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-004.yaml"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-003.yaml"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-003-closure-summary.md"
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md"
+
+files_changed:
+  - "workforce/work_orders/closed/WO-2026-05-07-004.yaml created"
+  - "workforce/work_orders/open/WO-2026-05-07-004.yaml deleted"
+  - "workforce/action_logs/WO-2026-05-07-004-closure.yaml created"
+  - "workforce/reports/WO-2026-05-07-004-closure-summary.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned the markdown corpus; no pseudocode markers found in Python code blocks (the closure summary contains no Python code blocks)."
+  - "make workforce-check: required directory layout present; templates intact; closed WO-2026-05-07-004 satisfies closure validation against allowed_files, forbidden_files, required_gates, action-log presence, self-verification presence, and human-approval closure entry; lifecycle order monotonic; both predecessor and closure action logs parse with required fields; reported 3 work orders, 6 action logs, 3 closed."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations:
+  - "Reads outside allowed_files: none. All reads recorded above match the *.md, workforce/**, and reports/** globs in allowed_files. The closure-time read of workforce/work_orders/open/WO-2026-05-07-004.yaml occurred before the file was deleted as part of the open->closed move; the path matches workforce/**."
+
+risk_notes:
+  - "The audit's bounded queue of ten remaining documents (P0+P1+P2+P3) is the closure-time anchor for the document-expansion phase termination. None of those ten documents is authorized by this work order or by this closure; each requires its own drafted, approved, and assigned governance work order."
+  - "All open follow-up items from prior closures (FU-1 through FU-15) remain unauthorized. The audit re-references them as M-1 through M-5; the audit's closure does not advance them."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback because no second reviewer identity exists in v0.1; the audit recommends locking this fallback into REVIEWER-IDENTITY-v0.1.md as a P1 closure document. The audit does not authorize that document."
+  - "Cross-language, cross-machine, and cross-Python-version determinism remain unverified. The audit re-records this as one of the contradictions between SPEC.md §4 and the v0.1 Python canonicalizer (C-2). This closure does not narrow that gap."
+
+rollback_notes: "Rollback plan documented in the closed work order. Not executed; gates green and human-owner closure approval recorded in status_history. If post-closure inspection reveals a material defect in the audit content, a successor correction work order is required; this work order is not reopened."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md"

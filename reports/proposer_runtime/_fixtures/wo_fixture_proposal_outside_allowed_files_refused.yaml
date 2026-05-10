@@ -1,0 +1,12 @@
+work_order_id: "WO-FIX-PROPOSER-PATHOUT-002"
+status: "approved"
+assigned_to: "canon_guardian-01"
+objective: "Run the v0.1 documentation conformance gate."
+allowed_files:
+  - "*.md"
+forbidden_files:
+  - "runtime/**"
+  - "vectors/**"
+  - "intellagent_runtime/**"
+required_gates:
+  - "cat secrets/config.txt"

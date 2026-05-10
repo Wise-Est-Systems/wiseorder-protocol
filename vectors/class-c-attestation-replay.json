@@ -1,0 +1,55 @@
+{
+  "vector_id": "class-c-attestation-replay",
+  "protocol_version": "0.1.0",
+  "class": "C",
+  "description": "Adversarial replay poisoning: a Class C artifact in which the same eligible attester appears twice with the same attestation, and both occurrences are counted toward quorum, MUST be rejected as INVALID. An attestation MUST be counted at most once per attester per consensus event.",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals (replayed attestation counted twice)",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.1.0",
+      "required_quorum": 2,
+      "eligible_attesters": [
+        "attester:aaaa",
+        "attester:bbbb"
+      ]
+    },
+    "evidence": [
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-10T11:05:00Z",
+        "eligible": true
+      },
+      {
+        "attester_id": "attester:aaaa",
+        "attestation": "approve",
+        "received_at": "2026-05-10T11:05:30Z",
+        "eligible": true
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Quorum claimed by counting attester:aaaa twice; replayed attestation must not contribute to quorum."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-10T11:05:31Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariants C2, C4: a conformant implementation MUST reject attestations from unauthorized participants and MUST preserve quorum semantics as auditable metadata. Counting the same attester twice is a quorum-semantic violation: the protocol's quorum is defined over distinct eligible attesters, not over attestation events. The artifact contains two attestations from attester:aaaa; structurally, only one can be counted. With required_quorum=2 and one distinct eligible attester present, the consensus is structurally non-conformant. Mitigates a replay-poisoning attack where an attacker re-submits a captured attestation to inflate quorum. Status MUST be INVALID."
+}

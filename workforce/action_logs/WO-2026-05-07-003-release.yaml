@@ -1,0 +1,77 @@
+# Action log — execution record for WO-2026-05-07-003.
+# Append-only. Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+#
+# Scope note: WO-2026-05-07-003 is a release-and-continuity work order. The
+# bundled artifacts named in the work order's allowed_files were authored
+# under prior work orders or direct human-owner authoring actions; this
+# action log records the release-cycle operations performed under WO-003,
+# namely (a) verification that each bundled artifact exists on disk, (b)
+# verification that the milestone report at reports/MILESTONE-FOUNDATION-v0.1.md
+# exists, (c) execution of the four required gates, and (d) production of
+# this action-log pair. No bundled artifact was modified by this action.
+
+action_id: "AL-2026-05-07-003-release"
+work_order_id: "WO-2026-05-07-003"
+agent_role: "release"
+timestamp_start: "2026-05-07T08:06:00Z"
+timestamp_end: "2026-05-08T00:44:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-003.yaml"
+  - "workforce/templates/action_log.yaml"
+  - "workforce/templates/self_verification.md"
+  - "workforce/templates/work_order.yaml"
+  - "workforce/action_logs/WO-2026-05-07-001-reviewer.yaml"
+  - "workforce/action_logs/WO-2026-05-07-001-closure.yaml"
+  - "workforce/action_logs/WO-2026-05-07-001-reviewer.self_verification.md"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/open/WO-2026-05-07-004.yaml"
+  - "MASTER-ROADMAP-v0.1.md"
+  - "TRANSLATION-LAYER-v0.1.md"
+  - "WORKFORCE-EXECUTION-RUNTIME-v0.1.md"
+  - "WORKFORCE-SANDBOX-STRESS-v0.1.md"
+  - "WORKFORCE-HARDENING-v0.2.md"
+  - "tools/check_workforce.py"
+  - "tools/workforce_sandbox_stress.py"
+  - "Makefile"
+  - "reports/MILESTONE-FOUNDATION-v0.1.md"
+
+files_changed:
+  - "workforce/action_logs/WO-2026-05-07-003-release.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-003-release.self_verification.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+  - "make workforce-stress 0"
+  - "make ci 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 42 markdown files including the milestone report; no pseudocode markers found in Python code blocks."
+  - "make workforce-check: required directory layout present; all three templates present; all work-order YAML files (open and closed) parse with required fields; all action-log YAML files parse with required fields; closed WO-001 satisfies closure validation; reported 3 work orders, 2 action logs, 1 closed."
+  - "make workforce-stress: 900 deterministic checks executed across 100 rule templates x 3 variants x 3 sandboxes; coverage_gap=0; cross-sandbox identity holds; duration ~11.4 seconds."
+  - "make ci: chained no-pseudocode + tests/ pytest suite + protocol conformance + interoperability + canonicalization-golden; 135/135 tests passing; 23/23 vectors passing; 3/3 interop fixtures passing; corpus_sha256 sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09 stable; CI summary line printed."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make workforce-stress"
+  - "make ci"
+
+gates_failed: []
+
+deviations:
+  - "Reads outside allowed_files: STATUS-REGISTRY.md and RELEASE-STATUS-v0.1.md were read for closure context. Neither is in forbidden_files; the validator does not enforce allowed_files against files_read. Recorded for transparency under operational lesson L-2 of WO-2026-05-07-001."
+  - "Initial make ci invocation under the system python3 (Homebrew python@3.14, no pytest installed) produced a pytest ImportError and exit 2. Re-invocation with PYTHON=.venv/bin/python — the repository's canonical interpreter declared by .venv/pyvenv.cfg — produced exit 0. The Makefile defaults PYTHON to python3, which is environment-dependent; the four required gates were satisfied under the canonical interpreter. Recorded as an environment observation, not a regression."
+  - "The agent identity release-01 was assumed by the closure operator under the WO-2026-05-07-001 operational lesson L-1 fallback (human-owner-as-reviewer when no second identity exists). The release-cycle work performed here is the post-hoc bundling validation; the bundled artifacts were authored under prior work orders or direct human-owner authoring actions per the work order's stated scope."
+
+risk_notes:
+  - "make ci's default PYTHON=python3 resolves environmentally and is not pinned to .venv/bin/python in the Makefile. CI on a system without pytest globally installed will fail until either (a) the Makefile pins to .venv/bin/python, (b) a venv-activation wrapper is added, or (c) the runner ensures pytest is on PATH. Logged as a follow-up candidate; not authorized by this work order."
+  - "Cross-language, cross-machine, and cross-Python-version determinism remain unverified per the WO-2026-05-07-001 closure summary §7. This release does not narrow any of those gaps."
+  - "The milestone artifact reports/MILESTONE-FOUNDATION-v0.1.md was authored under prior actions before the WO-2026-05-07-003 status_history began; this is the explicit shape of a release-and-continuity work order and is consistent with its constraints clause."
+  - "All operational lessons L-1, L-2, L-3 from the WO-2026-05-07-001 closure summary remain open. Their resolution is recommended via FU-1, FU-2, FU-3; none is authorized by this work order."
+
+rollback_notes: "Rollback plan documented in the work order. Not executed; gates green and milestone artifact intact. If human owner denies closure, executing the rollback removes reports/MILESTONE-FOUNDATION-v0.1.md and moves the work order to rejected/. No bundled artifact would need rollback because none was authored under this work order."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-003-release.self_verification.md"

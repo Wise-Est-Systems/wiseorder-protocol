@@ -1,0 +1,41 @@
+# Approval action log for WO-2026-05-07-006.
+# Records the drafted->approved status transition.
+# Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+# Predecessor: workforce/action_logs/WO-2026-05-07-006-draft.yaml.
+
+action_id: "AL-2026-05-07-006-approval"
+work_order_id: "WO-2026-05-07-006"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T02:32:00Z"
+timestamp_end: "2026-05-08T02:34:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-draft.yaml"
+
+files_changed:
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml modified"
+  - "workforce/action_logs/WO-2026-05-07-006-approval.yaml created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: 43 markdown files scanned; clean."
+  - "make workforce-check: 5 work orders, 9 action logs, 4 closed; approved WO-006 in open/ parses with all required fields; status_history includes drafted and approved entries."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "Approval transition modifies the WO yaml's status field and appends one status_history entry. All other content fields preserved verbatim per WORKFORCE-EXECUTION-RUNTIME-v0.1 §21 immutability."
+
+rollback_notes: "If the work order is subsequently rejected, the rollback plan in the WO yaml moves it to rejected/. This approval transition is preserved in status_history under the rejected work order."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"

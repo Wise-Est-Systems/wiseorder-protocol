@@ -1,0 +1,33 @@
+{
+  "fixture_id": "winstack-class-b-valid-001",
+  "implementation": "Winstack",
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "artifact_class": "B",
+  "aligned_vectors": ["class-b-valid-wiseexp"],
+  "generated_at": "2026-05-06T12:00:00Z",
+  "artifact": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "Winstack-emitted Class B artifact for interop alignment with class-b-valid-wiseexp",
+    "sources": [
+      { "id": "winstack-runtime-log", "kind": "log", "uri": "winstack://runtime/abc" },
+      { "id": "winstack-tsa-receipt", "kind": "rfc3161_receipt", "uri": "winstack://tsa/abc" }
+    ],
+    "timestamps": [
+      { "source_id": "winstack-runtime-log", "value": "2026-05-06T12:00:00Z" },
+      { "source_id": "winstack-tsa-receipt", "value": "2026-05-06T12:00:01Z" }
+    ],
+    "observations": [
+      { "source_id": "winstack-runtime-log", "result": "exit_code=0", "supports_claim": true },
+      { "source_id": "winstack-tsa-receipt", "result": "tsa_signature_valid", "supports_claim": true }
+    ],
+    "structural_diff": {
+      "byte": { "size_match": true, "digest_match": true }
+    },
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T12:00:02Z"
+    }
+  }
+}

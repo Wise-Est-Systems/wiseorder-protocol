@@ -1,0 +1,155 @@
+{
+  "all_passed": true,
+  "case_count": 10,
+  "directories": {
+    "real_agents_dir": "workforce/real_agents",
+    "reports_dir": "reports/real_agent_runtime",
+    "runs_dir": "workforce/real_agents/runs",
+    "sandboxes_dir": "workforce/real_agents/sandboxes"
+  },
+  "failed_count": 0,
+  "identities": [
+    "builder-01",
+    "canon_guardian-01",
+    "release-01",
+    "reviewer-01"
+  ],
+  "passed_count": 10,
+  "policy": {
+    "allowed_commands": [
+      "pwd",
+      "ls",
+      "find",
+      "cat",
+      "python3",
+      ".venv/bin/python",
+      "make no-pseudocode",
+      "make workforce-check"
+    ],
+    "default_denied_paths": [
+      "runtime/",
+      "intellagent_runtime/",
+      "vectors/",
+      "canonicalization/corpus/",
+      "tools/"
+    ],
+    "forbidden_command_patterns": [
+      "sudo",
+      "curl",
+      "wget",
+      "ssh",
+      "scp",
+      "git push",
+      "git reset --hard",
+      "git clean",
+      "rm -rf",
+      "chmod",
+      "chown",
+      "open ",
+      "http://",
+      "https://"
+    ]
+  },
+  "runtime_version": "v0.1",
+  "self_check_results": [
+    {
+      "actual_accepted": true,
+      "actual_reason": "admission accepted for canon_guardian-01 on WO-FIX-001 (status=approved)",
+      "actual_refusal_code": "",
+      "case": "approved_assigned_wo_passes_admission",
+      "expected_accepted": true,
+      "pass": true
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 status 'drafted' is not admissible for canon_guardian-01 (allowed: ['approved', 'assigned'])",
+      "actual_refusal_code": "status_not_admissible",
+      "case": "drafted_wo_refused",
+      "expected_accepted": false,
+      "pass": true
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 has empty assigned_to",
+      "actual_refusal_code": "assigned_to_mismatch",
+      "case": "unassigned_wo_refused",
+      "expected_accepted": false,
+      "pass": true
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 assigned_to 'release-01' does not match agent 'canon_guardian-01'",
+      "actual_refusal_code": "assigned_to_mismatch",
+      "case": "wrong_agent_identity_refused",
+      "expected_accepted": false,
+      "pass": true
+    },
+    {
+      "actual_accepted": true,
+      "actual_reason": "admission accepted for canon_guardian-01 on WO-FIX-001 (status=approved)",
+      "actual_refusal_code": "",
+      "case": "forbidden_command_refused",
+      "command_check": {
+        "actual_blocked": true,
+        "command": "curl http://example.com",
+        "expected_blocked": true,
+        "reason": "matches forbidden pattern 'curl'"
+      },
+      "expected_accepted": true,
+      "pass": true
+    },
+    {
+      "actual_accepted": true,
+      "actual_reason": "admission accepted for canon_guardian-01 on WO-FIX-001 (status=approved)",
+      "actual_refusal_code": "",
+      "case": "forbidden_file_read_refused",
+      "expected_accepted": true,
+      "pass": true,
+      "read_check": {
+        "actual_blocked": true,
+        "expected_blocked": true,
+        "path": "SPEC.md",
+        "reason": "forbidden_files pattern 'SPEC.md' matched"
+      }
+    },
+    {
+      "actual_accepted": true,
+      "actual_reason": "admission accepted for canon_guardian-01 on WO-FIX-001 (status=approved)",
+      "actual_refusal_code": "",
+      "case": "write_outside_sandbox_refused",
+      "expected_accepted": true,
+      "pass": true,
+      "write_check": {
+        "actual_blocked": true,
+        "expected_blocked": true,
+        "path": "/tmp/outside_sandbox.txt",
+        "reason": "write target outside sandbox or reports/real_agent_runtime/"
+      }
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 status 'closed' is not admissible for canon_guardian-01 (allowed: ['approved', 'assigned'])",
+      "actual_refusal_code": "status_not_admissible",
+      "case": "closed_wo_refused",
+      "expected_accepted": false,
+      "pass": true
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 missing or empty allowed_files",
+      "actual_refusal_code": "missing_allowed_files",
+      "case": "missing_allowed_files_refused",
+      "expected_accepted": false,
+      "pass": true
+    },
+    {
+      "actual_accepted": false,
+      "actual_reason": "work order WO-FIX-001 missing or empty forbidden_files",
+      "actual_refusal_code": "missing_forbidden_files",
+      "case": "missing_forbidden_files_refused",
+      "expected_accepted": false,
+      "pass": true
+    }
+  ],
+  "timestamp": "2026-05-09T00:48:05Z"
+}

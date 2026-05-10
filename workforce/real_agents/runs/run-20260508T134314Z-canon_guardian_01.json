@@ -1,0 +1,27 @@
+{
+  "agent_id": "canon_guardian-01",
+  "commands_allowed": [],
+  "commands_attempted": [],
+  "commands_blocked": [],
+  "dry_run": true,
+  "exit_status": 1,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [],
+  "gates_run": [],
+  "policy_violations": [
+    {
+      "code": "status_not_admissible",
+      "reason": "work order WO-2026-05-07-005 status 'closed' is not admissible for canon_guardian-01 (allowed: ['approved', 'assigned'])"
+    }
+  ],
+  "repo_fingerprint_after": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "repo_fingerprint_before": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "run_id": "run-20260508T134314Z-canon_guardian_01",
+  "runtime_version": "v0.1",
+  "sandbox_path": "",
+  "timestamp_end": "2026-05-08T13:43:14Z",
+  "timestamp_start": "2026-05-08T13:43:14Z",
+  "work_order_id": "WO-2026-05-07-005"
+}

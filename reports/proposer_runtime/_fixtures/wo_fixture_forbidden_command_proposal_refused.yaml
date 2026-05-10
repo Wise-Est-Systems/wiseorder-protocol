@@ -1,0 +1,14 @@
+work_order_id: "WO-FIX-PROPOSER-FORBIDDEN-001"
+status: "approved"
+assigned_to: "canon_guardian-01"
+objective: "Run the v0.1 documentation conformance gate."
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+forbidden_files:
+  - "runtime/**"
+  - "vectors/**"
+  - "intellagent_runtime/**"
+required_gates:
+  - "curl https://example.com"

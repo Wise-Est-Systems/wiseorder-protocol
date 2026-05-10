@@ -1,0 +1,43 @@
+name: WiseOrder Conformance
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Documentation code standard (no pseudocode)
+        run: make no-pseudocode
+
+      - name: Run tooling self-tests
+        run: pytest tests/ -v
+
+      - name: Run protocol conformance
+        run: make conformance
+
+      - name: Run interoperability checks
+        run: make interop
+
+      - name: Verify no drift in regenerated artifacts
+        run: |
+          if ! git diff --exit-code -- reports/ interop/; then
+            echo ""
+            echo "ERROR: regenerated artifacts drift from committed state."
+            echo "Run 'make conformance && make interop' locally and commit the result."
+            exit 1
+          fi
+          echo "OK: regenerated artifacts match committed state."

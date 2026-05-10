@@ -1,0 +1,46 @@
+{
+  "canonicalization": "python-json-sortkeys-compact-utf8",
+  "entries": {
+    "001-simple-object": {
+      "canonical_hex": "7b2261223a312c2262223a327d",
+      "canonical_utf8": "{\"a\":1,\"b\":2}"
+    },
+    "002-nested-object": {
+      "canonical_hex": "7b22696e6e6572223a5b7b226a223a342c226b223a337d2c7b226d223a357d5d2c226f75746572223a7b2261223a322c227a223a317d7d",
+      "canonical_utf8": "{\"inner\":[{\"j\":4,\"k\":3},{\"m\":5}],\"outer\":{\"a\":2,\"z\":1}}"
+    },
+    "003-array-order": {
+      "canonical_hex": "7b2264617461223a5b332c312c322c2261222c2262225d2c2274616773223a5b227a65627261222c226170706c65222c226d616e676f225d7d",
+      "canonical_utf8": "{\"data\":[3,1,2,\"a\",\"b\"],\"tags\":[\"zebra\",\"apple\",\"mango\"]}"
+    },
+    "004-unicode": {
+      "canonical_hex": "7b226173636969223a2268656c6c6f222c22656d6f6a69223a22f09f8c8d222c226a6170616e657365223a22e697a5e69cace8aa9e222c226c6174696e31223a22636166c3a9222c226d617468223a22ceb1202b20ceb2203d20ceb3227d",
+      "canonical_utf8": "{\"ascii\":\"hello\",\"emoji\":\"🌍\",\"japanese\":\"日本語\",\"latin1\":\"café\",\"math\":\"α + β = γ\"}"
+    },
+    "005-number-integer": {
+      "canonical_hex": "7b226d61785f73616665223a393030373139393235343734303939312c226d696e5f73616665223a2d393030373139393235343734303939312c226e65676174697665223a2d34322c22706f736974697665223a34322c227a65726f223a307d",
+      "canonical_utf8": "{\"max_safe\":9007199254740991,\"min_safe\":-9007199254740991,\"negative\":-42,\"positive\":42,\"zero\":0}"
+    },
+    "006-number-float": {
+      "canonical_hex": "7b226e65676174697665223a2d322e352c227069223a332e31343135392c22736d616c6c223a302e3030312c2274656e746873223a302e317d",
+      "canonical_utf8": "{\"negative\":-2.5,\"pi\":3.14159,\"small\":0.001,\"tenths\":0.1}"
+    },
+    "007-bool-null": {
+      "canonical_hex": "7b226d697373696e67223a6e756c6c2c226e6f223a66616c73652c22796573223a747275657d",
+      "canonical_utf8": "{\"missing\":null,\"no\":false,\"yes\":true}"
+    },
+    "008-key-order": {
+      "canonical_hex": "7b22616c706861223a322c22627261766f223a342c22636861726c6965223a362c226d696b65223a332c2279616e6b6565223a352c227a756c75223a317d",
+      "canonical_utf8": "{\"alpha\":2,\"bravo\":4,\"charlie\":6,\"mike\":3,\"yankee\":5,\"zulu\":1}"
+    },
+    "009-whitespace": {
+      "canonical_hex": "7b2261223a312c2262223a322c2263223a5b31302c32302c33305d7d",
+      "canonical_utf8": "{\"a\":1,\"b\":2,\"c\":[10,20,30]}"
+    },
+    "010-wiseorder-class-a": {
+      "canonical_hex": "7b22616c676f726974686d223a225348412d323536222c2263616e6f6e6963616c697a6174696f6e223a22524643383738352d4a4353222c22636c61696d223a2274686973206172746966616374206d61746368657320697473206465636c61726564206f726967696e20646967657374222c22636c617373223a2241222c2265787065637465645f646967657374223a227368613235363a61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c226f627365727665645f646967657374223a227368613235363a61616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161222c2270726f6f66223a7b22637265617465645f6174223a22323032362d30352d30365431323a30303a30305a222c2274797065223a22696e746567726974795f70726f6f66227d2c22726567696d65223a2264657465726d696e69737469635f766572696669636174696f6e227d",
+      "canonical_utf8": "{\"algorithm\":\"SHA-256\",\"canonicalization\":\"RFC8785-JCS\",\"claim\":\"this artifact matches its declared origin digest\",\"class\":\"A\",\"expected_digest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"observed_digest\":\"sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"proof\":{\"created_at\":\"2026-05-06T12:00:00Z\",\"type\":\"integrity_proof\"},\"regime\":\"deterministic_verification\"}"
+    }
+  },
+  "schema_version": "0.1.0"
+}

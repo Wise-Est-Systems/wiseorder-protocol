@@ -1,0 +1,12 @@
+{
+  "aligned_vectors": [
+    "class-b-valid-wiseexp"
+  ],
+  "artifact_class": "B",
+  "artifact_sha256": "sha256:8662d681baef006f45aa98d3b80584a7c0a4daa78279389a7ce3971cc94ab062",
+  "fixture_id": "wiseata-class-b-valid-001",
+  "generated_at": "2026-05-06T12:00:00Z",
+  "implementation": "WISEATA",
+  "protocol": "wiseorder",
+  "version": "0.1.0"
+}

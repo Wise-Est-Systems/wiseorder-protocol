@@ -1,0 +1,338 @@
+{
+  "implementation_results": [
+    {
+      "audit_status": "NOT_AUDITED",
+      "block_index": 0,
+      "classes_supported": [
+        "A",
+        "B"
+      ],
+      "failures": [],
+      "implementation": "Winstack",
+      "passed": true
+    },
+    {
+      "audit_status": "NOT_AUDITED",
+      "block_index": 1,
+      "classes_supported": [
+        "B"
+      ],
+      "failures": [],
+      "implementation": "WISEATA",
+      "passed": true
+    }
+  ],
+  "implementation_summary": {
+    "failed": 0,
+    "passed": 2,
+    "total": 2
+  },
+  "overall_status": "PASS",
+  "protocol": "wiseorder",
+  "vector_results": [
+    {
+      "class": "A",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-a-algorithm-downgrade.json",
+      "passed": true,
+      "sha256": "7fc9f4c93348123fba6ae0ee51a724a37deb0e549821684ca3d269b297859d0f",
+      "vector_id": "class-a-algorithm-downgrade"
+    },
+    {
+      "class": "A",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-a-canonicalization-scheme-corruption.json",
+      "passed": true,
+      "sha256": "acdeefb7c19e211f5ba0c1ab6316b3cdcd032eabd1614ac6b7c44a27371fea89",
+      "vector_id": "class-a-canonicalization-scheme-corruption"
+    },
+    {
+      "class": "A",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-a-missing-field.json",
+      "passed": true,
+      "sha256": "003400a6f49c2b06ef5f807c9f7950d3481ca89a4fc8bdf5d4af7aea469d05c7",
+      "vector_id": "class-a-missing-field"
+    },
+    {
+      "class": "A",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-a-non-jcs-invalid.json",
+      "passed": true,
+      "sha256": "1987db4c638e14c6f5396bd424feffd4a431c12394b5b7a12e2e55460ab30f01",
+      "vector_id": "class-a-non-jcs-invalid"
+    },
+    {
+      "class": "A",
+      "expected_status": "TAMPERED",
+      "failures": [],
+      "file": "vectors/class-a-tampered.json",
+      "passed": true,
+      "sha256": "47d4662c766818768b9f07a693f73bfc6cd800824cfedcaf5f350d191d6904a4",
+      "vector_id": "class-a-tampered"
+    },
+    {
+      "class": "A",
+      "expected_status": "VERIFIED",
+      "failures": [],
+      "file": "vectors/class-a-valid-wiseproof.json",
+      "passed": true,
+      "sha256": "65fe62c0ddf0c9956c1056fd40b6a81003dbbd2b55e7efdc17841ee523356871",
+      "vector_id": "class-a-valid-wiseproof"
+    },
+    {
+      "class": "A",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-any-telemetry-status-rejected.json",
+      "passed": true,
+      "sha256": "cfd0ceb7b4198caa9137def2b0d3e1c4e8d7bfc73c9c0bd79c4bd19d95612e0b",
+      "vector_id": "class-any-telemetry-status-rejected"
+    },
+    {
+      "class": "B",
+      "expected_status": "CONFLICTED",
+      "failures": [],
+      "file": "vectors/class-b-conflicted.json",
+      "passed": true,
+      "sha256": "7d2d1b2041603a796c51539a94e8494df879bf6369d3a6044e4030d675569fca",
+      "vector_id": "class-b-conflicted"
+    },
+    {
+      "class": "B",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-b-evidence-suppression-attempt.json",
+      "passed": true,
+      "sha256": "827ba6f84ffd0732a2dc7cfbc13e4df4c15951288044a222e101a799fba6efbc",
+      "vector_id": "class-b-evidence-suppression-attempt"
+    },
+    {
+      "class": "B",
+      "expected_status": "INSUFFICIENT_EVIDENCE",
+      "failures": [],
+      "file": "vectors/class-b-insufficient-evidence.json",
+      "passed": true,
+      "sha256": "5fde0aa7e6c0a59b5c9634e27b7f12f85892d158e9650e5797de3e671e7d8ae4",
+      "vector_id": "class-b-insufficient-evidence"
+    },
+    {
+      "class": "B",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-b-missing-sources.json",
+      "passed": true,
+      "sha256": "2fc0b20daf7dde7d39f011d39aa9594db9e2f99329ba71564afca7ac3b9e7094",
+      "vector_id": "class-b-missing-sources"
+    },
+    {
+      "class": "B",
+      "expected_status": "CONFLICTED",
+      "failures": [],
+      "file": "vectors/class-b-replay-drift.json",
+      "passed": true,
+      "sha256": "68ab7eae56d81e509c6ce8431a388e29068fea59889751eecc03b5fed76cf2e6",
+      "vector_id": "class-b-replay-drift"
+    },
+    {
+      "class": "B",
+      "expected_status": "SUPPORTED",
+      "failures": [],
+      "file": "vectors/class-b-valid-wiseexp.json",
+      "passed": true,
+      "sha256": "1ad0bcf1957cff269cae9c80d91bafa774caae5d517dd1a977ed52416aaf40d6",
+      "vector_id": "class-b-valid-wiseexp"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-attestation-replay.json",
+      "passed": true,
+      "sha256": "67ce484cd6d8d3cd4ce9f26decd36ac57e7d6e8e6fb75e27cae496f470759636",
+      "vector_id": "class-c-attestation-replay"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-authorization-source-required.json",
+      "passed": true,
+      "sha256": "57d1a647ee74d1d68e8628c340d463c46ef10b5930e5e97af78577c5dd6d2127",
+      "vector_id": "class-c-authorization-source-required"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-auto-authorize-rejected.json",
+      "passed": true,
+      "sha256": "fa97cbf9960549d937585fc77ed06b02bb867c9ac8f6df613f5d1e2b5a842f5f",
+      "vector_id": "class-c-auto-authorize-rejected"
+    },
+    {
+      "class": "C",
+      "expected_status": "CONSENSUS_FAILED",
+      "failures": [],
+      "file": "vectors/class-c-consensus-failed.json",
+      "passed": true,
+      "sha256": "68c8da979da7ccf389112c8dae0df3228f42ce9d60a41d90b6b4706a3dbaee30",
+      "vector_id": "class-c-consensus-failed"
+    },
+    {
+      "class": "C",
+      "expected_status": "CONSENSUS_PENDING",
+      "failures": [],
+      "file": "vectors/class-c-consensus-pending.json",
+      "passed": true,
+      "sha256": "e69a21de7c32731d37e320754f2c37d2e88504f43e050b2068a6c3bb3448cdf1",
+      "vector_id": "class-c-consensus-pending"
+    },
+    {
+      "class": "C",
+      "expected_status": "CONSENSUS_VALID",
+      "failures": [],
+      "file": "vectors/class-c-consensus-valid.json",
+      "passed": true,
+      "sha256": "199c580bb259061834600b333a226235b2bc52b101ba505c0b25b14630ebe33d",
+      "vector_id": "class-c-consensus-valid"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-protocol-version-mismatch.json",
+      "passed": true,
+      "sha256": "6379f272aa0ba6f3ddbd00adc94febf32072adae747c0843ab1d1fa962616b9d",
+      "vector_id": "class-c-protocol-version-mismatch"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-quorum-inflation.json",
+      "passed": true,
+      "sha256": "7ad12981ccfcad19076eac2fc99db6324a7b1dd6677c89eae91302971160a418",
+      "vector_id": "class-c-quorum-inflation"
+    },
+    {
+      "class": "C",
+      "expected_status": "CONSENSUS_VALID",
+      "failures": [],
+      "file": "vectors/class-c-same-consensus-different-action-policy.json",
+      "passed": true,
+      "sha256": "8a24a40f062a12655315d9a4cebf9c6bb87c30f2176d9e149af8a1f8391a4b29",
+      "vector_id": "class-c-same-consensus-different-action-policy"
+    },
+    {
+      "class": "C",
+      "expected_status": "INVALID",
+      "failures": [],
+      "file": "vectors/class-c-unauthorized-attester.json",
+      "passed": true,
+      "sha256": "46098520d1a28a56bd18c9a86fb63adc453bdfbfb550400a46927bfd3f079755",
+      "vector_id": "class-c-unauthorized-attester"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-action-compelled-without-quorum.json",
+      "passed": true,
+      "sha256": "aab5fcf66ff0bcd3bd9ed2991a868dca975831eaa52c6058053ee181006c343d",
+      "vector_id": "class-d-action-compelled-without-quorum"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-broken-depends-on.json",
+      "passed": true,
+      "sha256": "ea0e91950c2811ecc27c210bdcfebe633afcabc43764441a2783b9cbc9338579",
+      "vector_id": "class-d-broken-depends-on"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_VALID",
+      "failures": [],
+      "file": "vectors/class-d-conduct-valid.json",
+      "passed": true,
+      "sha256": "264562f40e04f91414d40dd28a3e52252ed31c4df8b662df5eb37b8593ffc6f7",
+      "vector_id": "class-d-conduct-valid"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-forged-commit-chain.json",
+      "passed": true,
+      "sha256": "ca57267de0c103df152473fee6b077a45d9d143203f5aa8532a45af522e8c430",
+      "vector_id": "class-d-forged-commit-chain"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-no-alternatives.json",
+      "passed": true,
+      "sha256": "bdb383cc92d76e3daa037c1a370625fbc7ab8919adeda040320d3f9720d5eddb",
+      "vector_id": "class-d-no-alternatives"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-no-counterarguments.json",
+      "passed": true,
+      "sha256": "67f71fba3d9430b78b7ddb78c0f06d94ae6cb5a77941098628b461ce00954cf2",
+      "vector_id": "class-d-no-counterarguments"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-out-of-order-stages.json",
+      "passed": true,
+      "sha256": "3bbae8a3752c0033a501a3963981f61ca073094a9d4cfae04bb1fb614807efc3",
+      "vector_id": "class-d-out-of-order-stages"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-partial-commit-chain.json",
+      "passed": true,
+      "sha256": "e2e23bca2a554a6ade1d4173e31a8d4a9cabc94c3c541a744fb2aabdebde7c21",
+      "vector_id": "class-d-partial-commit-chain"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-stage-skip-attempt.json",
+      "passed": true,
+      "sha256": "a01da5f6dd3ad71ccb939cf9a7cc63eec33467b39cd763fecca0329965b4aa09",
+      "vector_id": "class-d-stage-skip-attempt"
+    },
+    {
+      "class": "D",
+      "expected_status": "CONDUCT_INVALID",
+      "failures": [],
+      "file": "vectors/class-d-verified-status-rejected.json",
+      "passed": true,
+      "sha256": "2a10c349b751ab487efe7ce44cb1c595cc4611aecb96f24ea1f2b60e29de6e7f",
+      "vector_id": "class-d-verified-status-rejected"
+    }
+  ],
+  "vector_summary": {
+    "failed": 0,
+    "passed": 33,
+    "total": 33
+  },
+  "vectors_suite_sha256": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+  "version": "0.1.0"
+}

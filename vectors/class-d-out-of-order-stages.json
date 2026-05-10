@@ -1,0 +1,83 @@
+{
+  "vector_id": "class-d-out-of-order-stages",
+  "protocol_version": "0.1.0",
+  "class": "D",
+  "description": "A Class D conduct artifact whose commit_chain has stage numbers or created_at timestamps that contradict each other MUST receive CONDUCT_INVALID. Commit ordering must remain externally auditable (CC4).",
+  "input": {
+    "class": "D",
+    "regime": "interpretive_governance",
+    "claim": "the recommended strategy is to ship F-1 as a class-scoped governance correction",
+    "values_frame": {
+      "optimizing_for": ["ecosystem coherence at genesis"],
+      "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+    },
+    "alternatives": [
+      {
+        "id": "alt-1",
+        "summary": "Defensible alternative.",
+        "rejected_because": "Stated tradeoff."
+      }
+    ],
+    "reasoning_trace": [
+      { "step": 1, "claim": "single-rule lock at genesis is upstream" }
+    ],
+    "recommended_action": {
+      "kind": "governance_correction",
+      "summary": "Reduce WISEATA classes_supported."
+    },
+    "reversibility_score": 0.9,
+    "challenge_surface": [
+      { "id": "ch-1", "argument": "self-generated counterargument" }
+    ],
+    "calibration": {
+      "calibration_id": "cal-f1-2026-05-06",
+      "review_after": "2026-08-06T00:00:00Z",
+      "success_signals": [],
+      "failure_signals": []
+    },
+    "commit_chain": [
+      {
+        "stage": 2,
+        "name": "alternatives_commit",
+        "hash": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "content": {
+          "alternatives_summary": ["alt-1 stated"]
+        },
+        "depends_on": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "created_at": "2026-05-06T12:00:00Z"
+      },
+      {
+        "stage": 1,
+        "name": "values_frame_commit",
+        "hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "content": {
+          "optimizing_for": ["ecosystem coherence at genesis"],
+          "not_optimizing_for": ["preservation of existing WISEATA wire format"]
+        },
+        "depends_on": null,
+        "created_at": "2026-05-06T12:00:01Z"
+      }
+    ],
+    "meta_proof": {
+      "process_status": "CONDUCT_INVALID",
+      "artifact_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    }
+  },
+  "expected_status": "CONDUCT_INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "values_frame",
+    "alternatives",
+    "reasoning_trace",
+    "recommended_action",
+    "reversibility_score",
+    "challenge_surface",
+    "calibration",
+    "commit_chain",
+    "meta_proof",
+    "status"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 invariant CC4: commit ordering MUST remain externally auditable. The commit_chain above presents stage 2 first and stage 1 second, with created_at timestamps that contradict the stage numbering — stage 2 (12:00:00Z) is dated BEFORE stage 1 (12:00:01Z), yet stage 2 declares depends_on the hash of stage 1. Stage 2 cannot have committed to a stage that did not yet exist. A conformant verifier MUST reject the artifact as CONDUCT_INVALID. Auditable ordering means stage numbers monotonically increase, created_at monotonically increases, and depends_on references the literal prior stage."
+}

@@ -1,0 +1,91 @@
+# Action log — execution record for WO-2026-05-07-004.
+# Append-only. Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+#
+# Scope note: WO-2026-05-07-004 is an audit-only constitutional-closure
+# audit governed by canon_guardian-01. The deliverable is
+# reports/DOC-COMPLETION-AUDIT-v0.1.md plus this action-log pair. No
+# runtime, validator, governance-rule, canonicalization-corpus, protocol-
+# primitive, or build-tooling change is authorized by the work order.
+# This log records exactly the reads, writes, commands, and gate runs
+# performed under the audit.
+
+action_id: "AL-2026-05-07-004-canon_guardian"
+work_order_id: "WO-2026-05-07-004"
+agent_role: "canon_guardian"
+timestamp_start: "2026-05-08T01:00:00Z"
+timestamp_end: "2026-05-08T01:30:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-004.yaml"
+  - "ADOPTION-LADDER-v0.1.md"
+  - "AGENT-GOVERNANCE-WORKFORCE-v0.1.md"
+  - "ARCHITECTURE-PRESSURE-TESTS-v0.1.md"
+  - "ARTIFACTS.md"
+  - "AUTHORITY-LAW-v0.1.md"
+  - "CANONICAL-RELEASE-v0.1.md"
+  - "CONFORMANCE.md"
+  - "CORRECTION-LAW-v0.1.md"
+  - "CROSS-LANGUAGE-CANONICALIZATION-v0.1.md"
+  - "DEPENDENCY-GRADIENT-v0.1.md"
+  - "FORBIDDEN-SURFACES-v0.1.md"
+  - "IMPLEMENTATIONS.md"
+  - "INPUT-GRAMMAR-v0.1.md"
+  - "INTELLAGENT-DEMOS.md"
+  - "INTELLAGENT-EVALUATION.md"
+  - "INTELLAGENT-PROPOSERS.md"
+  - "INTELLAGENT-RUNTIME.md"
+  - "INTELLAGENT.md"
+  - "MASTER-ROADMAP-v0.1.md"
+  - "README.md"
+  - "RELEASE-CHECKLIST-v0.1.md"
+  - "RELEASE-STATUS-v0.1.md"
+  - "REPLAY-LAW-v0.1.md"
+  - "SPEC-EVOLUTION-POLICY-v0.1.md"
+  - "SPEC.md"
+  - "STATUS-REGISTRY.md"
+  - "TOOLS.md"
+  - "TRANSFORMER-PROPOSER-v0.1.md"
+  - "TRANSLATION-LAYER-v0.1.md"
+  - "TRUST-LAW-v0.1.md"
+  - "VALIDATION-LAW-v0.1.md"
+  - "WORKFLOW-GRAMMAR-v0.1.md"
+  - "WORKFORCE-EXECUTION-RUNTIME-v0.1.md"
+  - "WORKFORCE-HARDENING-v0.2.md"
+  - "WORKFORCE-SANDBOX-STRESS-v0.1.md"
+  - "workforce/work_orders/closed/WO-2026-05-07-001.yaml"
+  - "workforce/work_orders/closed/WO-2026-05-07-003.yaml"
+  - "workforce/reports/WO-2026-05-07-001-closure-summary.md"
+  - "workforce/reports/WO-2026-05-07-003-closure-summary.md"
+
+files_changed:
+  - "reports/DOC-COMPLETION-AUDIT-v0.1.md created"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned the markdown corpus including the audit deliverable; no pseudocode markers found in Python code blocks (the audit contains no Python code blocks at all)."
+  - "make workforce-check: required directory layout present; templates intact; all work-order YAML files (open and closed) parse with required fields; all action-log YAML files parse with required fields; closed WO-001 and WO-003 satisfy closure validation; lifecycle order monotonic; new canon_guardian execution log AL-2026-05-07-004 parses with required fields."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+gates_failed: []
+
+deviations:
+  - "The audit's bounded queue of at most ten remaining documents (§15 'Recommended Next 10 Documents Max') includes one entry whose form is a short note rather than a full specification (entry 10, 'v0.2-MIGRATION-NOTE-v0.1.md'). The work order requires that each entry include document name, purpose, contradiction boundaries, necessity justification, closure relevance, and priority. All six fields are present for entry 10; the deviation note is that the recommended document is intentionally smaller in scope than the others. Recorded for transparency; the bound of at most ten entries is honored and each entry has all six required sub-fields."
+
+risk_notes:
+  - "The audit identifies eight missing surfaces (M-1 through M-8) and ten forbidden future-doc categories. None of the missing-surface candidates is authorized by this audit; each requires its own drafted, approved, and assigned governance work order per AGENT-GOVERNANCE-WORKFORCE-v0.1.md §3."
+  - "The audit's constitutional-closure assessment is 'approaching' rather than 'achieved'. The bounded queue of three P1 + three P2 + three P3 + one P0 documents is the path to first constitutional closure. The P3 batch is explicitly deferrable to v0.2."
+  - "The contradiction risk surfaced in the audit (§11 C-2) between SPEC.md §4 (RFC 8785 JCS for Class A) and the v0.1 Python canonicalizer is acknowledged as a document-vs-runtime contradiction governed by SPEC-EVOLUTION-POLICY-v0.1.md and the canonicalization readiness audit's ten future enforcement items. This audit does not narrow that contradiction; it records its bounded shape."
+  - "All open follow-up items from the WO-2026-05-07-001 closure summary (FU-1 through FU-13) and the WO-2026-05-07-003 closure summary (FU-14, FU-15) remain unauthorized. The audit re-references them under M-1 through M-5; this audit does not advance them."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback because no second reviewer identity exists in v0.1; this is a known v0.1 enforcement gap and is one of the missing surfaces (M-2) the audit recommends locking via document REVIEWER-IDENTITY-v0.1.md."
+
+rollback_notes: "Rollback plan documented in the work order. Not executed; gates green and audit complete. If human owner denies closure, executing the rollback removes reports/DOC-COMPLETION-AUDIT-v0.1.md and the two action-log artifacts, and moves the work order to rejected/. The bundled top-level documents are not touched by rollback because no top-level document was modified by this work order."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-004-canon_guardian.self_verification.md"

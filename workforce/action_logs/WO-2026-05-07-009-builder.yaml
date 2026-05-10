@@ -1,0 +1,76 @@
+# Action log — execution record for WO-2026-05-07-009.
+# Append-only. Schema per WORKFORCE-EXECUTION-RUNTIME-v0.1.md §8.
+#
+# Scope note: WO-2026-05-07-009 is a builder hardening cycle that promotes
+# REAL-AGENT-RUNTIME-v0.1 (dry-run only) to REAL-AGENT-RUNTIME-v0.2 by
+# extending tools/real_agent_runtime.py with a bounded local-subprocess
+# execute mode under the existing admission, command-policy, filesystem-
+# policy, and manifest layers. v0.1 dry-run semantics are preserved
+# verbatim. v0.2 execute mode runs only allowlisted commands, only inside
+# the sandbox copy, only under a minimal environment, and always with a
+# wall-clock timeout. No autonomy, no models, no daemons, no network access.
+
+action_id: "AL-2026-05-07-009-builder"
+work_order_id: "WO-2026-05-07-009"
+agent_role: "builder"
+timestamp_start: "2026-05-08T13:58:00Z"
+timestamp_end: "2026-05-08T14:14:00Z"
+
+files_read:
+  - "workforce/work_orders/open/WO-2026-05-07-009.yaml"
+  - "REAL-AGENT-RUNTIME-v0.1.md"
+  - "tools/real_agent_runtime.py"
+  - "tools/check_workforce.py"
+  - "Makefile"
+  - "workforce/work_orders/closed/WO-2026-05-07-005.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-005-canon_guardian.self_verification.md"
+  - "workforce/action_logs/WO-2026-05-07-005-closure.yaml"
+  - "workforce/reports/WO-2026-05-07-005-closure-summary.md"
+
+files_changed:
+  - "tools/real_agent_runtime.py extended (added EXECUTE_ALLOWED_COMMANDS, EXECUTE_TIMEOUT_DEFAULT_S, EXECUTE_TIMEOUT_HARD_CAP_S, EXECUTE_OUTPUT_BYTE_CAP, classify_execute_command, _resolve_command_argv, _minimal_env, _truncate_bytes, execute_command, _walk_tree_files, tree_fingerprint, tree_change_set, execute_run, _execute_fixture_yaml, _write_temp_fixture, ten _execute_case_* functions, run_execute_self_check, render_execute_report_md, write_execute_reports, cmd_execute, cmd_execute_check; extended RunManifest with mode/replay_mode/command_results/sandbox_fingerprint_before/sandbox_fingerprint_after/sandbox_files_changed/env_keys; extended main() with execute and execute-check subcommands; v0.1 dry-run semantics preserved verbatim)"
+  - "REAL-AGENT-RUNTIME-v0.2.md created (17 sections: Purpose; Difference Between v0.1 Dry-Run And v0.2 Execute Mode; What Becomes Real In v0.2; What Remains Not Real; Work Order Admission; Subprocess Execution Boundary; Sandbox Boundary; Command Policy; Filesystem Policy; Environment Policy; Manifest Requirements; Timeout Requirements; Failure Modes; Security Non-Guarantees; Required Tests; Future OS Isolation; Final Law)"
+  - "Makefile extended (added .PHONY entries real-agent-execute and real-agent-execute-check; added real-agent-execute target with WO/AGENT/TIMEOUT/REPLAY/CMD parameters; added real-agent-execute-check target invoking python3 tools/real_agent_runtime.py execute-check; real-agent-* targets explicitly NOT added to make ci)"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.md created (execute-mode self-check fixture report; 10/10 cases pass)"
+  - "reports/real_agent_runtime/real_agent_runtime_v0.2.json created (machine-checkable v0.2 self-check report; 10/10 cases pass)"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.yaml created"
+  - "workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md created"
+
+commands_run:
+  - "make no-pseudocode 0"
+  - "make workforce-check 0"
+  - "make real-agent-check 0"
+  - "make real-agent-dry-run 0"
+  - "make real-agent-execute-check 0"
+
+command_outputs_summary:
+  - "make no-pseudocode: scanned 45 markdown files including REAL-AGENT-RUNTIME-v0.2.md and the wo005_dry_run_report_v0.1.md added in WO-005 follow-on; no pseudocode markers found in any Python code block of any scanned file."
+  - "make workforce-check: required directory layout present; templates intact; all work-order YAML files (open and closed) parse with required fields; new builder execution log AL-2026-05-07-009 parses with required fields at execution time; lifecycle order monotonic; reported 6 work orders, 13 action logs, 5 closed at execution time."
+  - "make real-agent-check: 10/10 v0.1 admission fixtures pass; configuration check clean; v0.1 reports refreshed at reports/real_agent_runtime/real_agent_runtime_v0.1.{md,json}."
+  - "make real-agent-dry-run: built-in dry-run ACCEPTED for canon_guardian-01 on synthetic fixture; 2/2 commands allowed (make no-pseudocode, make workforce-check); 0 policy violations; manifest written under workforce/real_agents/runs/."
+  - "make real-agent-execute-check: 10/10 v0.2 execute-mode fixtures pass — execute_allowed_command_succeeds; forbidden_command_blocked_before_subprocess; command_timeout_recorded; wrong_agent_identity_refused; drafted_work_order_refused; closed_refused_unless_replay_mode; missing_allowed_files_refused; missing_forbidden_files_refused; source_repo_unchanged_after_execute; manifest_records_stdout_stderr_exit_duration_cwd. v0.2 reports written at reports/real_agent_runtime/real_agent_runtime_v0.2.{md,json}."
+
+gates_passed:
+  - "make no-pseudocode"
+  - "make workforce-check"
+  - "make real-agent-check"
+  - "make real-agent-dry-run"
+  - "make real-agent-execute-check"
+
+gates_failed: []
+
+deviations: []
+
+risk_notes:
+  - "v0.2 is policy-layer containment, not OS-level containment. The sandbox is shutil.copytree, not a UNIX user namespace, jail, or container. A subprocess with sufficient operator privilege could still escape the sandbox path. Future enforcement (R-2 in REAL-AGENT-RUNTIME-v0.1.md §16, retargeted to v0.3+ in REAL-AGENT-RUNTIME-v0.2.md §16) addresses OS-level isolation; this work order does not authorize that move."
+  - "v0.2 introduces real subprocess invocation under bounded parameters (cwd inside sandbox, minimal env, wall-clock timeout, shell=False, list argv). It does not introduce autonomy, model calls, background daemons, or network access. The v0.2 execute allowlist is a strict script-call superset of the v0.1 dry-run allowlist; v0.2 explicitly drops bare-interpreter entries (python3, .venv/bin/python without script) and bare make ci because both could run arbitrary code paths."
+  - "v0.2 adds a replay_mode flag that admits a closed work order ONLY when the only refusal would be status_not_admissible AND the WO's status is exactly 'closed'. Every other refusal still applies. The replay flag is recorded in the manifest. This is a forensic re-run capability, not a closure-undo capability; the work order's lifecycle remains terminated and the action log is not appended by replay execution."
+  - "v0.2 manifests are unsigned JSON; cryptographic attestation (R-3 / AGENT-IDENTITY-v0.1.md) and hash-chained manifests (R-4) remain future enforcement. A post-hoc edit of a v0.2 manifest is detectable only by manual review. v0.2 closes none of these gaps."
+  - "v0.2 does not bound memory, CPU, file-descriptor count, or process count; only wall-clock time is bounded (default 60s, hard cap 300s, floor 0.001s). Resource limits beyond wall-clock are R-5 future enforcement."
+  - "make real-agent-execute-check is NOT added to make ci, in compliance with the work order's constraint and L-9 of REAL-AGENT-RUNTIME-v0.2.md. The Makefile's ci target is unchanged: ci: no-pseudocode test conformance interop canonicalization-check."
+  - "The reviewer signoff identity for this work order is the human owner under the L-1 fallback (no second reviewer identity exists in v0.1 / v0.2). The audit's P1 entry REVIEWER-IDENTITY-v0.1.md addresses this gap; that document is not authorized by this work order."
+
+rollback_notes: "Rollback plan documented in the work order. Not executed; all five gates green and deliverable complete. If human owner denies closure, the rollback removes REAL-AGENT-RUNTIME-v0.2.md, reverts tools/real_agent_runtime.py to its WO-005-era v0.1 dry-run-only state, reverts the Makefile to its pre-v0.2 form, deletes both v0.2 reports, deletes both action-log artifacts, and moves the work order to rejected/. v0.1 dry-run remains operational under either branch because v0.2 changes are strictly additive in code."
+
+self_verification_statement: "workforce/action_logs/WO-2026-05-07-009-builder.self_verification.md"

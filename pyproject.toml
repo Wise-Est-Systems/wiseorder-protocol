@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "intellagent-wiseorder"
+version = "0.1.0"
+description = "WiseOrder Protocol v0.1.0 governance kernel + Intellagent Runtime v0.1 (legitimate transition search engine)."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "see LICENSE" }
+keywords = ["wiseorder", "intellagent", "epistemic", "governance", "audit", "kernel"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Development Status :: 3 - Alpha",
+]
+dependencies = [
+    "jsonschema==4.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+]
+openai = [
+    "openai>=1.0",
+]
+anthropic = [
+    "anthropic>=0.30",
+]
+all = [
+    "intellagent-wiseorder[dev,openai,anthropic]",
+]
+
+[project.scripts]
+intellagent = "intellagent_runtime.cli:main"
+
+[project.urls]
+Documentation = "https://github.com/Wise-Est-Systems/wiseorder-protocol"
+Source = "https://github.com/Wise-Est-Systems/wiseorder-protocol"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["intellagent_runtime*"]
+namespaces = false
+
+[tool.setuptools.package-data]
+intellagent_runtime = [
+    "policies/*.json",
+    "policies/*.md",
+    "prompts/*.md",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-q"

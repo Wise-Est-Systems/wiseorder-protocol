@@ -1,0 +1,52 @@
+{
+  "agent_id": "canon_guardian-01",
+  "allowed_command_matches": [
+    "cat",
+    "find",
+    "ls"
+  ],
+  "commands_proposed": [
+    {
+      "allowed_command_match": "cat",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "cat"
+      ],
+      "command": "cat",
+      "rationale": ""
+    },
+    {
+      "allowed_command_match": "find",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "find"
+      ],
+      "command": "find",
+      "rationale": ""
+    },
+    {
+      "allowed_command_match": "ls",
+      "allowed_files_scope": [
+        "**"
+      ],
+      "argv_preview": [
+        "ls"
+      ],
+      "command": "ls",
+      "rationale": ""
+    }
+  ],
+  "commands_rejected": [],
+  "deterministic_hash": "sha256:80037663feb86fb2648b136f8905d65047910c680f1a1df474667caa8cc72602",
+  "exit_status": 0,
+  "policy_rejections": [],
+  "proposal_id": "proposal-canon_guardian_01-WO-FIX-REVIEW-NORATIONALE-005-FIXED",
+  "rationale": "",
+  "runtime_version": "v0.1",
+  "timestamp": "2026-05-08T22:00:00.000000Z",
+  "work_order_id": "WO-FIX-REVIEW-NORATIONALE-005"
+}

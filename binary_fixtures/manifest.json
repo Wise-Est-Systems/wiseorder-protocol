@@ -1,0 +1,37 @@
+{
+  "description": "Binary fixtures for tools/binary_fixture_check.py. The valid fixture's expected_digest matches its content (VERIFIED). The other three fixtures share the valid digest as expected_digest, since they were derived from valid content and a verifier reading their original-source manifest entry MUST classify them TAMPERED.",
+  "fixtures": [
+    {
+      "expected_digest": "sha256:2975420b8694423e8cc45fbb621472932fc9aebec45a49ac668224b183d39adb",
+      "expected_verdict": "VERIFIED",
+      "name": "valid",
+      "path": "valid.bin",
+      "size": 1056
+    },
+    {
+      "expected_digest": "sha256:2975420b8694423e8cc45fbb621472932fc9aebec45a49ac668224b183d39adb",
+      "expected_verdict": "TAMPERED",
+      "mutation": "byte at offset 100 XOR'd with 0xFF",
+      "name": "corrupted",
+      "path": "corrupted.bin",
+      "size": 1056
+    },
+    {
+      "expected_digest": "sha256:2975420b8694423e8cc45fbb621472932fc9aebec45a49ac668224b183d39adb",
+      "expected_verdict": "TAMPERED",
+      "mutation": "last 16 bytes removed",
+      "name": "truncated",
+      "path": "truncated.bin",
+      "size": 1040
+    },
+    {
+      "expected_digest": "sha256:2975420b8694423e8cc45fbb621472932fc9aebec45a49ac668224b183d39adb",
+      "expected_verdict": "TAMPERED",
+      "mutation": "4 bytes in the middle replaced with 'PWND'",
+      "name": "byte_mutated",
+      "path": "byte_mutated.bin",
+      "size": 1056
+    }
+  ],
+  "format_version": "1.0"
+}

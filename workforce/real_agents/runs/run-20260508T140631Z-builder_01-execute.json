@@ -1,0 +1,66 @@
+{
+  "agent_id": "builder-01",
+  "command_results": [
+    {
+      "argv": [
+        "pwd"
+      ],
+      "command": "pwd",
+      "cwd": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260508T140631Z-builder_01-execute-y6gjs232",
+      "duration_ms": 2,
+      "env_keys": [
+        "LANG",
+        "LC_ALL",
+        "PATH"
+      ],
+      "error": null,
+      "exit_code": 0,
+      "status": "ok",
+      "stderr": "",
+      "stderr_truncated": false,
+      "stdout": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260508T140631Z-builder_01-execute-y6gjs232\n",
+      "stdout_truncated": false,
+      "timed_out": false,
+      "timeout_s": 30.0,
+      "timestamp_end": "2026-05-08T14:06:32Z",
+      "timestamp_start": "2026-05-08T14:06:32Z"
+    }
+  ],
+  "commands_allowed": [
+    "pwd"
+  ],
+  "commands_attempted": [
+    "pwd"
+  ],
+  "commands_blocked": [],
+  "dry_run": false,
+  "env_keys": [
+    "LANG",
+    "LC_ALL",
+    "PATH"
+  ],
+  "exit_status": 0,
+  "files_changed": [],
+  "files_read": [],
+  "gates_failed": [],
+  "gates_passed": [
+    "pwd"
+  ],
+  "gates_run": [
+    "pwd"
+  ],
+  "mode": "execute",
+  "policy_violations": [],
+  "replay_mode": false,
+  "repo_fingerprint_after": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "repo_fingerprint_before": "sha256:04b6174d720781558466d92f7eb27c47d5611943f1e196d6466f4b6530a3e3bd",
+  "run_id": "run-20260508T140631Z-builder_01-execute",
+  "runtime_version": "v0.1",
+  "sandbox_files_changed": [],
+  "sandbox_fingerprint_after": "sha256:5ef5361276ae50d5e4ace481303dc52468f9b4d0a85cdc9d64fc0917fb46dd62",
+  "sandbox_fingerprint_before": "sha256:5ef5361276ae50d5e4ace481303dc52468f9b4d0a85cdc9d64fc0917fb46dd62",
+  "sandbox_path": "/Users/thekingflame/Desktop/wiseorder-protocol/workforce/real_agents/sandboxes/real-agent-run-20260508T140631Z-builder_01-execute-y6gjs232",
+  "timestamp_end": "2026-05-08T14:06:32Z",
+  "timestamp_start": "2026-05-08T14:06:31Z",
+  "work_order_id": "WO-FIX-EXECUTE-001"
+}

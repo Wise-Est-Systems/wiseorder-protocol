@@ -1,0 +1,33 @@
+{
+  "vector_id": "class-any-telemetry-status-rejected",
+  "protocol_version": "0.1.0",
+  "class": "A",
+  "description": "An artifact (any class) using a telemetry token (CALIBRATION_IMPROVED or CALIBRATION_DEGRADED) as its per-claim status MUST receive INVALID. Telemetry statuses are system-level signals, not artifact statuses (§9).",
+  "input": {
+    "class": "A",
+    "regime": "deterministic_verification",
+    "claim": "this artifact matches its declared origin digest",
+    "canonicalization": "RFC8785-JCS",
+    "algorithm": "SHA-256",
+    "expected_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "observed_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "status": "CALIBRATION_IMPROVED",
+    "proof": {
+      "type": "integrity_proof",
+      "created_at": "2026-05-06T12:00:00Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "canonicalization",
+    "algorithm",
+    "expected_digest",
+    "observed_digest",
+    "status",
+    "proof"
+  ],
+  "why": "WiseOrder Protocol v0.1.0 §9 Status Registry: 'Telemetry statuses such as CALIBRATION_IMPROVED and CALIBRATION_DEGRADED are system telemetry, not per-claim statuses.' The artifact above sets status='CALIBRATION_IMPROVED', which is not a member of the Class A status registry (VERIFIED, TAMPERED, INVALID) — nor of any per-class status registry. A conformant verifier MUST reject the artifact as INVALID. The same rule applies to any class: telemetry tokens MUST NOT be emitted as artifact status values. Class A is selected for concreteness in this vector; the underlying invariant is class-agnostic, hence the 'class-any' prefix on the vector_id."
+}

@@ -1,0 +1,119 @@
+# WORK ORDER — WO-2026-05-07-006 (CLOSED)
+# NEXT 3 EARNED MOVES — Independent Forward-Motion Assessment Under Governance
+# Governed by: WORKFORCE-EXECUTION-RUNTIME-v0.1.md, AGENT-GOVERNANCE-WORKFORCE-v0.1.md.
+#
+# Closure note: this work order required no amendment of allowed_files or
+# forbidden_files. The deliverable identifies three earned moves, each
+# requiring its own future drafted, approved, and assigned governance work
+# order. The original drafted/approved/assigned content is preserved
+# verbatim per WORKFORCE-EXECUTION-RUNTIME-v0.1 §21 immutability. Only
+# `status` and `status_history` are extended at closure.
+
+work_order_id: "WO-2026-05-07-006"
+agent_role: "canon_guardian"
+assigned_to: "canon_guardian-01"
+objective: "Produce a governed operational assessment identifying the next 3 highest-leverage execution moves that most increase earned operational trust, replay legitimacy, validator strength, sandbox containment, and release readiness, independently determined by the canon_guardian without speculative roadmap items, architecture expansion, or new product families."
+
+allowed_files:
+  - "*.md"
+  - "workforce/**"
+  - "reports/**"
+
+forbidden_files:
+  - "runtime/**"
+  - "intellagent_runtime/**"
+  - "vectors/**"
+  - "canonicalization/**"
+  - "tools/**"
+  - "Makefile"
+  - "SPEC.md"
+
+constraints:
+  - "audit / assessment-only operation"
+  - "no runtime semantic redesign"
+  - "no validator semantic redesign"
+  - "no workflow semantic redesign"
+  - "no authority semantic redesign"
+  - "no canon redefinition"
+  - "no speculative roadmap items"
+  - "no new product families"
+  - "no architecture expansion"
+  - "no expansion of the bounded ten-document remaining-doc queue identified by reports/DOC-COMPLETION-AUDIT-v0.1.md §15"
+  - "no edits to top-level .md documents under read; reads only"
+  - "no read or write of SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, or Makefile under this work order"
+  - "canon_guardian role only"
+  - "deliverable reports/NEXT-3-EARNED-MOVES-v0.1.md must contain the following sections, in order, each non-empty: 1. Purpose; 2. Current Operational State; 3. What Counts As Earned Forward Motion; 4. What Does NOT Count As Forward Motion; 5. Next 3 Earned Moves; 6. Why These 3 Matter Most; 7. Risks Reduced; 8. What Remains Unproven; 9. What Must Wait; 10. Final Assessment"
+  - "deliverable must contain the title 'NEXT 3 EARNED MOVES v0.1' and the subtitle 'Independent Forward-Motion Assessment Under Governance'"
+  - "deliverable must state the core thesis: 'Operational trust is earned through replayable, pressure-tested execution under governance. Forward motion is measured by increased operational legitimacy, not by document volume or architecture expansion.'"
+  - "deliverable must define exactly three (no more, no fewer) earned moves; each move must include all of: move_id, objective, why this was chosen, operational trust gained, risk reduced, required work order, expected artifact, required gates, public-release relevance, whether the move strengthens replayability/validation/containment/trust continuity"
+  - "deliverable must define: a move does not count unless it measurably strengthens replayability, validator legitimacy, sandbox safety, audit continuity, operational reproducibility, release legitimacy, or earned dependency readiness"
+  - "deliverable must NOT prioritize document count, architecture expansion, speculative capability, new abstractions, roadmap inflation, or hype-oriented outputs"
+  - "deliverable MUST prioritize earned trust, replay legitimacy, validator enforcement, sandbox containment, release legitimacy, cross-machine reproducibility, and operational dependency readiness"
+  - "execution must read at minimum: reports/DOC-COMPLETION-AUDIT-v0.1.md, reports/MILESTONE-FOUNDATION-v0.1.md, WORKFORCE-HARDENING-v0.2.md, WORKFORCE-SANDBOX-STRESS-v0.1.md, VALIDATION-LAW-v0.1.md, REPLAY-LAW-v0.1.md, TRUST-LAW-v0.1.md"
+  - "lifecycle artifacts required: draft action log, approval action log, assignment action log, execution action log, closure action log, self-verification artifact, closure summary artifact"
+  - "closure criteria: report exists; recommendations bounded to 3; replay continuity preserved; lifecycle continuity preserved; no canon contradiction; no speculative expansion; both required gates green; work order moved to closed state"
+
+expected_outputs:
+  - "reports/NEXT-3-EARNED-MOVES-v0.1.md"
+  - "workforce/work_orders/open/WO-2026-05-07-006.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-draft.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-approval.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-assignment.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-canon_guardian.yaml"
+  - "workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"
+
+required_gates:
+  - "make no-pseudocode"
+  - "make workforce-check"
+
+rollback_plan:
+  - "delete reports/NEXT-3-EARNED-MOVES-v0.1.md"
+  - "delete workforce/action_logs/WO-2026-05-07-006-draft.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-006-approval.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-006-assignment.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-006-canon_guardian.yaml"
+  - "delete workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md"
+  - "move workforce/work_orders/open/WO-2026-05-07-006.yaml to workforce/work_orders/rejected/WO-2026-05-07-006.yaml"
+  - "append rejection note to workforce/reports/WO-2026-05-07-006/postmortem.md"
+
+human_approval_required: true
+
+status: "closed"
+
+status_history:
+  - state: "drafted"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:30:00Z"
+    note: "Drafted by human owner. Audit / assessment-only canon_guardian work order producing reports/NEXT-3-EARNED-MOVES-v0.1.md as an independent forward-motion assessment. No speculative roadmap, no architecture expansion, no new product family, no runtime/validator/workflow/authority redesign, no canon redefinition, no doc-queue expansion. Allowed_files restrict writes to top-level *.md, workforce/**, and reports/**. Forbidden_files include SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, and Makefile. Required gates are make no-pseudocode and make workforce-check. Awaiting approval and assignment."
+  - state: "approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:33:00Z"
+    note: "Approved by human owner. Audit / assessment-only scope, allowed_files (*.md, workforce/**, reports/**), forbidden_files (SPEC.md, runtime/**, intellagent_runtime/**, vectors/**, canonicalization/**, tools/**, Makefile), required_gates (make no-pseudocode + make workforce-check), expected_outputs (deliverable + 5 lifecycle action logs + self-verification), rollback_plan, and closure criteria preserved verbatim from drafted state. No speculative expansion, no roadmap inflation, no new product family is authorized."
+  - state: "assigned"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T02:35:00Z"
+    note: "Assigned to identity canon_guardian-01 for independent forward-motion assessment. Execution does not begin under this transition; assignment only. Assignee MUST read at minimum the seven named files (DOC-COMPLETION-AUDIT, MILESTONE-FOUNDATION, WORKFORCE-HARDENING, WORKFORCE-SANDBOX-STRESS, VALIDATION-LAW, REPLAY-LAW, TRUST-LAW), MUST produce exactly three earned moves with all ten required sub-fields each, MUST include the must-define qualification clause, MUST satisfy both required gates, and MUST NOT touch any forbidden_files entry."
+  - state: "executed"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T03:00:00Z"
+    note: "Canon_guardian-01 read the seven named files plus supporting prior-closure and audit context (23 files total in files_read), and produced reports/NEXT-3-EARNED-MOVES-v0.1.md containing all 10 required sections in order with the required title, subtitle, and core thesis. Three earned moves identified: EARN-1 (pin make ci interpreter to .venv/bin/python; closes audit P2 entry CANONICAL-INTERPRETER-v0.1.md), EARN-2 (cross-machine + cross-Python-version replay harness; closes the longest-running unverified surface), EARN-3 (migrate WAIVER-MECHANISM-v0.1.md §14 failure classes F-1..F-14 into native validator rules in tools/check_workforce.py; converts WO-005's normative spec into mechanical enforcement). Each move carries all 10 required sub-fields. Must-define qualification clause present in §3. Forbidden categories explicitly rejected in §4. Bounded queue not expanded; M-1's CANONICAL-INTERPRETER-v0.1.md is already in the audit's bounded ten-doc queue (P2 entry); no new top-level governance documents authored or recommended outside the audit's bounded set."
+  - state: "self-verified"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T03:02:00Z"
+    note: "Self-verification block written at workforce/action_logs/WO-2026-05-07-006-canon_guardian.self_verification.md. All ten questions answered explicitly; question 3 answered yes (no forbidden_files reads); question 5 answered no (no pseudocode); question 6 answered no (no semantic drift); question 7 answered no (no canon alteration); question 8 answered no (no security-posture change); risk notes disclosed; deviations field empty."
+  - state: "gate-checked"
+    actor: "canon_guardian-01"
+    timestamp: "2026-05-08T03:05:00Z"
+    note: "Required gates run under PYTHON=.venv/bin/python: make no-pseudocode (exit 0; 43 markdown files scanned across the top-level / interop / vectors / intellagent_runtime globs; no pseudocode markers); make workforce-check (exit 0; 5 work orders, 12 action logs, 4 closed at run time; new canon_guardian execution log AL-2026-05-07-006 parses with required fields; lifecycle ordering monotonic; assigned WO-006 in open/ valid)."
+  - state: "reviewed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T03:10:00Z"
+    note: "Human owner reviewed deliverable, lifecycle action logs (draft + approval + assignment + canon_guardian execution), and self-verification block. Reviewer Agent independent signoff is recorded as a known v0.1 enforcement gap per the WO-2026-05-07-001 operational lesson L-1 fallback. The deliverable's three earned moves (EARN-1 / EARN-2 / EARN-3) are judged sufficient as an independent forward-motion ranking; each move addresses a load-bearing operational gap (interpreter-environment / single-machine / waiver-enforcement). No deviation requires amendment of allowed_files or forbidden_files. Both required gates green."
+  - state: "human_approved"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T03:12:00Z"
+    note: "Human owner grants closure approval on the basis of: deliverable exists at reports/NEXT-3-EARNED-MOVES-v0.1.md with all 10 required sections plus the title, subtitle, core thesis, and must-define qualification clause; exactly three earned moves; each move with all 10 required sub-fields; bounded queue not expanded; both required gates green at execution time and re-runnable at closure time; no canon, runtime, validator, governance, primitive, or cognition-class change occurred; no scope deviation; rollback plan intact. Closure summary to be written at workforce/reports/WO-2026-05-07-006-closure-summary.md."
+  - state: "closed"
+    actor: "henry-wayne-wise-iii"
+    timestamp: "2026-05-08T03:15:00Z"
+    note: "Work order closed. File moved from workforce/work_orders/open/ to workforce/work_orders/closed/. Closure summary at workforce/reports/WO-2026-05-07-006-closure-summary.md. Closure action log at workforce/action_logs/WO-2026-05-07-006-closure.yaml. Lifecycle action logs (draft, approval, assignment, canon_guardian execution) at workforce/action_logs/WO-2026-05-07-006-{draft,approval,assignment,canon_guardian}.yaml. Replay continuity preserved: every state transition recorded with actor, timestamp, and note; every action log carries every required §8 field; the deliverable identifies three earned moves whose execution requires three future governance work orders, none of which is authorized by this closure."

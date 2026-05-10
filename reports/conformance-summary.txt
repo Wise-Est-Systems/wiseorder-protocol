@@ -1,0 +1,47 @@
+WiseOrder Protocol v0.1.0 — Conformance Summary
+============================================================
+protocol:             wiseorder
+version:              0.1.0
+overall_status:       PASS
+vectors_suite_sha256: sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f
+
+vectors:         33 checked, 33 passed, 0 failed
+  PASS | class-a-algorithm-downgrade                      | A | INVALID
+  PASS | class-a-canonicalization-scheme-corruption       | A | INVALID
+  PASS | class-a-missing-field                            | A | INVALID
+  PASS | class-a-non-jcs-invalid                          | A | INVALID
+  PASS | class-a-tampered                                 | A | TAMPERED
+  PASS | class-a-valid-wiseproof                          | A | VERIFIED
+  PASS | class-any-telemetry-status-rejected              | A | INVALID
+  PASS | class-b-conflicted                               | B | CONFLICTED
+  PASS | class-b-evidence-suppression-attempt             | B | INVALID
+  PASS | class-b-insufficient-evidence                    | B | INSUFFICIENT_EVIDENCE
+  PASS | class-b-missing-sources                          | B | INVALID
+  PASS | class-b-replay-drift                             | B | CONFLICTED
+  PASS | class-b-valid-wiseexp                            | B | SUPPORTED
+  PASS | class-c-attestation-replay                       | C | INVALID
+  PASS | class-c-authorization-source-required            | C | INVALID
+  PASS | class-c-auto-authorize-rejected                  | C | INVALID
+  PASS | class-c-consensus-failed                         | C | CONSENSUS_FAILED
+  PASS | class-c-consensus-pending                        | C | CONSENSUS_PENDING
+  PASS | class-c-consensus-valid                          | C | CONSENSUS_VALID
+  PASS | class-c-protocol-version-mismatch                | C | INVALID
+  PASS | class-c-quorum-inflation                         | C | INVALID
+  PASS | class-c-same-consensus-different-action-policy   | C | CONSENSUS_VALID
+  PASS | class-c-unauthorized-attester                    | C | INVALID
+  PASS | class-d-action-compelled-without-quorum          | D | CONDUCT_INVALID
+  PASS | class-d-broken-depends-on                        | D | CONDUCT_INVALID
+  PASS | class-d-conduct-valid                            | D | CONDUCT_VALID
+  PASS | class-d-forged-commit-chain                      | D | CONDUCT_INVALID
+  PASS | class-d-no-alternatives                          | D | CONDUCT_INVALID
+  PASS | class-d-no-counterarguments                      | D | CONDUCT_INVALID
+  PASS | class-d-out-of-order-stages                      | D | CONDUCT_INVALID
+  PASS | class-d-partial-commit-chain                     | D | CONDUCT_INVALID
+  PASS | class-d-stage-skip-attempt                       | D | CONDUCT_INVALID
+  PASS | class-d-verified-status-rejected                 | D | CONDUCT_INVALID
+
+implementations: 2 checked, 2 passed, 0 failed
+  PASS | Winstack                 | classes=[A,B] | audit_status=NOT_AUDITED
+  PASS | WISEATA                  | classes=[B] | audit_status=NOT_AUDITED
+
+============================================================

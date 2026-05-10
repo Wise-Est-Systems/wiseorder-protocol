@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wiseorder/0.1.0/fixture.schema.json",
+  "title": "WiseOrder Protocol v0.1.0 Interop Fixture",
+  "description": "Source-of-truth fixture file under interop/fixtures/<impl>/<id>.fixture.json. Each fixture declares the implementation that produced it, the artifact class, the published vector(s) it aligns with, and the artifact bytes themselves. The fixture_id MUST equal the filename stem; this is enforced by interop/scripts/generate_fixture_manifest.py in addition to this schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "fixture_id",
+    "implementation",
+    "protocol",
+    "version",
+    "artifact_class",
+    "aligned_vectors",
+    "generated_at",
+    "artifact"
+  ],
+  "properties": {
+    "fixture_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "implementation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol": { "const": "wiseorder" },
+    "version": { "const": "0.1.0" },
+    "artifact_class": { "enum": ["A", "B", "C", "D"] },
+    "aligned_vectors": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "minLength": 1
+    },
+    "artifact": { "type": "object" }
+  }
+}
