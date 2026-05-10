@@ -1,0 +1,14 @@
+// Go workspace for the WiseOrder Protocol repo.
+//
+// This file exists solely so that commands like `go run ./go_verifier ...`
+// and `go test ./go_verifier/...` work from the repo root. It contains no
+// dependencies of its own; all module state lives under go_verifier/.
+//
+// Independence note (WORK ORDER 013): this workspace does NOT add the
+// Python or Rust verifier directories as Go modules. The Go verifier is a
+// FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK and depends only on the
+// standard library.
+
+go 1.26
+
+use ./go_verifier

@@ -1,4 +1,4 @@
-.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints
+.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints
 
 PYTHON ?= python3
 
@@ -235,6 +235,19 @@ rust-verifier-check:
 rust-verifier-fingerprints:
 	cargo run --manifest-path rust_verifier/Cargo.toml --quiet -- fingerprints
 
+# v0.1 first-party independent Go verifier track. NOT in `make ci` per
+# WORK ORDER 013 (until cold confirmation in a future work order). Verifies
+# vectors + corpus + the three frozen fingerprints via a Go binary that
+# does not import Python or the Rust verifier.
+go-verifier-check:
+	go test ./go_verifier/...
+	go run  ./go_verifier verify-vectors
+	go run  ./go_verifier verify-corpus
+
+# v0.1 Go verifier fingerprint check (subset). NOT in `make ci`.
+go-verifier-fingerprints:
+	go run ./go_verifier fingerprints
+
 # v0.1 dry-run archiver. Prints what files would be moved from live runtime
 # directories into reports/archive/. Modifies nothing. Useful before periodic
 # cleanup. NOT included in `make ci`.
@@ -260,5 +273,5 @@ archive-reports-dry-run:
 	@echo "Would move into: reports/archive/<runtime>/"
 	@echo "Run 'make repo-health' to see current archive counts."
 
-ci: no-pseudocode test conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check
-	@echo "CI: documentation code standard + tooling tests + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier (first-party independent track; cargo test covers all 3 frozen fingerprints) all passed."
+ci: no-pseudocode test conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
+	@echo "CI: documentation code standard + tooling tests + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."

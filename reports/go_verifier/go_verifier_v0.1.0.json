@@ -1,0 +1,124 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "go_verifier_track",
+  "report_version": "1.0",
+  "work_order": "013-option-c",
+  "timestamp_utc": "2026-05-10T20:00:00Z",
+  "go_version": "go version go1.26.3 darwin/arm64",
+  "go_dependencies_used": [
+    {"name": "standard library", "modules": ["encoding/json", "crypto/sha256", "encoding/hex", "bytes", "os", "path/filepath", "sort", "strings", "fmt", "flag", "io/fs", "testing", "os/exec"]}
+  ],
+  "third_party_dependencies": [],
+  "vectors_discovered": 33,
+  "vectors_passed": 33,
+  "vectors_failed": 0,
+  "corpus_entries_discovered": 10,
+  "corpus_entries_passed": 10,
+  "corpus_entries_failed": 0,
+  "fingerprint_results": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "parity_status": "FULL_PARITY_v0.1.0",
+  "python_runtime_imported": false,
+  "rust_runtime_imported": false,
+  "first_party_independence_status": "FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK",
+  "third_party_validation_status": false,
+  "classification_note": "Fourth verification path (Python ref / Python minimal / Rust / Go). All four owned by Wise.Est Systems. The external-validation gap is NOT closed by this track. Per docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md §8, a verifier authored, owned, and operated by a non-first-party party is required.",
+  "tests": {
+    "unit_tests": {
+      "internal/jcs": 11,
+      "internal/vectors": 14,
+      "internal/fingerprints": 4
+    },
+    "integration_tests": 9,
+    "total_tests": 38,
+    "tests_passed": 38,
+    "tests_failed": 0,
+    "covered_behaviors": [
+      "reads all 33 vectors",
+      "rejects malformed vector structure",
+      "rejects unsupported protocol version",
+      "reproduces all 33 vector verdicts",
+      "reads all 10 canonicalization corpus entries",
+      "reproduces all 10 corpus hashes",
+      "reproduces all three frozen fingerprints",
+      "produces deterministic output across two runs",
+      "does not import or shell out to Python or the Rust verifier"
+    ]
+  },
+  "deterministic_runs": {
+    "fingerprints_two_runs_byte_identical": true,
+    "verify_vectors_two_runs_byte_identical": true,
+    "verify_corpus_two_runs_byte_identical": true
+  },
+  "subcommands_run": [
+    {"cmd": "go test ./go_verifier/...",                       "rc": 0},
+    {"cmd": "go run  ./go_verifier verify-vectors",            "rc": 0},
+    {"cmd": "go run  ./go_verifier verify-corpus",             "rc": 0},
+    {"cmd": "go run  ./go_verifier fingerprints",              "rc": 0},
+    {"cmd": "make go-verifier-check",                          "rc": 0},
+    {"cmd": "make go-verifier-fingerprints",                   "rc": 0},
+    {"cmd": "make ci",                                         "rc": 0},
+    {"cmd": "make demo",                                       "rc": 0},
+    {"cmd": "git status --short",                              "rc": 0}
+  ],
+  "makefile_targets_added": [
+    {"target": "go-verifier-check",        "in_ci": false, "by_design": true, "reason": "WORK ORDER 013 — do not add to make ci until cold confirmation in a future work order"},
+    {"target": "go-verifier-fingerprints", "in_ci": false, "by_design": true, "reason": "same"}
+  ],
+  "files_created": [
+    "go.work",
+    "go_verifier/go.mod",
+    "go_verifier/main.go",
+    "go_verifier/internal/jcs/jcs.go",
+    "go_verifier/internal/jcs/jcs_test.go",
+    "go_verifier/internal/vectors/vectors.go",
+    "go_verifier/internal/vectors/vectors_test.go",
+    "go_verifier/internal/fingerprints/fingerprints.go",
+    "go_verifier/internal/fingerprints/fingerprints_test.go",
+    "go_verifier/tests/integration_test.go",
+    "reports/go_verifier/go_verifier_v0.1.0.md",
+    "reports/go_verifier/go_verifier_v0.1.0.json"
+  ],
+  "files_modified": [
+    "Makefile (added .PHONY entries + go-verifier-check + go-verifier-fingerprints recipes; NOT added to ci)",
+    ".gitignore (added go.work.sum exclusion)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "intellagent_runtime/**",
+    "tools/** (Python verifier)",
+    "rust_verifier/** (Rust verifier)",
+    "frozen fingerprint values"
+  ],
+  "known_limitations": [
+    "Same-repo, same-owner. The Go track is logically independent (different language, different module surface, stdlib-only) but organizationally first-party. This does NOT constitute third-party validation per docs/release/IMPLEMENTATION_TRACKER.md §1.",
+    "Canonicalization parity sidesteps Python repr(float) divergence by using encoding/json with json.Decoder.UseNumber(); number literals are pass-through. This is strictly correct for the v0.1.0 corpus and for any JSON number the parser accepts, but it does not exercise Go's float-formatting code path. A different canonicalization scheme that required emitting numbers in normalized form would need separate work.",
+    "Go's default JSON encoder escapes <, >, & to \\u003c / \\u003e / \\u0026. The implementation explicitly disables this via json.Encoder.SetEscapeHTML(false) — but no committed corpus entry contains <, >, or & inside a string. If a future corpus entry adds one, parity remains correct due to the disabled escaping, but the corpus does not currently test that path.",
+    "The CLI locates the repo root by walking up from cwd until it finds vectors/ and canonicalization/ as sibling directories. It does not accept a --repo-root flag yet.",
+    "The Go verifier is intentionally NOT yet wired into make ci, per WORK ORDER 013."
+  ],
+  "largest_remaining_external_validation_gap": "A verifier authored, owned, and operated by a party other than Wise.Est Systems. Four first-party tracks (Python reference, Python minimal, Rust, Go) now all reproduce the three frozen fingerprints from independent code paths. This closes 'is the spec re-implementable across languages?' very strongly. It does not close the ownership / accountability question that defines third-party validation in docs/release/IMPLEMENTATION_TRACKER.md §1 and docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md.",
+  "next_build_task": "Either (a) promote the Go verifier into make ci after one more cold confirmation run, or (b) post the recruitment pitch (already drafted in docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md and EXTERNAL_REVIEW_PACKET_v0.1.md) to a non-first-party audience and wait for an external submission. (a) tightens the in-repo gate; (b) is the only path that closes the gap.",
+  "overall_result": "PASS"
+}

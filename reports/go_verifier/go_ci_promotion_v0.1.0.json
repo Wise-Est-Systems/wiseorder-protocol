@@ -1,0 +1,81 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "go_ci_promotion",
+  "report_version": "1.0",
+  "work_order": "014",
+  "timestamp_utc": "2026-05-10T20:30:00Z",
+  "purpose": "Promote the first-party Go verifier into make ci after a cold confirmation run.",
+  "go_version": "go version go1.26.3 darwin/arm64",
+  "commands_run": [
+    {"command": "go test ./go_verifier/...",                                                               "rc": 0, "result": "PASS — 38 tests"},
+    {"command": "go run  ./go_verifier verify-vectors",                                                    "rc": 0, "result": "PASS — 33/33 vectors"},
+    {"command": "go run  ./go_verifier verify-corpus",                                                     "rc": 0, "result": "PASS — 10/10 corpus entries"},
+    {"command": "go run  ./go_verifier fingerprints",                                                      "rc": 0, "result": "PASS — OVERALL: MATCH"},
+    {"command": "make go-verifier-check",                                                                  "rc": 0, "result": "PASS"},
+    {"command": "make go-verifier-fingerprints",                                                           "rc": 0, "result": "PASS"},
+    {"command": "make ci",                                                                                 "rc": 0, "result": "PASS — 11 stages"},
+    {"command": "make demo",                                                                               "rc": 0, "result": "PASS — 6 steps + 3 fingerprints MATCH"},
+    {"command": "git status --short",                                                                      "rc": 0, "result": "captured working tree"}
+  ],
+  "ci_stages_after_promotion": [
+    {"stage": "no-pseudocode",            "result": "PASS"},
+    {"stage": "test",                     "result": "PASS — 271 tests"},
+    {"stage": "conformance",              "result": "PASS — 33 vectors"},
+    {"stage": "interop",                  "result": "PASS — 3 fixtures"},
+    {"stage": "canonicalization-check",   "result": "PASS — 10 corpus entries"},
+    {"stage": "minimal-verifier-check",   "result": "PASS — 33 vectors via Python independent re-derivation"},
+    {"stage": "replay-diff-check",        "result": "PASS — 9 self-check fixtures"},
+    {"stage": "binary-fixture-check",     "result": "PASS — 4 fixtures"},
+    {"stage": "sandbox-escape-check",     "result": "PASS — 29 attempts (25 hostile refused, 4 controls allowed)"},
+    {"stage": "rust-verifier-check",      "result": "PASS — cargo test (26), verify-vectors (33/33), verify-corpus (10/10)"},
+    {"stage": "go-verifier-check",        "result": "PASS — go test (38), verify-vectors (33/33), verify-corpus (10/10)"}
+  ],
+  "go_test_result":  {"total": 38, "passed": 38, "failed": 0},
+  "go_vector_parity":      {"total": 33, "passed": 33, "failed": 0},
+  "go_corpus_parity":      {"total": 10, "passed": 10, "failed": 0},
+  "go_fingerprint_parity": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "make_ci_result":   {"rc": 0, "result": "PASS"},
+  "make_demo_result": {"rc": 0, "result": "PASS"},
+  "files_created": [
+    "reports/go_verifier/go_ci_promotion_v0.1.0.md",
+    "reports/go_verifier/go_ci_promotion_v0.1.0.json"
+  ],
+  "files_modified": [
+    "Makefile (ci target now includes go-verifier-check as the 11th stage; summary message updated)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "intellagent_runtime/**",
+    "tools/** (Python verifier)",
+    "rust_verifier/** (Rust verifier)",
+    "go_verifier/** (Go verifier sources)",
+    "frozen fingerprint values"
+  ],
+  "classification": "FIRST_PARTY_INDEPENDENT_IMPLEMENTATION_TRACK",
+  "third_party_validation_status": false,
+  "remaining_external_validation_gap": "A verifier authored, owned, and operated by a party other than Wise.Est Systems. Four first-party tracks now reproduce the three frozen fingerprints byte-for-byte from independent code paths (Python reference, Python minimal, Rust, Go). This closes the cross-language implementability question very strongly. It does NOT close the ownership/accountability question that defines third-party validation per docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md §1 and §8.",
+  "next_build_task": "Prepare and publish the external verifier recruitment packet for a true non-first-party implementer. The packet is already drafted in docs/release/EXTERNAL_REVIEW_PACKET_v0.1.md, docs/release/REVIEW_QUICKSTART.md, and docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md. The next move is publication to a non-first-party audience (security forums, AI-safety communities, university courses, Show HN, etc.) and waiting for a submission that satisfies all eight requirements in the brief.",
+  "overall_result": "PASS"
+}

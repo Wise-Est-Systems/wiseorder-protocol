@@ -53,3 +53,7 @@ reports/archive/
 rust_verifier/target/
 rust_verifier/Cargo.lock
 **/*.rs.bk
+
+# Go verifier build artifacts (WORK ORDER 013). Sources under go_verifier/
+# (go.mod, *.go) ARE tracked; the Go build cache and workspace lock are not.
+go.work.sum
