@@ -1,0 +1,195 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "system_map_evidence",
+  "report_version": "1.0",
+  "work_order": "020",
+  "timestamp_utc": "2026-05-11T18:30:00Z",
+  "overall_result": "PASS",
+  "purpose": "Evidence record backing SYSTEM-MAP-v0.1.md. Captures the commands, counts, gate results, and fingerprints observed when producing the system map on commit b1bb16f.",
+  "commit": "b1bb16f",
+  "branch": "main",
+  "files_created": [
+    "SYSTEM-MAP-v0.1.md",
+    "reports/repo_health/system_map_v0.1.md",
+    "reports/repo_health/system_map_v0.1.json"
+  ],
+  "files_modified": [],
+  "commands_run": [
+    "git status --short",
+    "git log --oneline -15",
+    "find . -maxdepth 2 -type f (filtered: .git, .venv, target, __pycache__, .egg-info excluded)",
+    "ls vectors/*.json | wc -l",
+    "ls canonicalization/corpus/*.json | wc -l",
+    "ls -la chain/",
+    ".venv/bin/python -m pytest tests/ --collect-only -q",
+    ".venv/bin/python -m pytest tests/",
+    "cargo test --manifest-path rust_verifier/Cargo.toml --quiet",
+    "go test ./go_verifier/...",
+    "make ci PYTHON=.venv/bin/python",
+    "make demo PYTHON=.venv/bin/python",
+    "wc -l intellagent_runtime/*.py tools/*.py",
+    "find rust_verifier -name '*.rs' -not -path '*/target/*' | xargs wc -l",
+    "find go_verifier -name '*.go' | xargs wc -l",
+    "grep platform/sandbox references in tools/os_isolation_runtime.py and tools/real_agent_runtime.py",
+    "grep governed-run surfaces in intellagent_runtime/cli.py",
+    "head intellagent_runtime/refusal.py",
+    "grep hash/chain surfaces in intellagent_runtime/audit_memory.py"
+  ],
+  "counts_observed": {
+    "intellagent_runtime_modules": 17,
+    "tools_modules": 19,
+    "rust_verifier_rs_files": 5,
+    "go_verifier_go_files": 8,
+    "vectors_frozen": 33,
+    "canonicalization_corpus_entries": 10,
+    "test_files": 23,
+    "pytest_collected": 437,
+    "pytest_passed": 437,
+    "rust_tests_passed": 27,
+    "rust_unit_tests": 14,
+    "rust_integration_tests": 13,
+    "go_test_packages_ok": 4,
+    "win_chain_files": 2,
+    "make_ci_stages": 18,
+    "intellagent_runtime_total_loc": 5377,
+    "tools_total_loc": 14807,
+    "rust_verifier_total_loc": 1616,
+    "go_verifier_total_loc": 1952
+  },
+  "gate_results": {
+    "make_ci": {
+      "result": "PASS",
+      "exit_status": 0,
+      "wall_seconds_approx": 8.7,
+      "stages": 18
+    },
+    "make_demo": {
+      "result": "PASS",
+      "overall": "PASS",
+      "fingerprint_match": true,
+      "wall_seconds_approx": 0.4
+    },
+    "pytest": {
+      "result": "PASS",
+      "passed": 437,
+      "failed": 0,
+      "wall_seconds": 3.31
+    },
+    "cargo_test": {
+      "result": "PASS",
+      "passed": 27,
+      "failed": 0,
+      "warnings": 3,
+      "warning_names": ["canonical_sha256_hex unused", "sha256_prefixed unused", "Vector.{file, protocol_version} unread"]
+    },
+    "go_test": {
+      "result": "PASS",
+      "packages_ok": 4,
+      "packages_failed": 0
+    }
+  },
+  "frozen_fingerprints": {
+    "vectors_suite_sha256": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+    "manifests_suite_sha256": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+    "corpus_sha256": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09"
+  },
+  "ci_stages_in_order": [
+    "no-pseudocode",
+    "test",
+    "work-order-parser-check",
+    "workflow-grammar-check",
+    "execution-plan-check",
+    "audit-memory-check",
+    "governed-run-check",
+    "governed-run-pipeline-check",
+    "chain-check",
+    "conformance",
+    "interop",
+    "canonicalization-check",
+    "minimal-verifier-check",
+    "replay-diff-check",
+    "binary-fixture-check",
+    "sandbox-escape-check",
+    "rust-verifier-check",
+    "go-verifier-check"
+  ],
+  "not_in_ci_runtimes": [
+    "tools/pipeline_runtime.py (pipeline-check, pipeline-run-fixture)",
+    "tools/proposer_runtime.py (proposer-check, proposer-propose)",
+    "tools/review_gate_runtime.py (review-gate-check, review-gate-review)",
+    "tools/os_isolation_runtime.py (os-isolation-check, os-isolation-fixture)",
+    "tools/resource_limit_runtime.py (resource-limit-check, resource-limit-fixture)",
+    "tools/real_agent_runtime.py (real-agent-check, real-agent-dry-run, real-agent-execute, real-agent-execute-check)",
+    "tools/signature_runtime.py (no Makefile target)",
+    "tools/workforce_sandbox_stress.py (workforce-stress)",
+    "tools/check_workforce.py (workforce-check)"
+  ],
+  "verification_tracks": [
+    {
+      "track": "Python reference",
+      "language": "Python 3.12+",
+      "imports_runtime": true,
+      "in_ci": true,
+      "first_party": true,
+      "limitation": "Uses production code; not a true second source."
+    },
+    {
+      "track": "Python minimal",
+      "language": "Python 3.12+",
+      "imports_runtime": false,
+      "in_ci": true,
+      "first_party": true,
+      "limitation": "Same author/repo as runtime; same language."
+    },
+    {
+      "track": "Rust",
+      "language": "Rust",
+      "imports_runtime": false,
+      "in_ci": true,
+      "first_party": true,
+      "limitation": "Same author/repo; second language."
+    },
+    {
+      "track": "Go",
+      "language": "Go",
+      "imports_runtime": false,
+      "in_ci": true,
+      "first_party": true,
+      "limitation": "Same author/repo; third language."
+    }
+  ],
+  "platform_support": {
+    "macos_sandbox_exec": "implemented (tools/os_isolation_runtime.py, tools/real_agent_runtime.py)",
+    "linux_bwrap": "probe-only (tools/real_agent_runtime.py:1895+)",
+    "linux_wet_execution": "NOT IMPLEMENTED",
+    "windows": "NOT IMPLEMENTED"
+  },
+  "what_is_proven": [
+    "33 vectors verified across 4 independent verifier paths",
+    "10 canonicalization corpus digests reproduce byte-identically in Python/Rust/Go",
+    "3 frozen fingerprints regenerate match",
+    "437 pytest tests pass on commit b1bb16f",
+    "27 Rust tests + 4 Go test packages pass",
+    "make verify-drift exits clean",
+    "Audit chain tamper detection enforced (AUDIT_CHAIN_VALID/TAMPERED)",
+    "Sandbox-escape policy refuses 6 hostile input categories without executing them",
+    "no-pseudocode guard scans 70 markdown files clean",
+    "macOS sandbox-exec runner executes /bin/pwd under confinement"
+  ],
+  "what_is_not_proven": [
+    "No third-party validation of any verifier",
+    "Not production-grade security (macOS sandbox-exec is Apple-deprecated)",
+    "Not an operating system",
+    "Not an industry standard",
+    "Conformance corpus is not exhaustive",
+    "No market or currency layer",
+    "Linux wet-run is probe-only (real_agent_runtime.py:1895+)",
+    "No concurrent audit locking",
+    "No full stdout/stderr lift-up into manifest",
+    "No YAML pipeline adapter",
+    "Six runtimes (pipeline/proposer/review/real-agent/os-isolation/resource-limit) NOT in make ci",
+    "signature_runtime.py has no Makefile target"
+  ],
+  "exact_next_build_task": "WORK ORDER 021 — Untrack 225 stale sandbox-profile files (git rm --cached reports/os_isolation_runtime/profiles/*.sb), confirm `make ci && make verify-drift` still green, commit. This closes WO019-RES-1, the highest-priority carry-forward."
+}
