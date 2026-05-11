@@ -1,6 +1,9 @@
 .PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check chain-check
 
-PYTHON ?= python3
+# Prefer the repo's .venv (which has pytest + jsonschema pinned in
+# requirements.txt) when present; fall back to system python3 otherwise.
+# Override explicitly with `make ci PYTHON=/path/to/python`.
+PYTHON ?= $(if $(wildcard .venv/bin/python),.venv/bin/python,python3)
 
 validate-vectors:
 	$(PYTHON) tools/validate_vectors.py
