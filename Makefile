@@ -297,5 +297,5 @@ archive-reports-dry-run:
 	@echo "Would move into: reports/archive/<runtime>/"
 	@echo "Run 'make repo-health' to see current archive counts."
 
-ci: no-pseudocode test conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
-	@echo "CI: documentation code standard + tooling tests + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."
+ci: no-pseudocode test work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
+	@echo "CI: documentation code standard + tooling tests + governed-runtime core (parser + grammar + plan + audit + governed-run self-check + pipeline-integration tests) + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."

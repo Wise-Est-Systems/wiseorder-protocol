@@ -1,0 +1,116 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "governed_runtime_ci_promotion",
+  "report_version": "1.0",
+  "work_order": "017",
+  "timestamp_utc": "2026-05-10T23:00:00Z",
+  "purpose": "Promote six WO-015/WO-016 governed-runtime targets into the permanent make ci gate after cold confirmation.",
+  "files_created": [
+    "reports/runtime_core/governed_runtime_ci_promotion_v0.1.md",
+    "reports/runtime_core/governed_runtime_ci_promotion_v0.1.json"
+  ],
+  "files_modified": [
+    "Makefile (ci target now includes work-order-parser-check, workflow-grammar-check, execution-plan-check, audit-memory-check, governed-run-check, governed-run-pipeline-check between `test` and `conformance`; summary message updated)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "intellagent_runtime/** (all behavior unchanged)",
+    "tools/** (Python verifier behavior)",
+    "rust_verifier/** (Rust verifier behavior)",
+    "go_verifier/** (Go verifier behavior)",
+    "tests/** (no new tests; no test weakened)",
+    "frozen fingerprint values"
+  ],
+  "commands_run": [
+    {"command": "python -m pytest tests/test_work_order_parser.py",       "rc": 0, "result": "22/22 PASS"},
+    {"command": "python -m pytest tests/test_workflow_grammar.py",        "rc": 0, "result": "21/21 PASS"},
+    {"command": "python -m pytest tests/test_execution_plan.py",          "rc": 0, "result": "20/20 PASS"},
+    {"command": "python -m pytest tests/test_audit_memory.py",            "rc": 0, "result": "17/17 PASS"},
+    {"command": "python -m pytest tests/test_governed_run_pipeline.py",   "rc": 0, "result": "40/40 PASS"},
+    {"command": "python -m pytest tests/test_intellagent_cli.py",         "rc": 0, "result": "14/14 PASS"},
+    {"command": "make work-order-parser-check",                           "rc": 0, "result": "PASS"},
+    {"command": "make workflow-grammar-check",                            "rc": 0, "result": "PASS"},
+    {"command": "make execution-plan-check",                              "rc": 0, "result": "PASS"},
+    {"command": "make audit-memory-check",                                "rc": 0, "result": "PASS"},
+    {"command": "make governed-run-check",                                "rc": 0, "result": "PASS"},
+    {"command": "make governed-run-pipeline-check",                       "rc": 0, "result": "PASS — 54 tests"},
+    {"command": "make ci",                                                "rc": 0, "result": "PASS — 17 stages"},
+    {"command": "make demo",                                              "rc": 0, "result": "PASS — 3 frozen fingerprints MATCH"},
+    {"command": "git status --short",                                     "rc": 0, "result": "captured working tree"}
+  ],
+  "ci_stages_after_promotion": [
+    {"stage": "no-pseudocode",              "result": "PASS"},
+    {"stage": "test",                       "result": "PASS — 398 tests"},
+    {"stage": "work-order-parser-check",    "result": "PASS — 22 tests + self-check"},
+    {"stage": "workflow-grammar-check",     "result": "PASS — 21 tests + self-check"},
+    {"stage": "execution-plan-check",       "result": "PASS — 20 tests + self-check"},
+    {"stage": "audit-memory-check",         "result": "PASS — 17 tests + self-check"},
+    {"stage": "governed-run-check",         "result": "PASS — governed-run --self-check"},
+    {"stage": "governed-run-pipeline-check","result": "PASS — 54 tests (40 pipeline + 14 CLI; 10 macOS-only)"},
+    {"stage": "conformance",                "result": "PASS — 33 vectors"},
+    {"stage": "interop",                    "result": "PASS — 3 fixtures"},
+    {"stage": "canonicalization-check",     "result": "PASS — 10 corpus entries"},
+    {"stage": "minimal-verifier-check",     "result": "PASS — 33 vectors via Python independent re-derivation"},
+    {"stage": "replay-diff-check",          "result": "PASS — 9 self-check fixtures"},
+    {"stage": "binary-fixture-check",       "result": "PASS — 4 fixtures"},
+    {"stage": "sandbox-escape-check",       "result": "PASS — 29 attempts (25 hostile refused, 4 controls allowed)"},
+    {"stage": "rust-verifier-check",        "result": "PASS — cargo test (26), verify-vectors (33/33), verify-corpus (10/10)"},
+    {"stage": "go-verifier-check",          "result": "PASS — go test (38), verify-vectors (33/33), verify-corpus (10/10)"}
+  ],
+  "parser_check_result":            {"rc": 0, "result": "PASS — 22 unit tests + self_check"},
+  "workflow_grammar_check_result":  {"rc": 0, "result": "PASS — 21 unit tests + self_check"},
+  "execution_plan_check_result":    {"rc": 0, "result": "PASS — 20 unit tests + self_check"},
+  "audit_memory_check_result":      {"rc": 0, "result": "PASS — 17 unit tests + self_check"},
+  "governed_run_check_result":      {"rc": 0, "result": "PASS — in-memory governance-flow self-check (valid + refused WO; AUDIT_CHAIN_VALID)"},
+  "governed_run_pipeline_check_result": {"rc": 0, "result": "PASS — 40 pipeline integration tests + 14 CLI tests; 10 of the 40 are macOS-only"},
+  "make_ci_result":   {"rc": 0, "result": "PASS — 17 stages green"},
+  "make_demo_result": {"rc": 0, "result": "PASS — 3 frozen fingerprints MATCH byte-for-byte"},
+  "total_tests_passing": 398,
+  "ci_stage_count_before_wo_017": 11,
+  "ci_stage_count_after_wo_017": 17,
+  "frozen_fingerprints": {
+    "vectors_suite_sha256": {
+      "expected": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "observed": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+      "match": true
+    },
+    "manifests_suite_sha256": {
+      "expected": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "observed": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+      "match": true
+    },
+    "corpus_sha256": {
+      "expected": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "observed": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09",
+      "match": true
+    },
+    "all_match": true
+  },
+  "platform_behavior": {
+    "host_os": "darwin (macOS, sandbox-exec available)",
+    "wet_run_supported": true,
+    "macos_only_tests_run": 10,
+    "macos_only_tests_skipped": 0,
+    "linux_wet_run_supported": false,
+    "linux_wet_run_status": "skipped with explicit reason (\"sandbox-exec is macOS only\"); not claimed supported"
+  },
+  "known_limitations": [
+    "Wet-run is macOS-only because tools/os_isolation_runtime uses sandbox-exec. On non-macOS hosts, the 10 macOS-only tests inside test_governed_run_pipeline.py are skipped with an explicit pytest reason; the other 30 platform-agnostic tests still run. No Linux equivalent is implemented.",
+    "Governed-run wet-run dispatch calls tools/os_isolation_runtime.execute_command_isolated directly rather than routing through tools/pipeline_runtime.run() — see reports/runtime_core/governed_run_pipeline_v0.1.md §9 Decision 1 for the integration-decision rationale.",
+    "Workflow grammar parser still uses a keyword heuristic. WOs whose prose contains stage synonyms (e.g. \"verify\" / \"execute\" outside the workflow list) can be misclassified. Mitigation: test fixtures use prose deliberately free of stage synonyms; real WOs that violate this surface as a no-verify or no-report plan refusal.",
+    "CI exercises macOS-only wet-run on this host. A future Linux-hosted CI run will skip the 10 sandbox-exec tests; CI will still PASS on that host because the skipped subset is treated as passing-by-skip per pytest convention. This is documented and intentional, not a silent gap."
+  ],
+  "remaining_risks": [
+    "Adding the wet-run pipeline check to ci means every `make ci` run on macOS now spawns real subprocesses under sandbox-exec. Mitigation: three independent gates (WO-015 plan validator → os_isolation_runtime classifier deny-first → macOS sandbox-exec kernel profile), output cap, network deny, fork deny, per-command timeout.",
+    "Per-run RefusalRecord files accumulate under <cwd>/intellagent_refusals/ during the wet-run tests. The test harness uses tmp_path so the test-run artifacts are isolated; /intellagent_refusals/ at the repo root is .gitignored.",
+    "Sandbox profile files generated during CI (reports/os_isolation_runtime/profiles/*.sb) are tracked in the repo. They accumulate as new commands produce new profiles. This is consistent with the canonical-vs-archived policy in reports/canonical/README.md; periodic archiving via WO-011 patterns remains an option."
+  ],
+  "third_party_validation_status": false,
+  "next_build_task": "Prepare and publish the external verifier recruitment packet (docs/release/THIRD_PARTY_VERIFIER_BRIEF_v0.1.md, docs/release/EXTERNAL_REVIEW_PACKET_v0.1.md, docs/release/REVIEW_QUICKSTART.md) to a non-first-party audience. The in-repo CI gate is now 17 stages strong across Python ref + Python minimal + Rust + Go verifier tracks AND the full governed-runtime kernel; the remaining gap is ownership, not coverage.",
+  "overall_result": "PASS"
+}
