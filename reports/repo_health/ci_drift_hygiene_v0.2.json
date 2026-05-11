@@ -1,0 +1,63 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "ci_drift_hygiene",
+  "report_version": "2.0",
+  "work_order": "021",
+  "closes_issue": "WO019-RES-1",
+  "timestamp_utc": "2026-05-11T19:00:00Z",
+  "overall_result": "PASS",
+  "purpose": "Untrack the 225 stale, non-deterministic sandbox-profile files left behind by WO 019. WO 019 ignored future profiles via .gitignore but did not untrack the already-committed ones. WO 021 removes them from the git index without deleting from disk.",
+  "files_modified": [],
+  "files_created": [
+    "reports/repo_health/ci_drift_hygiene_v0.2.md",
+    "reports/repo_health/ci_drift_hygiene_v0.2.json"
+  ],
+  "index_changes": {
+    "files_untracked": 225,
+    "files_remaining_on_disk": 285,
+    "files_still_tracked_after": 0,
+    "directory": "reports/os_isolation_runtime/profiles/",
+    "method": "git ls-files -z reports/os_isolation_runtime/profiles/ | xargs -0 git rm --cached",
+    "why_not_shell_glob": "git rm --cached reports/os_isolation_runtime/profiles/*.sb fails because the shell glob expands to include the on-disk files that .gitignore (WO 019) now hides; only the index-bound `git ls-files | xargs` form is safe."
+  },
+  "gate_results": {
+    "make_ci": {
+      "result": "PASS",
+      "exit_status": 0,
+      "wall_seconds_approx": 8.1
+    },
+    "make_demo": {
+      "result": "PASS",
+      "overall": "PASS",
+      "fingerprint_match": true
+    },
+    "make_verify_drift": {
+      "result": "PASS",
+      "stdout_tail": "OK: regenerated artifacts match committed state."
+    }
+  },
+  "frozen_fingerprints_unchanged": {
+    "vectors_suite_sha256": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+    "manifests_suite_sha256": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+    "corpus_sha256": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09"
+  },
+  "commands_run": [
+    "git ls-files reports/os_isolation_runtime/profiles/ | wc -l",
+    "git ls-files -z reports/os_isolation_runtime/profiles/ | xargs -0 git rm --cached",
+    "find reports/os_isolation_runtime/profiles -type f -name '*.sb' | wc -l",
+    "make ci PYTHON=.venv/bin/python",
+    "make demo PYTHON=.venv/bin/python",
+    "make verify-drift",
+    "git status --short | awk '{print $1}' | sort | uniq -c"
+  ],
+  "what_is_now_fixed": [
+    "WO019-RES-1 closed: zero stale profile files remain in the git index.",
+    "Repo no longer carries 225 non-deterministic per-run artifacts as if they were canonical evidence.",
+    "Combined with WO 019 .gitignore rule, profile drift cannot recur."
+  ],
+  "what_remains_unresolved": [
+    "WO019-RES-2: Makefile default PYTHON=python3 resolves to system Python without project deps.",
+    "WO019-RES-3: Rust verifier dead-code warnings."
+  ]
+}
