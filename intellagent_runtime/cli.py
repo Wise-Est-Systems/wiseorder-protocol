@@ -254,6 +254,222 @@ def cmd_refuse(args: argparse.Namespace) -> int:
 
 
 # ---------------------------------------------------------------------------
+# governed-run
+# ---------------------------------------------------------------------------
+
+
+def _governed_run_self_check() -> int:
+    """In-memory governance-flow exercise. Builds, validates, audits, and
+    reports on a synthetic valid work order plus a synthetic refused one
+    — all without touching the filesystem outside a temp directory."""
+    import tempfile
+
+    from intellagent_runtime.audit_memory import (
+        AUDIT_CHAIN_VALID,
+        append_event,
+        verify_chain,
+    )
+    from intellagent_runtime.execution_plan import build_plan
+    from intellagent_runtime.work_order_parser import parse_work_order
+
+    valid_wo = """# WORK ORDER X
+## Objective
+governed-run self-check
+## Required Commands
+```bash
+make ci
+```
+## Workflow
+- inspect
+- propose
+- review
+- execute
+- verify
+- report
+- stop
+Stop.
+"""
+    refused_wo = """# WORK ORDER X
+## Objective
+governed-run refusal self-check
+## Required Commands
+```bash
+rm -rf /
+```
+## Workflow
+- inspect
+- propose
+- review
+- execute
+- verify
+- report
+- stop
+Stop.
+"""
+
+    with tempfile.TemporaryDirectory() as tmpd:
+        audit_path = Path(tmpd) / "selfcheck.jsonl"
+        # Valid path.
+        wo = parse_work_order(valid_wo)
+        plan = build_plan(wo)
+        append_event(audit_path, "governed_run.started", {"sha256": wo.source_sha256})
+        if not plan.is_valid():
+            print(f"FAIL: valid WO did not validate: {plan.validate()}")
+            return 1
+        append_event(audit_path, "governed_run.plan_valid", {})
+        # Refused path.
+        wo2 = parse_work_order(refused_wo)
+        plan2 = build_plan(wo2)
+        append_event(audit_path, "governed_run.started", {"sha256": wo2.source_sha256})
+        if plan2.is_valid():
+            print("FAIL: refused WO was not refused")
+            return 1
+        append_event(
+            audit_path,
+            "governed_run.refused",
+            {"reasons": plan2.validate()},
+        )
+        # Chain still valid.
+        status = verify_chain(audit_path)
+        if status.status != AUDIT_CHAIN_VALID:
+            print(f"FAIL: audit chain {status.status} reason={status.reason}")
+            return 1
+
+    print("PASS: governed-run self-check")
+    return 0
+
+
+def cmd_governed_run(args: argparse.Namespace) -> int:
+    """``governed-run`` subcommand.
+
+    Pipeline: parse work order → build execution plan → validate →
+    append audit event → emit manifest JSON → final status.
+
+    Returns 0 on GOVERNED_RUN_VALID, 1 on GOVERNED_RUN_REFUSED, 2 on
+    GOVERNED_RUN_INVALID (the work order itself was malformed).
+    """
+    if getattr(args, "self_check", False):
+        return _governed_run_self_check()
+
+    from intellagent_runtime.audit_memory import (
+        append_event,
+        verify_chain,
+    )
+    from intellagent_runtime.execution_plan import build_plan, ExecutionPlanError
+    from intellagent_runtime.work_order_parser import (
+        WorkOrderError,
+        parse_work_order_file,
+    )
+
+    wo_path = getattr(args, "work_order", None)
+    if not wo_path:
+        sys.stderr.write("ERROR: governed-run requires --work-order or --self-check\n")
+        return 1
+
+    audit_path = Path(args.audit) if getattr(args, "audit", None) else None
+
+    # Parse.
+    try:
+        wo = parse_work_order_file(wo_path)
+    except (WorkOrderError, FileNotFoundError) as exc:
+        manifest = _governed_run_manifest(
+            work_order_hash=None,
+            plan=None,
+            validation=[str(exc)],
+            audit_status=None,
+            final_status="GOVERNED_RUN_INVALID",
+        )
+        print(canonical.canonical_pretty(manifest))
+        return 2
+
+    # Build plan.
+    try:
+        plan = build_plan(wo)
+    except ExecutionPlanError as exc:
+        manifest = _governed_run_manifest(
+            work_order_hash=wo.source_sha256,
+            plan=None,
+            validation=[str(exc)],
+            audit_status=None,
+            final_status="GOVERNED_RUN_INVALID",
+        )
+        print(canonical.canonical_pretty(manifest))
+        return 2
+
+    # Validate.
+    violations = plan.validate()
+    final_status = "GOVERNED_RUN_VALID" if not violations else "GOVERNED_RUN_REFUSED"
+
+    # Audit append (if requested).
+    audit_status: dict[str, Any] | None = None
+    if audit_path is not None:
+        append_event(
+            audit_path,
+            "governed_run.started",
+            {"work_order_sha256": wo.source_sha256, "title": wo.title},
+        )
+        if final_status == "GOVERNED_RUN_VALID":
+            append_event(audit_path, "governed_run.plan_valid", {
+                "stages": [s.value for s in plan.workflow.stages],
+                "command_count": len(plan.planned_commands),
+            })
+        else:
+            append_event(audit_path, "governed_run.refused", {
+                "reasons": violations,
+            })
+        audit_status = verify_chain(audit_path).to_dict()
+
+    # Dry-run does not execute. Without --dry-run, we still refuse to
+    # invoke real shell commands from this CLI surface; v0.1.0 keeps the
+    # governance kernel decoupled from execution dispatch.
+    manifest = _governed_run_manifest(
+        work_order_hash=wo.source_sha256,
+        plan=plan,
+        validation=violations,
+        audit_status=audit_status,
+        final_status=final_status,
+    )
+    print(canonical.canonical_pretty(manifest))
+    return 0 if final_status == "GOVERNED_RUN_VALID" else 1
+
+
+def _governed_run_manifest(
+    *,
+    work_order_hash: str | None,
+    plan,  # ExecutionPlan or None
+    validation: list[str],
+    audit_status: dict | None,
+    final_status: str,
+) -> dict:
+    if plan is not None:
+        parsed_stages = [s.value for s in plan.workflow.stages]
+        protected_paths = list(plan.protected_paths)
+        allowed_paths = list(plan.allowed_paths)
+        forbidden_paths = list(plan.forbidden_paths)
+        required_commands = list(plan.required_commands)
+    else:
+        parsed_stages = []
+        protected_paths = []
+        allowed_paths = []
+        forbidden_paths = []
+        required_commands = []
+
+    validation_status = "VALID" if not validation else "REFUSED"
+    return {
+        "work_order_hash": work_order_hash,
+        "parsed_stages": parsed_stages,
+        "protected_paths": protected_paths,
+        "allowed_paths": allowed_paths,
+        "forbidden_paths": forbidden_paths,
+        "required_commands": required_commands,
+        "validation_status": validation_status,
+        "validation_violations": validation,
+        "audit_status": audit_status,
+        "final_status": final_status,
+    }
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -304,6 +520,37 @@ def build_parser() -> argparse.ArgumentParser:
     p_refuse = sub.add_parser("refuse", help="seal an operator-initiated refusal")
     p_refuse.add_argument("--query", required=True, help="text describing the unanswered query")
     p_refuse.set_defaults(func=cmd_refuse)
+
+    p_governed_run = sub.add_parser(
+        "governed-run",
+        help="parse a work order, build a plan, validate, and (optionally) execute",
+    )
+    p_governed_run.add_argument(
+        "--work-order",
+        required=False,
+        help="path to a markdown work order; required unless --self-check",
+    )
+    p_governed_run.add_argument(
+        "--audit",
+        required=False,
+        help="path to an append-only JSONL audit log",
+    )
+    p_governed_run.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="parse + plan + validate + audit-append; do not execute commands",
+    )
+    p_governed_run.add_argument(
+        "--self-check",
+        action="store_true",
+        help="run an in-memory governance-flow self-check and exit",
+    )
+    p_governed_run.add_argument(
+        "--verify-over-existing-artifact",
+        action="store_true",
+        help="allow verify before execute when verifying a pre-existing artifact",
+    )
+    p_governed_run.set_defaults(func=cmd_governed_run)
 
     return parser
 

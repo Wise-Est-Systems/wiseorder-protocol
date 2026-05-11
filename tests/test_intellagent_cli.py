@@ -213,3 +213,128 @@ def test_cli_chain_corrupt_is_detected(tmp_path: Path) -> None:
     out = _run(["transition", "prop-cli-005"], tmp_path)
     assert out.returncode == 2
     assert "CHAIN_CORRUPT" in out.stderr
+
+
+# ---------------------------------------------------------------------------
+# governed-run subcommand (WORK ORDER 015)
+# ---------------------------------------------------------------------------
+
+
+VALID_GR_WO = """# WORK ORDER X — governed-run cli test
+## Objective
+exercise governed-run from the CLI
+
+## Required Commands
+```bash
+make ci
+```
+
+## Workflow
+- inspect
+- propose
+- review
+- execute
+- verify
+- report
+- stop
+
+## Do Not Modify
+- vectors/**
+
+Stop.
+"""
+
+
+REFUSED_GR_WO = """# WORK ORDER X — governed-run refused
+## Objective
+trigger refusal
+
+## Required Commands
+```bash
+rm -rf /
+```
+
+## Workflow
+- inspect
+- propose
+- review
+- execute
+- verify
+- report
+- stop
+
+Stop.
+"""
+
+
+def test_governed_run_self_check_returns_zero(tmp_path: Path) -> None:
+    proc = _run(["governed-run", "--self-check"], tmp_path)
+    assert proc.returncode == 0, proc.stderr
+    assert "PASS" in proc.stdout
+
+
+def test_governed_run_valid_returns_zero_and_valid_status(tmp_path: Path) -> None:
+    wo = tmp_path / "wo.md"
+    wo.write_text(VALID_GR_WO, encoding="utf-8")
+    proc = _run(["governed-run", "--work-order", str(wo), "--dry-run"], tmp_path)
+    assert proc.returncode == 0, proc.stderr
+    manifest = json.loads(proc.stdout)
+    assert manifest["final_status"] == "GOVERNED_RUN_VALID"
+    assert manifest["validation_status"] == "VALID"
+    assert "make ci" in manifest["required_commands"]
+    assert "vectors/**" in manifest["protected_paths"]
+
+
+def test_governed_run_refused_returns_one_and_refused_status(tmp_path: Path) -> None:
+    wo = tmp_path / "wo.md"
+    wo.write_text(REFUSED_GR_WO, encoding="utf-8")
+    proc = _run(["governed-run", "--work-order", str(wo), "--dry-run"], tmp_path)
+    assert proc.returncode == 1, proc.stderr
+    manifest = json.loads(proc.stdout)
+    assert manifest["final_status"] == "GOVERNED_RUN_REFUSED"
+    assert manifest["validation_status"] == "REFUSED"
+    assert manifest["validation_violations"], "expected violations"
+
+
+def test_governed_run_invalid_work_order_returns_two(tmp_path: Path) -> None:
+    proc = _run(["governed-run", "--work-order", str(tmp_path / "nope.md"), "--dry-run"], tmp_path)
+    assert proc.returncode == 2, proc.stderr
+    manifest = json.loads(proc.stdout)
+    assert manifest["final_status"] == "GOVERNED_RUN_INVALID"
+
+
+def test_governed_run_emits_valid_json(tmp_path: Path) -> None:
+    wo = tmp_path / "wo.md"
+    wo.write_text(VALID_GR_WO, encoding="utf-8")
+    proc = _run(["governed-run", "--work-order", str(wo), "--dry-run"], tmp_path)
+    # JSON must parse cleanly.
+    parsed = json.loads(proc.stdout)
+    for field in (
+        "work_order_hash", "parsed_stages", "protected_paths", "allowed_paths",
+        "forbidden_paths", "required_commands", "validation_status",
+        "audit_status", "final_status",
+    ):
+        assert field in parsed
+
+
+def test_governed_run_appends_audit_log(tmp_path: Path) -> None:
+    wo = tmp_path / "wo.md"
+    wo.write_text(VALID_GR_WO, encoding="utf-8")
+    audit = tmp_path / "audit" / "run.jsonl"
+    proc = _run(
+        ["governed-run", "--work-order", str(wo), "--audit", str(audit), "--dry-run"],
+        tmp_path,
+    )
+    assert proc.returncode == 0, proc.stderr
+    assert audit.is_file()
+    lines = [ln for ln in audit.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(lines) >= 2  # started + plan_valid
+    manifest = json.loads(proc.stdout)
+    assert manifest["audit_status"] is not None
+    assert manifest["audit_status"]["status"] == "AUDIT_CHAIN_VALID"
+
+
+def test_governed_run_missing_work_order_arg(tmp_path: Path) -> None:
+    proc = _run(["governed-run", "--dry-run"], tmp_path)
+    assert proc.returncode == 1
+    assert "requires --work-order" in proc.stderr

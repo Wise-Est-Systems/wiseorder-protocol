@@ -1,4 +1,4 @@
-.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints
+.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check
 
 PYTHON ?= python3
 
@@ -247,6 +247,24 @@ go-verifier-check:
 # v0.1 Go verifier fingerprint check (subset). NOT in `make ci`.
 go-verifier-fingerprints:
 	go run ./go_verifier fingerprints
+
+# v0.1 runtime core self-checks (WORK ORDER 015). NOT in `make ci` until
+# stable across cold runs. Each target runs the module's self_check()
+# function which exits 0 on PASS and 1 on FAIL.
+work-order-parser-check:
+	$(PYTHON) -m intellagent_runtime.work_order_parser
+
+workflow-grammar-check:
+	$(PYTHON) -m intellagent_runtime.workflow_grammar
+
+execution-plan-check:
+	$(PYTHON) -m intellagent_runtime.execution_plan
+
+audit-memory-check:
+	$(PYTHON) -m intellagent_runtime.audit_memory
+
+governed-run-check:
+	$(PYTHON) -m intellagent_runtime.cli governed-run --self-check
 
 # v0.1 dry-run archiver. Prints what files would be moved from live runtime
 # directories into reports/archive/. Modifies nothing. Useful before periodic

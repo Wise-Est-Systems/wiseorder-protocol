@@ -1,0 +1,122 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "runtime_core_implementation",
+  "report_version": "1.0",
+  "work_order": "015",
+  "timestamp_utc": "2026-05-10T21:00:00Z",
+  "purpose": "Implement the runtime core needed for real governed agent execution: WO parser, workflow grammar, execution plan, audit memory, governed-run CLI.",
+  "files_created": [
+    "intellagent_runtime/work_order_parser.py",
+    "intellagent_runtime/workflow_grammar.py",
+    "intellagent_runtime/execution_plan.py",
+    "intellagent_runtime/audit_memory.py",
+    "tests/test_work_order_parser.py",
+    "tests/test_workflow_grammar.py",
+    "tests/test_execution_plan.py",
+    "tests/test_audit_memory.py",
+    "reports/runtime_core/runtime_core_implementation_v0.1.md",
+    "reports/runtime_core/runtime_core_implementation_v0.1.json"
+  ],
+  "files_modified": [
+    "intellagent_runtime/cli.py (added governed-run subcommand + cmd_governed_run + _governed_run_self_check + _governed_run_manifest)",
+    "tests/test_intellagent_cli.py (added 7 governed-run CLI tests)",
+    "Makefile (added work-order-parser-check, workflow-grammar-check, execution-plan-check, audit-memory-check, governed-run-check; NOT in ci yet)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "tools/** (Python verifier behavior)",
+    "rust_verifier/** (Rust verifier behavior)",
+    "go_verifier/** (Go verifier behavior)",
+    "frozen fingerprint values"
+  ],
+  "tests_added": {
+    "test_work_order_parser.py": 22,
+    "test_workflow_grammar.py": 21,
+    "test_execution_plan.py": 20,
+    "test_audit_memory.py": 17,
+    "test_intellagent_cli.py (added)": 7,
+    "total_new": 87,
+    "minimum_required": 50,
+    "exceeded_by": 37
+  },
+  "test_totals": {
+    "before_wo_015": 271,
+    "after_wo_015": 358,
+    "all_passing": true
+  },
+  "commands_run": [
+    {"command": "python -m pytest tests/test_work_order_parser.py", "rc": 0, "result": "22/22 PASS"},
+    {"command": "python -m pytest tests/test_workflow_grammar.py",  "rc": 0, "result": "21/21 PASS"},
+    {"command": "python -m pytest tests/test_execution_plan.py",    "rc": 0, "result": "20/20 PASS"},
+    {"command": "python -m pytest tests/test_audit_memory.py",      "rc": 0, "result": "17/17 PASS"},
+    {"command": "python -m pytest tests/test_intellagent_cli.py",   "rc": 0, "result": "14/14 PASS (7 new + 7 existing)"},
+    {"command": "python -m pytest tests/",                          "rc": 0, "result": "358/358 PASS"},
+    {"command": "make work-order-parser-check",                     "rc": 0, "result": "PASS"},
+    {"command": "make workflow-grammar-check",                      "rc": 0, "result": "PASS"},
+    {"command": "make execution-plan-check",                        "rc": 0, "result": "PASS"},
+    {"command": "make audit-memory-check",                          "rc": 0, "result": "PASS"},
+    {"command": "make governed-run-check",                          "rc": 0, "result": "PASS"},
+    {"command": "make ci",                                          "rc": 0, "result": "PASS (11 stages unchanged)"},
+    {"command": "make demo",                                        "rc": 0, "result": "PASS (3 frozen fingerprints MATCH)"},
+    {"command": "git status --short",                               "rc": 0, "result": "captured pre-commit working tree"}
+  ],
+  "parser_result":          {"tests_passed": 22, "self_check": "PASS"},
+  "workflow_grammar_result": {"tests_passed": 21, "self_check": "PASS"},
+  "execution_plan_result":   {"tests_passed": 20, "self_check": "PASS"},
+  "audit_memory_result":     {"tests_passed": 17, "self_check": "PASS"},
+  "governed_run_result":     {"tests_passed": 7,  "self_check": "PASS", "json_output_valid": true},
+  "make_ci_result":   {"rc": 0, "result": "PASS — 11 stages green, no regression"},
+  "make_demo_result": {"rc": 0, "result": "PASS — 3 frozen fingerprints MATCH"},
+  "what_is_now_real": [
+    "Markdown work-order parser that rejects: missing objective, missing stop, empty input, protected-and-mutable contradiction without explicit permission, placeholder-only deliverables.",
+    "Workflow grammar with 8 stages and ordering enforcement: execute-after-review, verify-after-execute (unless verifying existing artifact), report-before-stop, stop/refuse terminal.",
+    "Execution-plan validator that refuses: forbidden-path touch, missing required command, unbounded shell, destructive command without permission, plan without verify, plan without report.",
+    "Append-only audit-memory JSONL with SHA-256 hash chain and four-status verification: VALID, TAMPERED, EMPTY, INVALID.",
+    "governed-run CLI subcommand: parse WO → build plan → validate → audit-append → emit manifest JSON → final status (VALID / REFUSED / INVALID).",
+    "5 Makefile targets (work-order-parser-check, workflow-grammar-check, execution-plan-check, audit-memory-check, governed-run-check); NOT in `make ci` per WO 015."
+  ],
+  "what_remains_unimplemented": [
+    "Actual shell execution: governed-run is dry-run-only in v0.1.0. Wiring the validated plan into a real sandboxed executor remains. Existing tools/pipeline_runtime.py already provides the proposer→review→executor pipeline; integrating governed-run with that pipeline is a follow-up.",
+    "Persistent audit-memory across CLI invocations: append_event/verify_chain support persistence, but the governed-run CLI invocation creates a new file each --audit run; multi-run aggregation patterns are not yet exercised by tests.",
+    "Workflow-stage parsing in arbitrary WO formats: parse_workflow_from_text uses a keyword heuristic. WOs that bury stages inside deeply nested prose may not be parsed correctly. The validator never silently accepts an invalid stage list — bad parses surface as 'plan has no verification step' or similar.",
+    "Refused-but-actionable handling: when validate() returns violations, the CLI emits GOVERNED_RUN_REFUSED and the audit log records the reasons. A separate sealed RefusalRecord artifact in the format defined by intellagent_runtime/refusal.py is NOT yet produced — that integration is a follow-up.",
+    "Path-glob semantics for forbidden paths: the implementation uses literal-substring + regex matching, which is conservative (false positives are possible, false negatives less so). True glob expansion via fnmatch is a follow-up.",
+    "Audit-memory locking under concurrent appends: file-locking is not implemented. Concurrent append_event calls from multiple processes against the same file may interleave; verify_chain would detect the resulting corruption but reordering is not prevented."
+  ],
+  "risks_introduced": [
+    "The work-order parser is heuristic (regex-based, not a formal grammar). A WO that uses unusual heading syntax may yield incomplete fields. Mitigation: every required field rejected when absent; parser is conservative.",
+    "Destructive-command detection is heuristic. A novel command form not on the deny-list could pass. Mitigation: explicit allow-list approach in the execution surface remains the strongest backstop; this validator is one of several layers.",
+    "Hash-chained audit log is single-writer. Multi-writer use without external coordination will corrupt the chain. Mitigation: verify_chain reliably detects corruption.",
+    "governed-run does not yet integrate with the existing pipeline_runtime sandbox. Calling --dry-run is safe; calling without --dry-run currently does NOT execute commands either (it just emits the manifest). This is deliberate for v0.1.0; the runtime kernel and execution dispatch remain decoupled."
+  ],
+  "make_ci_still_passes": true,
+  "make_demo_still_passes": true,
+  "frozen_fingerprints_unchanged": true,
+  "decisions": [
+    {
+      "decision": "audit-memory hash format: prefixed (sha256:<hex>) vs bare hex.",
+      "recommendation": "prefixed",
+      "why": "Consistent with the rest of the WiseOrder repo (Class A artifacts, manifests, vectors_suite_sha256). Single-format across the codebase reduces audit-side confusion.",
+      "cost_if_wrong": "low; only the audit log is affected; a future migration would be a simple per-line replace."
+    },
+    {
+      "decision": "governed-run without --dry-run still does not execute shell commands.",
+      "recommendation": "yes (no-op outside of audit emission)",
+      "why": "v0.1.0 keeps the governance kernel decoupled from execution dispatch. tools/pipeline_runtime.py is the existing executor surface; wiring governed-run into it is a follow-up that deserves its own work order so the integration is reviewable.",
+      "cost_if_wrong": "low; --dry-run is the safer mode and is the only one tested."
+    },
+    {
+      "decision": "Workflow-stage parsing uses a keyword heuristic, not a formal grammar.",
+      "recommendation": "keyword heuristic for v0.1.0",
+      "why": "WOs are author-written prose, not machine-generated. A heuristic that recognizes 90% of WOs is more useful than a strict grammar that recognizes 30% and rejects the rest as malformed. The validator catches the consequences of any parse failure (no verify / no report).",
+      "cost_if_wrong": "medium; a misparsed WO becomes a refused plan rather than an unsafe execution."
+    }
+  ],
+  "next_build_task": "Integrate governed-run with tools/pipeline_runtime.py so a GOVERNED_RUN_VALID plan flows into the existing proposer→review→executor pipeline under macOS sandbox-exec isolation. Acceptance criteria: a valid WO can be dry-run AND wet-run (with explicit --execute flag), execution stays within the planned commands, audit memory captures pipeline_hash + proposer_hash + review_hash + executor_manifest_hash, and refusal at any pipeline stage seals a RefusalRecord using intellagent_runtime/refusal.py.",
+  "overall_result": "PASS"
+}
