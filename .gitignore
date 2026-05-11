@@ -34,6 +34,12 @@ dist/
 # is found outside this directory under the repo root.
 .wiseorder_keys/
 
+# governed-run RefusalRecord output (WORK ORDER 015 / 016).
+# These are per-run operational artifacts written to the working directory
+# the CLI was invoked from. The sealed records live alongside whichever
+# project drove the run; we do not track them at the repo root.
+/intellagent_refusals/
+
 # Generated reports are intentionally NOT ignored:
 #   reports/conformance-report.json
 #   reports/conformance-summary.txt

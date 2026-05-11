@@ -1,0 +1,104 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "governed_run_pipeline_integration",
+  "report_version": "1.0",
+  "work_order": "016",
+  "timestamp_utc": "2026-05-10T22:00:00Z",
+  "purpose": "Integrate governed-run with the runtime pipeline so a validated work order can flow from parsed plan → review → bounded execution under macOS sandbox-exec isolation → audit memory → manifest.",
+  "files_created": [
+    "tests/test_governed_run_pipeline.py",
+    "reports/runtime_core/governed_run_pipeline_v0.1.md",
+    "reports/runtime_core/governed_run_pipeline_v0.1.json"
+  ],
+  "files_modified": [
+    "intellagent_runtime/cli.py (extended governed-run: --execute, --output, mode resolution, mutual exclusion, wet-run flow via tools/os_isolation_runtime.execute_command_isolated, RefusalRecord sealing on every refusal/invalid/execution-failed path, manifest_hash, command_results)",
+    "Makefile (added governed-run-pipeline-check target; NOT in ci yet)",
+    ".gitignore (added /intellagent_refusals/ at the repo root; per-run refusal records are operational artifacts, not source)"
+  ],
+  "files_NOT_changed_by_design": [
+    "SPEC.md",
+    "SPEC_LOCK_v0.1.md",
+    "vectors/**",
+    "schemas/**",
+    "canonicalization/corpus/**",
+    "rust_verifier/**",
+    "go_verifier/**",
+    "tools/** (no edits to existing pipeline_runtime / proposer_runtime / review_gate_runtime; the integration calls the lower-level os_isolation_runtime.execute_command_isolated primitive directly — see integration-decision below)",
+    "frozen fingerprint values"
+  ],
+  "tests": {
+    "added": {
+      "test_governed_run_pipeline.py": 40
+    },
+    "before_wo_016": 358,
+    "after_wo_016": 398,
+    "minimum_required_new": 40,
+    "exceeded_by": 0,
+    "all_passing": true,
+    "macos_only_subset": "10 of the 40 are gated MACOS_ONLY because they invoke sandbox-exec; the other 30 run on all platforms and exercise dry-run, mode resolution, refusal sealing, manifest shape, audit chain, and CI/freeze invariants."
+  },
+  "commands_run": [
+    {"command": "python -m pytest tests/test_governed_run_pipeline.py",            "rc": 0, "result": "40/40 PASS"},
+    {"command": "python -m pytest tests/test_intellagent_cli.py",                  "rc": 0, "result": "14/14 PASS"},
+    {"command": "python -m pytest tests/",                                         "rc": 0, "result": "398/398 PASS"},
+    {"command": "make governed-run-pipeline-check",                                "rc": 0, "result": "54 tests PASS (40 pipeline + 14 CLI)"},
+    {"command": "make ci",                                                         "rc": 0, "result": "PASS (11 stages unchanged)"},
+    {"command": "make demo",                                                       "rc": 0, "result": "PASS (3 frozen fingerprints MATCH)"},
+    {"command": "git status --short",                                              "rc": 0, "result": "captured pre-commit working tree"}
+  ],
+  "dry_run_result": "PASS — backward-compatible with WO 015 behavior; manifest now also carries mode=\"dry-run\", execution_plan_hash, and manifest_hash fields; existing dry-run tests continue to pass.",
+  "wet_run_result": "PASS — wet-run flow exercised end-to-end on macOS via os_isolation_runtime.execute_command_isolated. A `pwd` work order produces GOVERNED_RUN_EXECUTED with all four pipeline-equivalent hashes (proposer/review/executor_manifest/pipeline) plus command_results.",
+  "refusal_result": "PASS — every refusal path (invalid WO, refused plan, execution failure) seals a formal RefusalRecord via intellagent_runtime.refusal.RefusalStore.seal(), the canonical record hash is reported in the manifest as refusal_record_hash, and the file is materialized under <cwd>/intellagent_refusals/refusal-<id>.json.",
+  "audit_memory_result": "PASS — audit chain stays AUDIT_CHAIN_VALID across dry-run and wet-run. Wet-run additionally appends governed_run.command.executed events per command and governed_run.completed at the end. audit_status is captured in the manifest.",
+  "refusal_record_result": "PASS — formal RefusalRecord sealed on (a) invalid work order (parse error or file missing), (b) plan validation refusal, (c) execution failure. The intellagent_runtime.refusal.RefusalStore is reused unchanged.",
+  "make_ci_result":   {"rc": 0, "result": "PASS — 11 stages green; no regression"},
+  "make_demo_result": {"rc": 0, "result": "PASS — 3 fingerprints MATCH byte-for-byte"},
+  "frozen_fingerprints_unchanged": true,
+  "final_statuses_implemented": [
+    "GOVERNED_RUN_VALID",
+    "GOVERNED_RUN_REFUSED",
+    "GOVERNED_RUN_INVALID",
+    "GOVERNED_RUN_EXECUTED",
+    "GOVERNED_RUN_EXECUTION_FAILED"
+  ],
+  "exit_codes": {
+    "GOVERNED_RUN_VALID":             0,
+    "GOVERNED_RUN_EXECUTED":          0,
+    "GOVERNED_RUN_REFUSED":           1,
+    "GOVERNED_RUN_EXECUTION_FAILED":  1,
+    "GOVERNED_RUN_INVALID":           2
+  },
+  "integration_decisions": [
+    {
+      "decision": "Wet-run path: call tools/pipeline_runtime.run() (Workforce YAML) vs. call tools/os_isolation_runtime.execute_command_isolated() (sandbox primitive)?",
+      "recommendation": "os_isolation_runtime.execute_command_isolated() directly.",
+      "why": "tools/pipeline_runtime.py is built for the Workforce YAML schema with fields (work_order_id, agent_role, allowed_files globs, required_gates, rollback_plan, human_approval_required, status_history, etc.) that do not map cleanly to a freeform markdown work order. Bridging would require inventing values for those required fields (synthetic status_history, heuristic rollback_plan, default human_approval_required) — exactly the kind of fake-it-to-make-it the standing law forbids. Additionally, pipeline_runtime.run() applies its OWN proposer→review filtering with a different admit-list logic from the WO-015 execution_plan validator, which would make the execution_plan validation vestigial. Calling execute_command_isolated() directly: (i) preserves the WO-015 validator as the authoritative gate; (ii) inherits sandbox-exec isolation, classifier deny-first, per-command timeout, and output cap; (iii) does not require an adapter that fabricates fields.",
+      "what_would_change_my_mind": "(a) A future work order that adds a faithful markdown→YAML adapter capable of populating every required Workforce schema field from the parsed WorkOrder without invention. (b) A pipeline_runtime variant that accepts a plan-as-data (rather than a YAML path) so the WO-015 plan can be passed directly. Either would let us route through pipeline_runtime.run() without lying about the format.",
+      "cost_if_wrong": "We lose one redundant pass of admit-list filtering and deterministic-hash checking that pipeline_runtime applies on top of the executor. The WO-015 plan validator + the os_isolation_runtime classifier remain in place as two layers. The third layer (pipeline_runtime's proposer/review) is forgone. Recoverable in a follow-up via the adapter mentioned above without re-doing the integration."
+    },
+    {
+      "decision": "Proposer / review / executor hash provenance in the wet-run manifest.",
+      "recommendation": "Compute the four pipeline-equivalent hashes locally from the actual governed-run data: proposer_hash = sha256(canonical({planned_commands, work_order_hash})); review_hash = sha256(canonical({approved_commands, validation_status})); executor_manifest_hash = sha256(canonical(command_results)); pipeline_hash = sha256(canonical({proposer_hash, review_hash, executor_manifest_hash})).",
+      "why": "The manifest needs to be shape-comparable to a tools/pipeline_runtime manifest for any future reviewer or audit. Computing locally is honest accounting (the hashes commit to exactly what we did) and matches the structure pipeline_runtime would have emitted given the same inputs. No hash is fabricated; each one is derived from a real artifact in the run.",
+      "what_would_change_my_mind": "If pipeline_runtime.run() is integrated later via the YAML adapter, these fields would be replaced by the canonical pipeline_runtime hashes (proposer.deterministic_hash, review.review_hash, executor manifest sha256, pipeline_hash). The manifest field NAMES would stay; their derivation would change.",
+      "cost_if_wrong": "A reviewer comparing a governed-run manifest with a pipeline_runtime manifest would see different values for the same conceptual field. Documented here so the difference is visible."
+    }
+  ],
+  "known_limitations": [
+    "Wet-run requires macOS — tools/os_isolation_runtime uses sandbox-exec. The 10 macOS-only tests are skipped on non-macOS. A Linux equivalent (namespaces / cgroups) is unimplemented in v0.1.",
+    "Wet-run does not pass commands through tools/pipeline_runtime — see Decision 1 above. The execution_plan validator + os_isolation_runtime classifier are the only filtering layers.",
+    "Per-command results capture status/exit_code/duration/profile hash. Full stdout/stderr capture is NOT included in the manifest (it is captured by the os_isolation_runtime per-run manifest but not echoed up). A reviewer can inspect reports/os_isolation_runtime/runs/*.json (when present) for the full output.",
+    "Concurrent governed-run invocations on the same audit file may interleave; audit_memory.verify_chain detects the resulting corruption but does not prevent it.",
+    "The workflow grammar parser still uses a keyword heuristic — WO prose containing words like \"verify\" or \"execute\" outside the workflow list can be misclassified as stages. Mitigation: every test fixture uses prose deliberately free of stage synonyms; real WOs that violate this surface the symptom as a no-verify / no-execute plan refusal.",
+    "RefusalRecord query field uses the work-order title or path; if both are empty the record carries a path-only query. This is acceptable because the rejected list always contains the reason strings."
+  ],
+  "risks_introduced": [
+    {"risk": "Wet-run invokes real subprocesses under sandbox-exec.",                                       "severity": "medium", "mitigation": "Three independent gates: WO-015 execution_plan validator → os_isolation_runtime classifier deny-first → macOS sandbox-exec kernel profile. Output is capped, network is denied by default, fork is denied. Per-command timeout enforced."},
+    {"risk": "Hash provenance for proposer/review/executor differs from tools/pipeline_runtime.",         "severity": "low",    "mitigation": "Documented in Decision 2; manifest names match pipeline_runtime; derivation is honest local computation."},
+    {"risk": "RefusalRecord files accumulate under <cwd>/intellagent_refusals/.",                         "severity": "low",    "mitigation": "/intellagent_refusals/ added to .gitignore at the repo root; per-run records remain on disk for audit but are not committed."},
+    {"risk": "execute_command_isolated import depends on tools/ being on sys.path.",                      "severity": "low",    "mitigation": "Lazy import; sys.path manipulation isolated to _execute_planned_commands; tested by all macOS-only tests."}
+  ],
+  "next_build_task": "Promote governed-run-check + governed-run-pipeline-check into make ci after one more cold-checkout confirmation run. The 5 WO-015 module self-check targets plus the WO-016 pipeline integration test would become CI stages 12–17 (after the existing 11). This converts governed-run from \"opt-in surface\" to a permanent CI gate.",
+  "overall_result": "PASS"
+}

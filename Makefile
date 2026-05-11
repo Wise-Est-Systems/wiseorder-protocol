@@ -1,4 +1,4 @@
-.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check
+.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check
 
 PYTHON ?= python3
 
@@ -265,6 +265,12 @@ audit-memory-check:
 
 governed-run-check:
 	$(PYTHON) -m intellagent_runtime.cli governed-run --self-check
+
+# v0.1 governed-run pipeline integration check (WORK ORDER 016). NOT in
+# `make ci` until cold-stable. Exercises dry-run + wet-run + refusal paths
+# end-to-end through the CLI.
+governed-run-pipeline-check:
+	$(PYTHON) -m pytest tests/test_governed_run_pipeline.py tests/test_intellagent_cli.py -q
 
 # v0.1 dry-run archiver. Prints what files would be moved from live runtime
 # directories into reports/archive/. Modifies nothing. Useful before periodic

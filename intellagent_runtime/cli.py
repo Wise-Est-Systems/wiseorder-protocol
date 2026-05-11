@@ -14,6 +14,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 from intellagent_runtime import canonical
 from intellagent_runtime.authorization import AuthorizationGate
@@ -342,11 +343,22 @@ Stop.
 def cmd_governed_run(args: argparse.Namespace) -> int:
     """``governed-run`` subcommand.
 
-    Pipeline: parse work order → build execution plan → validate →
-    append audit event → emit manifest JSON → final status.
+    Modes:
+      --dry-run     (default)  parse → plan → validate → audit → emit manifest
+      --execute                wet-run: same, then run each planned command
+                               under tools/os_isolation_runtime sandbox-exec
+                               isolation; refuse safely on any failed gate
 
-    Returns 0 on GOVERNED_RUN_VALID, 1 on GOVERNED_RUN_REFUSED, 2 on
-    GOVERNED_RUN_INVALID (the work order itself was malformed).
+    Final statuses:
+      GOVERNED_RUN_VALID              dry-run; plan valid; no execution
+      GOVERNED_RUN_REFUSED            dry-run OR --execute; plan refused
+                                       (no commands run); RefusalRecord sealed
+      GOVERNED_RUN_INVALID            work order itself malformed
+      GOVERNED_RUN_EXECUTED           --execute; every command completed cleanly
+      GOVERNED_RUN_EXECUTION_FAILED   --execute; one or more commands failed
+                                       or were blocked at the sandbox classifier
+
+    Exit codes: VALID=0, EXECUTED=0, REFUSED=1, EXECUTION_FAILED=1, INVALID=2.
     """
     if getattr(args, "self_check", False):
         return _governed_run_self_check()
@@ -361,54 +373,93 @@ def cmd_governed_run(args: argparse.Namespace) -> int:
         parse_work_order_file,
     )
 
+    # ---- mode resolution ----
+    dry_run = bool(getattr(args, "dry_run", False))
+    execute = bool(getattr(args, "execute", False))
+    if dry_run and execute:
+        sys.stderr.write("ERROR: --dry-run and --execute are mutually exclusive\n")
+        return 1
+    if not dry_run and not execute:
+        dry_run = True
+    mode = "execute" if execute else "dry-run"
+
     wo_path = getattr(args, "work_order", None)
     if not wo_path:
         sys.stderr.write("ERROR: governed-run requires --work-order or --self-check\n")
         return 1
 
     audit_path = Path(args.audit) if getattr(args, "audit", None) else None
+    output_path = Path(args.output) if getattr(args, "output", None) else None
 
-    # Parse.
+    refusals_dir = Path(getattr(args, "dir", None) or ".").resolve() / "intellagent_refusals"
+
+    # ---- parse ----
     try:
         wo = parse_work_order_file(wo_path)
     except (WorkOrderError, FileNotFoundError) as exc:
+        refusal_record_hash = _seal_refusal_if_requested(
+            refusals_dir=refusals_dir,
+            query=f"invalid work order: {wo_path}",
+            reasons=[str(exc)],
+        )
         manifest = _governed_run_manifest(
+            mode=mode,
             work_order_hash=None,
             plan=None,
             validation=[str(exc)],
             audit_status=None,
             final_status="GOVERNED_RUN_INVALID",
+            refusal_record_hash=refusal_record_hash,
         )
-        print(canonical.canonical_pretty(manifest))
+        _emit_manifest(manifest, output_path)
         return 2
 
-    # Build plan.
+    # ---- plan ----
     try:
         plan = build_plan(wo)
     except ExecutionPlanError as exc:
+        refusal_record_hash = _seal_refusal_if_requested(
+            refusals_dir=refusals_dir,
+            query=f"invalid execution plan from {wo_path}",
+            reasons=[str(exc)],
+        )
         manifest = _governed_run_manifest(
+            mode=mode,
             work_order_hash=wo.source_sha256,
             plan=None,
             validation=[str(exc)],
             audit_status=None,
             final_status="GOVERNED_RUN_INVALID",
+            refusal_record_hash=refusal_record_hash,
         )
-        print(canonical.canonical_pretty(manifest))
+        _emit_manifest(manifest, output_path)
         return 2
 
-    # Validate.
-    violations = plan.validate()
-    final_status = "GOVERNED_RUN_VALID" if not violations else "GOVERNED_RUN_REFUSED"
+    execution_plan_hash = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes(plan.to_dict())
+    ).split(":", 1)[-1]
+    # canonical.sha256_hex already prefixes; canonicalize on its output by
+    # dropping the leading "sha256:" before re-prefixing — keeps a single
+    # source of truth for the format.
+    # (sha256_hex returns "sha256:<hex>"; the split above is defensive.)
 
-    # Audit append (if requested).
+    # ---- validate ----
+    violations = plan.validate()
+
+    # ---- audit: started + plan_valid/refused ----
     audit_status: dict[str, Any] | None = None
     if audit_path is not None:
         append_event(
             audit_path,
             "governed_run.started",
-            {"work_order_sha256": wo.source_sha256, "title": wo.title},
+            {
+                "mode": mode,
+                "work_order_sha256": wo.source_sha256,
+                "execution_plan_hash": execution_plan_hash,
+                "title": wo.title,
+            },
         )
-        if final_status == "GOVERNED_RUN_VALID":
+        if not violations:
             append_event(audit_path, "governed_run.plan_valid", {
                 "stages": [s.value for s in plan.workflow.stages],
                 "command_count": len(plan.planned_commands),
@@ -419,27 +470,243 @@ def cmd_governed_run(args: argparse.Namespace) -> int:
             })
         audit_status = verify_chain(audit_path).to_dict()
 
-    # Dry-run does not execute. Without --dry-run, we still refuse to
-    # invoke real shell commands from this CLI surface; v0.1.0 keeps the
-    # governance kernel decoupled from execution dispatch.
+    # ---- refusal path (no execution allowed) ----
+    if violations:
+        refusal_record_hash = _seal_refusal_if_requested(
+            refusals_dir=refusals_dir,
+            query=f"governed-run refused: {wo.title or wo_path}",
+            reasons=violations,
+        )
+        manifest = _governed_run_manifest(
+            mode=mode,
+            work_order_hash=wo.source_sha256,
+            plan=plan,
+            validation=violations,
+            audit_status=audit_status,
+            final_status="GOVERNED_RUN_REFUSED",
+            execution_plan_hash=execution_plan_hash,
+            refusal_record_hash=refusal_record_hash,
+        )
+        _emit_manifest(manifest, output_path)
+        return 1
+
+    # ---- dry-run terminal ----
+    if dry_run:
+        manifest = _governed_run_manifest(
+            mode=mode,
+            work_order_hash=wo.source_sha256,
+            plan=plan,
+            validation=[],
+            audit_status=audit_status,
+            final_status="GOVERNED_RUN_VALID",
+            execution_plan_hash=execution_plan_hash,
+        )
+        _emit_manifest(manifest, output_path)
+        return 0
+
+    # ---- wet-run: execute under sandbox isolation ----
+    proposer_hash, review_hash, executor_manifest_hash, pipeline_hash, command_results, \
+        execution_status = _execute_planned_commands(
+            plan=plan,
+            audit_path=audit_path,
+        )
+    if audit_path is not None:
+        audit_status = verify_chain(audit_path).to_dict()
+
+    final_status = (
+        "GOVERNED_RUN_EXECUTED"
+        if execution_status == "OK"
+        else "GOVERNED_RUN_EXECUTION_FAILED"
+    )
+    refusal_record_hash = None
+    if final_status == "GOVERNED_RUN_EXECUTION_FAILED":
+        refusal_record_hash = _seal_refusal_if_requested(
+            refusals_dir=refusals_dir,
+            query=f"governed-run execution failed: {wo.title or wo_path}",
+            reasons=[
+                f"{r['command']}: status={r['status']} exit={r['exit_code']} error={r.get('error') or ''}"
+                for r in command_results if not r.get("succeeded")
+            ],
+        )
+
     manifest = _governed_run_manifest(
+        mode=mode,
         work_order_hash=wo.source_sha256,
         plan=plan,
-        validation=violations,
+        validation=[],
         audit_status=audit_status,
         final_status=final_status,
+        execution_plan_hash=execution_plan_hash,
+        proposer_hash=proposer_hash,
+        review_hash=review_hash,
+        executor_manifest_hash=executor_manifest_hash,
+        pipeline_hash=pipeline_hash,
+        command_results=command_results,
+        refusal_record_hash=refusal_record_hash,
     )
-    print(canonical.canonical_pretty(manifest))
-    return 0 if final_status == "GOVERNED_RUN_VALID" else 1
+    _emit_manifest(manifest, output_path)
+    return 0 if final_status == "GOVERNED_RUN_EXECUTED" else 1
+
+
+def _emit_manifest(manifest: dict, output_path: Path | None) -> None:
+    """Print the manifest to stdout and, if requested, also to ``output_path``."""
+    text = canonical.canonical_pretty(manifest)
+    print(text, end="")
+    if output_path is not None:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(text, encoding="utf-8")
+
+
+def _seal_refusal_if_requested(
+    *,
+    refusals_dir: Path,
+    query: str,
+    reasons: list,
+    manifest: dict | None = None,
+) -> str | None:
+    """Seal a RefusalRecord using the existing intellagent_runtime.refusal
+    store. Returns the hash of the canonicalized record (or None if sealing
+    failed — which itself is recorded but does not abort)."""
+    try:
+        store = RefusalStore(refusals_dir)
+        rejected = [(None, [str(r) for r in reasons if r])]
+        record = store.seal(
+            query=query,
+            from_state_id="governed_run::no_state",
+            rejected=rejected,
+        )
+        return "sha256:" + canonical.sha256_hex(
+            canonical.canonical_json_bytes(record.to_dict())
+        ).split(":", 1)[-1]
+    except Exception as exc:  # pragma: no cover - defensive
+        sys.stderr.write(f"WARN: refusal sealing failed: {exc}\n")
+        return None
+
+
+def _execute_planned_commands(
+    *,
+    plan,
+    audit_path: Path | None,
+) -> tuple[str, str, str, str, list[dict], str]:
+    """Run each planned command under tools/os_isolation_runtime sandbox.
+
+    Returns ``(proposer_hash, review_hash, executor_manifest_hash,
+    pipeline_hash, command_results, execution_status)`` where
+    ``execution_status`` is ``"OK"`` if every command succeeded and
+    ``"FAILED"`` otherwise.
+
+    Integration note: tools/pipeline_runtime.py operates on the Workforce
+    YAML schema and is not used here. Instead we call the lower-level
+    isolation primitive directly. The proposer/review/executor hashes are
+    derived from our own data so the manifest is comparable in shape to
+    a pipeline_runtime manifest. See
+    reports/runtime_core/governed_run_pipeline_v0.1.md §integration-decision.
+    """
+    from intellagent_runtime.audit_memory import append_event
+    # Lazy import: the isolation runtime lives under tools/ and depends on
+    # the Python path. Importing it at module top would couple package
+    # import to the workspace layout. We add tools/ to sys.path and import
+    # by name so the module registers in sys.modules — required for the
+    # @dataclass decorators inside the module to introspect their own
+    # __module__ during class construction.
+    import importlib
+    repo_root = Path(__file__).resolve().parent.parent
+    tools_dir = str(repo_root / "tools")
+    if tools_dir not in sys.path:
+        sys.path.insert(0, tools_dir)
+    iso = importlib.import_module("os_isolation_runtime")
+
+    import tempfile
+
+    proposer_payload = {
+        "planned_commands": [c.raw for c in plan.planned_commands],
+        "work_order_hash": plan.work_order_sha256,
+    }
+    proposer_hash = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes(proposer_payload)
+    ).split(":", 1)[-1]
+
+    review_payload = {
+        "approved_commands": [c.raw for c in plan.planned_commands],
+        "validation_status": "VALID",
+    }
+    review_hash = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes(review_payload)
+    ).split(":", 1)[-1]
+
+    command_results: list[dict] = []
+    execution_status = "OK"
+    with tempfile.TemporaryDirectory(prefix="governed-run-") as tmpd:
+        sandbox = Path(tmpd)
+        for cmd in plan.planned_commands:
+            result = iso.execute_command_isolated(cmd.raw, sandbox)
+            status = result.get("status", "unknown")
+            exit_code = result.get("exit_code")
+            # Success criterion: the sandbox ran the command (status=="ok")
+            # AND the command itself exited 0. Any other combination is a
+            # failure for the whole run.
+            command_succeeded = status == "ok" and exit_code == 0
+            command_results.append({
+                "command": cmd.raw,
+                "status": status,
+                "exit_code": exit_code,
+                "succeeded": command_succeeded,
+                "timed_out": result.get("timed_out", False),
+                "duration_ms": result.get("duration_ms", 0),
+                "stdout_truncated": result.get("stdout_truncated", False),
+                "stderr_truncated": result.get("stderr_truncated", False),
+                "sandbox_profile_hash": result.get("sandbox_profile_hash", ""),
+                "error": result.get("error", ""),
+            })
+            event_payload = {
+                "command": cmd.raw,
+                "status": status,
+                "exit_code": exit_code,
+                "succeeded": command_succeeded,
+            }
+            if audit_path is not None:
+                append_event(audit_path, "governed_run.command.executed", event_payload)
+            if not command_succeeded:
+                execution_status = "FAILED"
+
+    executor_manifest_hash = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes(command_results)
+    ).split(":", 1)[-1]
+    pipeline_payload = {
+        "proposer_hash": proposer_hash,
+        "review_hash": review_hash,
+        "executor_manifest_hash": executor_manifest_hash,
+    }
+    pipeline_hash = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes(pipeline_payload)
+    ).split(":", 1)[-1]
+
+    if audit_path is not None:
+        append_event(audit_path, "governed_run.completed", {
+            "execution_status": execution_status,
+            "pipeline_hash": pipeline_hash,
+        })
+    return (
+        proposer_hash, review_hash, executor_manifest_hash,
+        pipeline_hash, command_results, execution_status,
+    )
 
 
 def _governed_run_manifest(
     *,
+    mode: str,
     work_order_hash: str | None,
     plan,  # ExecutionPlan or None
     validation: list[str],
     audit_status: dict | None,
     final_status: str,
+    execution_plan_hash: str | None = None,
+    proposer_hash: str | None = None,
+    review_hash: str | None = None,
+    executor_manifest_hash: str | None = None,
+    pipeline_hash: str | None = None,
+    command_results: list[dict] | None = None,
+    refusal_record_hash: str | None = None,
 ) -> dict:
     if plan is not None:
         parsed_stages = [s.value for s in plan.workflow.stages]
@@ -455,8 +722,10 @@ def _governed_run_manifest(
         required_commands = []
 
     validation_status = "VALID" if not validation else "REFUSED"
-    return {
+    manifest = {
+        "mode": mode,
         "work_order_hash": work_order_hash,
+        "execution_plan_hash": execution_plan_hash,
         "parsed_stages": parsed_stages,
         "protected_paths": protected_paths,
         "allowed_paths": allowed_paths,
@@ -467,6 +736,20 @@ def _governed_run_manifest(
         "audit_status": audit_status,
         "final_status": final_status,
     }
+    if mode == "execute":
+        manifest["proposer_hash"] = proposer_hash
+        manifest["review_hash"] = review_hash
+        manifest["executor_manifest_hash"] = executor_manifest_hash
+        manifest["pipeline_hash"] = pipeline_hash
+        manifest["command_results"] = command_results or []
+        manifest["refusal_record_hash"] = refusal_record_hash
+    elif refusal_record_hash is not None:
+        manifest["refusal_record_hash"] = refusal_record_hash
+
+    manifest["manifest_hash"] = "sha256:" + canonical.sha256_hex(
+        canonical.canonical_json_bytes({k: v for k, v in manifest.items() if k != "manifest_hash"})
+    ).split(":", 1)[-1]
+    return manifest
 
 
 # ---------------------------------------------------------------------------
@@ -539,6 +822,17 @@ def build_parser() -> argparse.ArgumentParser:
         "--dry-run",
         action="store_true",
         help="parse + plan + validate + audit-append; do not execute commands",
+    )
+    p_governed_run.add_argument(
+        "--execute",
+        action="store_true",
+        help="wet-run: run each planned command under sandbox isolation; "
+             "mutually exclusive with --dry-run",
+    )
+    p_governed_run.add_argument(
+        "--output",
+        required=False,
+        help="path to write the manifest JSON (in addition to stdout)",
     )
     p_governed_run.add_argument(
         "--self-check",
