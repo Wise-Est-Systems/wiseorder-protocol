@@ -52,14 +52,6 @@ pub fn canonical_bytes(value: &serde_json::Value) -> Vec<u8> {
         .into_bytes()
 }
 
-/// Convenience: SHA-256 hex (lowercase, no prefix) of canonical bytes.
-pub fn canonical_sha256_hex(value: &serde_json::Value) -> String {
-    let bytes = canonical_bytes(value);
-    let mut hasher = Sha256::new();
-    hasher.update(&bytes);
-    hex_lower(&hasher.finalize())
-}
-
 /// SHA-256 hex (lowercase, no prefix) of arbitrary bytes.
 pub fn sha256_hex(bytes: &[u8]) -> String {
     let mut hasher = Sha256::new();
@@ -68,6 +60,9 @@ pub fn sha256_hex(bytes: &[u8]) -> String {
 }
 
 /// SHA-256 with the protocol's "sha256:" prefix.
+/// Exercised by jcs::tests::sha256_prefixed_includes_marker; binary code paths
+/// emit the prefix elsewhere, so this is documentary public API.
+#[allow(dead_code)]
 pub fn sha256_prefixed(bytes: &[u8]) -> String {
     format!("sha256:{}", sha256_hex(bytes))
 }

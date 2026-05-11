@@ -44,11 +44,15 @@ const REQUIRED_D: &[&str] = &[
 
 #[derive(Debug, Clone)]
 pub struct Vector {
+    // Diagnostic-only: populated at load time, surfaced via the Debug
+    // derive when needed but not read by the verifier's verdict logic.
+    #[allow(dead_code)]
     pub file: PathBuf,
     pub vector_id: String,
     pub class: String,
     pub expected_status: String,
     pub input: Value,
+    #[allow(dead_code)]
     pub protocol_version: String,
 }
 
