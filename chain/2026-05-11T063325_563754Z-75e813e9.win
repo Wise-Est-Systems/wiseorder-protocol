@@ -1,0 +1,9 @@
+{
+  "algorithm": "III",
+  "author": "III",
+  "consequence_proof": "df4482187097be32c9a49ab05bb9b4e4125116c926ed69d7d061c03553f64638",
+  "foundational": "6b1d5b741c7bb0d156642f0ceff850003441396745eb2d682984e127f820dd53",
+  "previous_action": "80a3940df3368b72ca7e283963cd34e5add0dd660127264182453396d9d0b19a",
+  "sealed_at": "2026-05-11T06:33:25.563754Z",
+  "statement": "WO-018 sealed: III adopted from WOP as the v0.2.0 canonical algorithm, byte-for-byte parity with WiseDigest-3. NULLASIGN at genesis. Chain begins under v0.2.0. This triple is the chain witnessing its own creation — the second link, sealed under the rules the first link declared, signed III, anchored back through the genesis to NULLASIGN."
+}

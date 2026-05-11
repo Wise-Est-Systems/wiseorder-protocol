@@ -1,4 +1,4 @@
-.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check
+.PHONY: validate-vectors validate-implementations conformance interop test ci verify-drift no-pseudocode canonicalization-golden canonicalization-check workforce-check workforce-stress real-agent-check real-agent-dry-run real-agent-execute real-agent-execute-check proposer-check proposer-propose review-gate-check review-gate-review pipeline-check pipeline-run-fixture os-isolation-check os-isolation-fixture resource-limit-check resource-limit-fixture replay-diff-check minimal-verifier-check binary-fixture-check sandbox-escape-check demo repo-health report-inventory archive-reports-dry-run rust-verifier-check rust-verifier-fingerprints go-verifier-check go-verifier-fingerprints work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check chain-check
 
 PYTHON ?= python3
 
@@ -272,6 +272,13 @@ governed-run-check:
 governed-run-pipeline-check:
 	$(PYTHON) -m pytest tests/test_governed_run_pipeline.py tests/test_intellagent_cli.py -q
 
+# v0.2.0 chain integrity check (WO-018). Runs the chain module self-check
+# (seal/append/verify/tamper-detect) and the pytest suite for chain.py.
+# III digest parity vs WOP reference is covered by tests/test_iii.py.
+chain-check:
+	$(PYTHON) -m intellagent_runtime.chain
+	$(PYTHON) -m pytest tests/test_iii.py tests/test_chain.py -q
+
 # v0.1 dry-run archiver. Prints what files would be moved from live runtime
 # directories into reports/archive/. Modifies nothing. Useful before periodic
 # cleanup. NOT included in `make ci`.
@@ -297,5 +304,5 @@ archive-reports-dry-run:
 	@echo "Would move into: reports/archive/<runtime>/"
 	@echo "Run 'make repo-health' to see current archive counts."
 
-ci: no-pseudocode test work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
-	@echo "CI: documentation code standard + tooling tests + governed-runtime core (parser + grammar + plan + audit + governed-run self-check + pipeline-integration tests) + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."
+ci: no-pseudocode test work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check chain-check conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
+	@echo "CI: documentation code standard + tooling tests + governed-runtime core (parser + grammar + plan + audit + governed-run self-check + pipeline-integration tests) + v0.2.0 chain (III digest + .win chain primitives + tamper detection) + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."
