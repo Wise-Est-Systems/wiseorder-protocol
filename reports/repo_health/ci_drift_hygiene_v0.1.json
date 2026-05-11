@@ -1,0 +1,113 @@
+{
+  "protocol": "wiseorder",
+  "version": "0.1.0",
+  "report_kind": "ci_drift_hygiene",
+  "report_version": "1.0",
+  "work_order": "019",
+  "timestamp_utc": "2026-05-11T00:00:00Z",
+  "overall_result": "PASS",
+  "purpose": "Evidence that make ci no longer leaves the working tree dirty with generated sandbox-profile artifacts, that canonical evidence remains tracked, and that make verify-drift passes against committed state.",
+  "files_modified": [
+    ".gitignore"
+  ],
+  "files_created": [
+    "reports/repo_health/ci_drift_hygiene_v0.1.md",
+    "reports/repo_health/ci_drift_hygiene_v0.1.json"
+  ],
+  "drift_source": {
+    "path_glob": "reports/os_isolation_runtime/profiles/profile_*.sb",
+    "produced_by": "os_isolation_runtime (macOS sandbox-exec profile materializer)",
+    "non_determinism_cause": "profile content embeds a per-process random temp path issued by mkdtemp(3) such as /T/osisol-fields-XXXXXXXX and /T/governed-run-XXXXXXXX; each invocation produces new file content and therefore a new content-hash filename",
+    "is_deterministic_evidence": false,
+    "observed_counts": {
+      "on_disk_before_wo_019": 249,
+      "on_disk_after_ci_plus_demo": 261,
+      "delta_from_one_ci_plus_demo_run": 12,
+      "tracked_in_git": 225
+    }
+  },
+  "gitignore_change": {
+    "rule_added": "reports/os_isolation_runtime/profiles/",
+    "rule_location_in_file": "lines 57-64 (after reports/archive/ block)",
+    "preserves_not_ignored": [
+      "reports/conformance-report.json",
+      "reports/conformance-summary.txt",
+      "reports/ci/**",
+      "reports/canonical/**",
+      "reports/repo_health/**",
+      "interop/reports/interop-report.json",
+      "canonicalization/golden/golden-digests.json"
+    ],
+    "verified_via": "git check-ignore -v"
+  },
+  "commands_run": [
+    "git status --short",
+    "find reports/os_isolation_runtime/profiles -type f | sort",
+    "git ls-files reports/os_isolation_runtime/profiles/ | wc -l",
+    "git check-ignore -v reports/os_isolation_runtime/profiles/*.sb",
+    "git check-ignore -v <canonical-evidence-paths>",
+    "make ci PYTHON=.venv/bin/python",
+    "make demo PYTHON=.venv/bin/python",
+    "make verify-drift"
+  ],
+  "gate_results": {
+    "make_ci": {
+      "result": "PASS",
+      "wall_seconds_approx": 8.7,
+      "stages_run": 18,
+      "exit_status": 0
+    },
+    "make_demo": {
+      "result": "PASS",
+      "wall_seconds_approx": 0.4,
+      "overall": "PASS",
+      "fingerprint_match": true
+    },
+    "make_verify_drift": {
+      "target_exists": true,
+      "result": "PASS",
+      "stdout_tail": "OK: regenerated artifacts match committed state."
+    }
+  },
+  "frozen_fingerprints_reproduced": {
+    "vectors_suite_sha256": "sha256:6168d2075931baa98bba763f9cd537142554aae7b26f19e3e93a60de2ee5bb0f",
+    "manifests_suite_sha256": "sha256:74eaaa62271f23172232bda43ba3340543e66c46ba1e2f5e6da18d3447a6ba29",
+    "corpus_sha256": "sha256:c95685bff48c15abc313c462908b05ac309250bc660c2d802ae51af5a8038b09"
+  },
+  "final_git_status_short_before_commit": [
+    " M .gitignore",
+    "?? reports/repo_health/ci_drift_hygiene_v0.1.md",
+    "?? reports/repo_health/ci_drift_hygiene_v0.1.json"
+  ],
+  "normal_ci_still_leaves_untracked_artifacts": false,
+  "known_remaining_hygiene_issues": [
+    {
+      "id": "WO019-RES-1",
+      "summary": "225 already-tracked stale profile files remain in the repo",
+      "detail": "These were committed before WO 019. They contain the same non-deterministic per-process temp paths described in drift_source.non_determinism_cause. .gitignore does not untrack already-tracked files. Fix: future work order should run `git rm --cached reports/os_isolation_runtime/profiles/*.sb`.",
+      "severity": "medium"
+    },
+    {
+      "id": "WO019-RES-2",
+      "summary": "Default PYTHON=python3 in Makefile resolves to system Python without project deps",
+      "detail": "On this machine `python3` is homebrew 3.14.3, which lacks pytest/jsonschema. The pinned deps live in .venv. A fresh-clone contributor running `make ci` fails at the `test` stage with `No module named pytest`. Fix options: (a) Makefile auto-detects .venv/bin/python; (b) README pins the invocation.",
+      "severity": "medium"
+    },
+    {
+      "id": "WO019-RES-3",
+      "summary": "Rust verifier emits 3 dead-code warnings during every CI run",
+      "detail": "Unused: function `canonical_sha256_hex` (src/jcs.rs:56), function `sha256_prefixed` (src/jcs.rs:71), fields `file`/`protocol_version` on struct `Vector` (src/vectors.rs:47,52). Non-blocking.",
+      "severity": "low"
+    }
+  ],
+  "what_is_now_fixed": [
+    "CI no longer leaves untracked profile artifacts in the working tree.",
+    "make verify-drift exits clean.",
+    "Future CI runs cannot pollute drift checks via the sandbox-profile path."
+  ],
+  "what_remains_unresolved": [
+    "225 historical tracked profile files (WO019-RES-1).",
+    "System-python-vs-venv contributor friction (WO019-RES-2).",
+    "Rust verifier dead-code warnings (WO019-RES-3)."
+  ]
+}

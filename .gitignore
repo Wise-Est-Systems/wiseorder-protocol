@@ -54,6 +54,14 @@ dist/
 # and at the top of reports/.
 reports/archive/
 
+# Generated sandbox profiles (WORK ORDER 019). The os_isolation_runtime
+# materializes a sandbox-exec profile per invocation; the file name is a
+# content hash, but the content embeds a per-process random temp path
+# (e.g. /T/osisol-fields-XXXXXXXX, /T/governed-run-XXXXXXXX), so every
+# CI run produces new files. They are not deterministic evidence and
+# must not pollute drift checks.
+reports/os_isolation_runtime/profiles/
+
 # Rust verifier build artifacts (WORK ORDER 012). Sources under rust_verifier/
 # (Cargo.toml, src/, tests/) ARE tracked; the build cache is not.
 rust_verifier/target/
