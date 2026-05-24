@@ -1,0 +1,9 @@
+{
+  "algorithm": "III",
+  "author": "III",
+  "consequence_proof": "3a762a52bb918241fb5484f43b96bde245b9e2abd0f45aefa722c7c30ccf1453",
+  "foundational": "50c018c064cb0c8b2f4561e8543da5316dc4aa7dee5af851738e1f5ae20d0588",
+  "previous_action": "75e813e94e9d3ee60048869a22c2da3743cacd9b653a66f51a1724c5f4fd559a",
+  "sealed_at": "2026-05-23T07:14:37.482327Z",
+  "statement": "WO-D5-SIZE-CAP + WO-CLASS-B-STATE-MACHINE + WO-IDENTITY-MODEL sealed. v0.2.0 now defines: (D6) per-stage/per-artifact preimage size caps (1 MiB / 4 MiB) with PREIMAGE_OVERSIZED reason and enforcement in Python, Rust, Go verifiers; (B4-B7) Class B state-machine transitions with INVALID terminal and prior_status / transition_reason / prior_artifact_hash requirements; (C5-C7) Ed25519 attester identity with kid = SHA-256(pubkey)[:16] base64url, signature binding, and three reason codes (SIGNATURE_VERIFY_FAILED, UNAUTHORIZED_ATTESTER_KID, KID_MISMATCH). Foundational covers the expanded SPEC_LOCK_v0.2.0.md with subsections 2.5, 2.6, 2.7. v0.1.0 untouched."
+}
