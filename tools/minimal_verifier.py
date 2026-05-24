@@ -47,6 +47,11 @@ TELEMETRY_TOKENS = frozenset({"CALIBRATION_IMPROVED", "CALIBRATION_DEGRADED"})
 
 DIGEST_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
 
+# v0.2.0 §2.5 (D6): preimage size caps. Measured in canonical JSON bytes
+# (sort_keys=True, separators=(",", ":"), UTF-8).
+PREIMAGE_PER_STAGE_CAP_BYTES = 1_048_576  # 1 MiB
+PREIMAGE_PER_ARTIFACT_CAP_BYTES = 4_194_304  # 4 MiB
+
 REQUIRED_BY_CLASS = {
     "A": (
         "class", "regime", "claim", "canonicalization", "algorithm",
@@ -275,6 +280,7 @@ def verify_class_d(art: dict) -> Verdict:
     prev_hash: str | None = None
     prev_time = ""
     seen_hashes: dict[str, str] = {}  # hash -> serialized content (for forgery detect)
+    total_canonical_bytes = 0
     for entry in chain:
         if not isinstance(entry, dict):
             return Verdict("CONDUCT_INVALID", ["commit_chain entry malformed"])
@@ -292,6 +298,22 @@ def verify_class_d(art: dict) -> Verdict:
         if content is None or content == {} or content == []:
             return Verdict("CONDUCT_INVALID", [
                 f"stage {stage} preimage content missing or empty (CC1)"
+            ])
+        canonical_content_bytes = len(
+            json.dumps(content, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
+        if canonical_content_bytes > PREIMAGE_PER_STAGE_CAP_BYTES:
+            return Verdict("CONDUCT_INVALID", [
+                f"PREIMAGE_OVERSIZED: stage {stage} canonical content "
+                f"{canonical_content_bytes} bytes exceeds per-stage cap "
+                f"{PREIMAGE_PER_STAGE_CAP_BYTES} (D6)"
+            ])
+        total_canonical_bytes += canonical_content_bytes
+        if total_canonical_bytes > PREIMAGE_PER_ARTIFACT_CAP_BYTES:
+            return Verdict("CONDUCT_INVALID", [
+                f"PREIMAGE_OVERSIZED: artifact canonical preimage total "
+                f"{total_canonical_bytes} bytes exceeds per-artifact cap "
+                f"{PREIMAGE_PER_ARTIFACT_CAP_BYTES} (D6)"
             ])
         depends = entry.get("depends_on", "<absent>")
         if stage == 1:

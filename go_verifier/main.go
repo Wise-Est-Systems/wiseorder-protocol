@@ -4,6 +4,7 @@
 //   verify-vectors   Re-derive verdicts for every file under vectors/*.json.
 //   verify-corpus    Reproduce SHA-256 over canonicalized corpus bytes.
 //   fingerprints     Compute all three v0.1.0 frozen fingerprints.
+//   canonicalize     Canonicalize one JSON file; emit canonical bytes + sha256.
 //
 // Exit codes:
 //   0  every assertion under the chosen subcommand passed
@@ -16,6 +17,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -256,6 +258,48 @@ func cmdFingerprints() int {
 	return 1
 }
 
+// --- canonicalize ----------------------------------------------------------
+
+// cmdCanonicalize reads one JSON file, canonicalizes it via jcs.CanonicalBytes,
+// and prints a single-line JSON report on stdout. Used by tools/triple_sweep.py
+// to diff Python vs Go vs Rust canonical bytes.
+//
+//	output: {"canonical_b64":"...","sha256_hex":"...","length":N}
+func cmdCanonicalize(args []string) int {
+	if len(args) != 1 {
+		fmt.Fprintln(os.Stderr, "usage: go_verifier canonicalize <input.json>")
+		return 2
+	}
+	raw, err := os.ReadFile(args[0])
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error reading", args[0], err)
+		return 2
+	}
+	v, err := jcs.ParseValue(raw)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error parsing", args[0], err)
+		return 2
+	}
+	canonical, err := jcs.CanonicalBytes(v)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error canonicalizing", args[0], err)
+		return 2
+	}
+	report := map[string]interface{}{
+		"canonical_b64": base64.StdEncoding.EncodeToString(canonical),
+		"sha256_hex":    jcs.SHA256Hex(canonical),
+		"length":        len(canonical),
+	}
+	out, err := json.Marshal(report)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error encoding report:", err)
+		return 2
+	}
+	os.Stdout.Write(out)
+	os.Stdout.Write([]byte("\n"))
+	return 0
+}
+
 // --- help / dispatch -------------------------------------------------------
 
 func printHelp() {
@@ -265,10 +309,11 @@ USAGE:
   go_verifier <SUBCOMMAND>
 
 SUBCOMMANDS:
-  verify-vectors   Re-derive verdicts for every vectors/*.json
-  verify-corpus    Reproduce canonicalization corpus digests
-  fingerprints     Compute and compare all three v0.1.0 frozen fingerprints
-  help             This message
+  verify-vectors        Re-derive verdicts for every vectors/*.json
+  verify-corpus         Reproduce canonicalization corpus digests
+  fingerprints          Compute and compare all three v0.1.0 frozen fingerprints
+  canonicalize <file>   Canonicalize one JSON file; emit canonical bytes + sha256
+  help                  This message
 
 INDEPENDENCE:
   This module does not import or shell out to Python or to the Rust verifier
@@ -291,6 +336,8 @@ func main() {
 		os.Exit(cmdVerifyCorpus())
 	case "fingerprints":
 		os.Exit(cmdFingerprints())
+	case "canonicalize":
+		os.Exit(cmdCanonicalize(args[1:]))
 	case "help", "--help", "-h":
 		printHelp()
 		os.Exit(0)

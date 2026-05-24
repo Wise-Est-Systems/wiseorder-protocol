@@ -22,6 +22,10 @@ pub const PROTOCOL_VERSION: &str = "0.1.0";
 pub const CANONICAL_SCHEME: &str = "RFC8785-JCS";
 pub const CANONICAL_ALGORITHM: &str = "SHA-256";
 
+// v0.2.0 §2.5 (D6): preimage size caps. Measured in canonical JSON bytes.
+pub const PREIMAGE_PER_STAGE_CAP_BYTES: usize = 1_048_576; // 1 MiB
+pub const PREIMAGE_PER_ARTIFACT_CAP_BYTES: usize = 4_194_304; // 4 MiB
+
 const TELEMETRY_TOKENS: &[&str] = &["CALIBRATION_IMPROVED", "CALIBRATION_DEGRADED"];
 
 const REQUIRED_A: &[&str] = &[
@@ -494,6 +498,7 @@ fn verify_class_d(input: &Value) -> (String, Vec<String>) {
     let mut prev_time = String::new();
     let mut seen_hash_content: std::collections::HashMap<String, String> =
         std::collections::HashMap::new();
+    let mut total_canonical_bytes: usize = 0;
     for entry in &chain {
         let obj = match entry.as_object() {
             Some(o) => o,
@@ -529,6 +534,30 @@ fn verify_class_d(input: &Value) -> (String, Vec<String>) {
             return (
                 "CONDUCT_INVALID".into(),
                 vec![format!("stage {} preimage content missing or empty (CC1)", stage)],
+            );
+        }
+        // v0.2.0 §2.5 D6: per-stage and per-artifact preimage size caps.
+        let canonical_content_bytes = crate::jcs::canonical_bytes(
+            content.unwrap_or(&Value::Null),
+        )
+        .len();
+        if canonical_content_bytes > PREIMAGE_PER_STAGE_CAP_BYTES {
+            return (
+                "CONDUCT_INVALID".into(),
+                vec![format!(
+                    "PREIMAGE_OVERSIZED: stage {} canonical content {} bytes exceeds per-stage cap {} (D6)",
+                    stage, canonical_content_bytes, PREIMAGE_PER_STAGE_CAP_BYTES
+                )],
+            );
+        }
+        total_canonical_bytes += canonical_content_bytes;
+        if total_canonical_bytes > PREIMAGE_PER_ARTIFACT_CAP_BYTES {
+            return (
+                "CONDUCT_INVALID".into(),
+                vec![format!(
+                    "PREIMAGE_OVERSIZED: artifact canonical preimage total {} bytes exceeds per-artifact cap {} (D6)",
+                    total_canonical_bytes, PREIMAGE_PER_ARTIFACT_CAP_BYTES
+                )],
             );
         }
         let depends_on = obj.get("depends_on");

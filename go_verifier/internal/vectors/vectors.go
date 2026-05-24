@@ -28,6 +28,10 @@ const (
 	ProtocolVersion    = "0.1.0"
 	CanonicalScheme    = "RFC8785-JCS"
 	CanonicalAlgorithm = "SHA-256"
+
+	// v0.2.0 §2.5 (D6): preimage size caps. Measured in canonical JSON bytes.
+	PreimagePerStageCapBytes    = 1_048_576 // 1 MiB
+	PreimagePerArtifactCapBytes = 4_194_304 // 4 MiB
 )
 
 var telemetryTokens = map[string]struct{}{
@@ -496,6 +500,7 @@ func verifyClassD(input map[string]interface{}) (string, []string) {
 	var prevHash string
 	var prevTime string
 	seenHash := map[string]string{} // hash -> canonical(content)
+	var totalCanonicalBytes int = 0
 
 	for _, e := range chain {
 		entry := asObject(e)
@@ -531,6 +536,22 @@ func verifyClassD(input map[string]interface{}) (string, []string) {
 		}
 		if emptyContent {
 			return "CONDUCT_INVALID", []string{fmt.Sprintf("stage %d preimage content missing or empty (CC1)", stage)}
+		}
+		// v0.2.0 §2.5 D6: per-stage and per-artifact preimage size caps.
+		canonicalContentBytes := 0
+		if cb, err := jcs.CanonicalBytes(content); err == nil {
+			canonicalContentBytes = len(cb)
+		}
+		if canonicalContentBytes > PreimagePerStageCapBytes {
+			return "CONDUCT_INVALID", []string{fmt.Sprintf(
+				"PREIMAGE_OVERSIZED: stage %d canonical content %d bytes exceeds per-stage cap %d (D6)",
+				stage, canonicalContentBytes, PreimagePerStageCapBytes)}
+		}
+		totalCanonicalBytes += canonicalContentBytes
+		if totalCanonicalBytes > PreimagePerArtifactCapBytes {
+			return "CONDUCT_INVALID", []string{fmt.Sprintf(
+				"PREIMAGE_OVERSIZED: artifact canonical preimage total %d bytes exceeds per-artifact cap %d (D6)",
+				totalCanonicalBytes, PreimagePerArtifactCapBytes)}
 		}
 		dep, depPresent := entry["depends_on"]
 		if stage == 1 {

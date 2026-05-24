@@ -4,6 +4,7 @@
 //   verify-vectors   Re-derive verdicts for every file under vectors/*.json.
 //   verify-corpus    Reproduce SHA-256 over canonicalized corpus bytes.
 //   fingerprints     Compute all three v0.1.0 frozen fingerprints.
+//   canonicalize     Canonicalize one JSON file; emit canonical bytes + sha256.
 //
 // Exit codes:
 //   0  every assertion under the chosen subcommand passed
@@ -228,10 +229,11 @@ fn print_help() {
            rust_verifier <SUBCOMMAND>\n\
          \n\
          SUBCOMMANDS:\n\
-           verify-vectors   Re-derive verdicts for every vectors/*.json\n\
-           verify-corpus    Reproduce canonicalization corpus digests\n\
-           fingerprints     Compute and compare all three v0.1.0 frozen fingerprints\n\
-           help             This message\n\
+           verify-vectors        Re-derive verdicts for every vectors/*.json\n\
+           verify-corpus         Reproduce canonicalization corpus digests\n\
+           fingerprints          Compute and compare all three v0.1.0 frozen fingerprints\n\
+           canonicalize <file>   Canonicalize one JSON file; emit canonical bytes + sha256\n\
+           help                  This message\n\
          \n\
          INDEPENDENCE:\n\
            This crate does not import or shell out to Python. The classification\n\
@@ -240,12 +242,51 @@ fn print_help() {
     );
 }
 
+// --- canonicalize ----------------------------------------------------------
+
+// cmd_canonicalize reads one JSON file, canonicalizes it via jcs::canonical_bytes,
+// and prints a single-line JSON report on stdout. Used by tools/triple_sweep.py
+// to diff Python vs Go vs Rust canonical bytes.
+//
+//   output: {"canonical_b64":"...","sha256_hex":"...","length":N}
+fn cmd_canonicalize(args: &[String]) -> i32 {
+    use base64::Engine as _;
+    if args.len() != 1 {
+        eprintln!("usage: rust_verifier canonicalize <input.json>");
+        return 2;
+    }
+    let path = std::path::PathBuf::from(&args[0]);
+    let raw = match std::fs::read(&path) {
+        Ok(b) => b,
+        Err(e) => {
+            eprintln!("error reading {}: {}", path.display(), e);
+            return 2;
+        }
+    };
+    let value: serde_json::Value = match serde_json::from_slice(&raw) {
+        Ok(v) => v,
+        Err(e) => {
+            eprintln!("error parsing {}: {}", path.display(), e);
+            return 2;
+        }
+    };
+    let canonical = jcs::canonical_bytes(&value);
+    let report = serde_json::json!({
+        "canonical_b64": base64::engine::general_purpose::STANDARD.encode(&canonical),
+        "sha256_hex": jcs::sha256_hex(&canonical),
+        "length": canonical.len(),
+    });
+    println!("{}", serde_json::to_string(&report).expect("serialize report"));
+    0
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let rc = match args.first().map(|s| s.as_str()).unwrap_or("help") {
         "verify-vectors" => cmd_verify_vectors(),
         "verify-corpus" => cmd_verify_corpus(),
         "fingerprints" => cmd_fingerprints(),
+        "canonicalize" => cmd_canonicalize(&args[1..]),
         "help" | "--help" | "-h" => {
             print_help();
             0
