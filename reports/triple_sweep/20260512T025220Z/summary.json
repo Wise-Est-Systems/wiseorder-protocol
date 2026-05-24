@@ -1,0 +1,73 @@
+{
+  "ts": "20260512T025220Z",
+  "count_requested": 100,
+  "count_processed": 100,
+  "agreements": 67,
+  "disagreements": 33,
+  "errors": 0,
+  "elapsed_seconds": 1.071,
+  "workers": 6,
+  "seed": 12648430,
+  "timeout": 30.0,
+  "tracks": {
+    "python": true,
+    "go": true,
+    "rust": true
+  },
+  "by_generator": {
+    "array_order": {
+      "total": 12,
+      "agreed": 7,
+      "disagreed": 5,
+      "errors": 0
+    },
+    "unicode_string": {
+      "total": 13,
+      "agreed": 8,
+      "disagreed": 5,
+      "errors": 0
+    },
+    "object_unicode_keys": {
+      "total": 13,
+      "agreed": 3,
+      "disagreed": 10,
+      "errors": 0
+    },
+    "number_edge": {
+      "total": 13,
+      "agreed": 11,
+      "disagreed": 2,
+      "errors": 0
+    },
+    "nested": {
+      "total": 12,
+      "agreed": 4,
+      "disagreed": 8,
+      "errors": 0
+    },
+    "mixed_object": {
+      "total": 13,
+      "agreed": 10,
+      "disagreed": 3,
+      "errors": 0
+    },
+    "whitespace_key": {
+      "total": 12,
+      "agreed": 12,
+      "disagreed": 0,
+      "errors": 0
+    },
+    "duplicate_like_keys": {
+      "total": 12,
+      "agreed": 12,
+      "disagreed": 0,
+      "errors": 0
+    }
+  },
+  "halted_thermal": false,
+  "last_thermal_reading": {
+    "ts": "2026-05-12T02:52:26Z",
+    "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded"
+  },
+  "run_dir": "reports/triple_sweep/20260512T025220Z"
+}

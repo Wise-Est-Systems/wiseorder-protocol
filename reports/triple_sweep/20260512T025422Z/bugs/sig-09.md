@@ -1,0 +1,87 @@
+# Disagreement signature 9
+
+**Signature:** `agree:python+rust|outlier:go | longest:go,shortest:python | markers:contains-BOM,contains-C0-control,contains-C1-control,contains-DEL,contains-SMP,contains-U+2028,contains-emoji`
+
+**Count:** 18
+
+**Partition:** agree:python+rust|outlier:go
+
+**Outlier:** go
+
+**Markers:** contains-BOM, contains-C0-control, contains-C1-control, contains-DEL, contains-SMP, contains-U+2028, contains-emoji
+
+**Length pattern:** longest:go,shortest:python
+
+**By generator:**
+  - object_unicode_keys: 13
+  - nested: 3
+  - array_order: 1
+  - unicode_string: 1
+
+## Examples
+
+### Example 1
+
+- generator: `object_unicode_keys`
+- input: `{"𐀀􏿿 ￿Ā</": -552, "﻿": -561, "ÿ\\": 90, "Ā\\\u0007\\\u0000": -295, " ࠀ\"😀&�ࠀ\u001f": -85, "/>\u001f\\�￿\"�": 558}`
+
+Canonical per implementation:
+- **python** (len 135, sha 01063f4229d8827f...):
+
+  ```
+  {"/>\u001f\\�￿\"�":558,"ÿ\\":90,"Ā\\\u0007\\\u0000":-295," ࠀ\"😀&�ࠀ\u001f":-85,"﻿":-561,"𐀀􏿿 ￿Ā</":-552}
+  ```
+- **go** (len 138, sha 1209ec2192520a89...):
+
+  ```
+  {"/>\u001f\\�￿\"�":558,"ÿ\\":90,"Ā\\\u0007\\\u0000":-295,"\u2028ࠀ\"😀&�ࠀ\u001f":-85,"﻿":-561,"𐀀􏿿 ￿Ā</":-552}
+  ```
+- **rust** (len 135, sha 01063f4229d8827f...):
+
+  ```
+  {"/>\u001f\\�￿\"�":558,"ÿ\\":90,"Ā\\\u0007\\\u0000":-295," ࠀ\"😀&�ࠀ\u001f":-85,"﻿":-561,"𐀀􏿿 ￿Ā</":-552}
+  ```
+
+### Example 2
+
+- generator: `object_unicode_keys`
+- input: `{"�😀𐀀﻿􏿿ÿ\"": -937, "/𐀀\"": 277, "߿<\\Āࠀ􏿿": 268, "߿ \u0000 ": -340, "Ā&𐀀": 600, "\"�\u001f﻿ ": 481}`
+
+Canonical per implementation:
+- **python** (len 131, sha 32e6bbebca283bed...):
+
+  ```
+  {"\"�\u001f﻿ ":481,"/𐀀\"":277,"�😀𐀀﻿􏿿ÿ\"":-937,"Ā&𐀀":600,"߿<\\Āࠀ􏿿":268,"߿ \u0000 ":-340}
+  ```
+- **go** (len 134, sha d5bca0cf36343937...):
+
+  ```
+  {"\"�\u001f﻿ ":481,"/𐀀\"":277,"�😀𐀀﻿􏿿ÿ\"":-937,"Ā&𐀀":600,"߿<\\Āࠀ􏿿":268,"߿\u2028\u0000 ":-340}
+  ```
+- **rust** (len 131, sha 32e6bbebca283bed...):
+
+  ```
+  {"\"�\u001f﻿ ":481,"/𐀀\"":277,"�😀𐀀﻿􏿿ÿ\"":-937,"Ā&𐀀":600,"߿<\\Āࠀ􏿿":268,"߿ \u0000 ":-340}
+  ```
+
+### Example 3
+
+- generator: `object_unicode_keys`
+- input: `{"Ā": -483, "\u0007𐀀\"😀": -810, "< <\\� ￿<": -309, "﻿�\\﻿\u0000": 439, "&<😀&Ā �": 239}`
+
+Canonical per implementation:
+- **python** (len 107, sha 717ea5fcccb0e28d...):
+
+  ```
+  {"\u0007𐀀\"😀":-810,"&<😀&Ā �":239,"< <\\� ￿<":-309,"Ā":-483,"﻿�\\﻿\u0000":439}
+  ```
+- **go** (len 110, sha aed0903323e31337...):
+
+  ```
+  {"\u0007𐀀\"😀":-810,"&<😀&Ā �":239,"< <\\�\u2028￿<":-309,"Ā":-483,"﻿�\\﻿\u0000":439}
+  ```
+- **rust** (len 107, sha 717ea5fcccb0e28d...):
+
+  ```
+  {"\u0007𐀀\"😀":-810,"&<😀&Ā �":239,"< <\\� ￿<":-309,"Ā":-483,"﻿�\\﻿\u0000":439}
+  ```
