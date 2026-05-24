@@ -1,0 +1,62 @@
+{
+  "vector_id": "class-b-transition-insufficient-to-supported",
+  "protocol_version": "0.2.0",
+  "class": "B",
+  "description": "A v0.2.0 Class B artifact transitioning from INSUFFICIENT_EVIDENCE to SUPPORTED, where a new affirming source raises the artifact above threshold with no contradicting record, MUST receive SUPPORTED status. The transition MUST declare prior_status, transition_reason, and prior_artifact_hash.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "sources": [
+      {
+        "id": "src-partial-log",
+        "kind": "log",
+        "uri": "file:///var/log/partial.log",
+        "completeness": "truncated"
+      },
+      {
+        "id": "src-tsa-receipt",
+        "kind": "rfc3161_receipt",
+        "uri": "tsa://example/receipt/bbbb"
+      }
+    ],
+    "timestamps": [
+      {"source_id": "src-partial-log", "value": "2026-05-12T09:00:00Z"},
+      {"source_id": "src-tsa-receipt", "value": "2026-05-12T09:30:00Z"}
+    ],
+    "observations": [
+      {"source_id": "src-partial-log", "result": "log truncated before exit code recorded", "supports_claim": null},
+      {"source_id": "src-tsa-receipt", "result": "timestamp_authority_signature_valid", "supports_claim": true}
+    ],
+    "structural_diff": {
+      "byte": {"size_match": true, "digest_match": true}
+    },
+    "prior_status": "INSUFFICIENT_EVIDENCE",
+    "transition_reason": {
+      "code": "NEW_EVIDENCE_REACHED_THRESHOLD",
+      "narrative": "RFC 3161 timestamp receipt arrived after initial sealing; affirms claim and crosses threshold without contradicting prior partial log."
+    },
+    "prior_artifact_hash": "0000000000000000000000000000000000000000000000000000000000000001",
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-12T09:30:01Z"
+    }
+  },
+  "expected_status": "SUPPORTED",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "prior_status",
+    "transition_reason",
+    "prior_artifact_hash",
+    "proof"
+  ],
+  "expected_reasons_contain": [],
+  "why": "SPEC_LOCK_v0.2.0 §2.6.1 row 1: INSUFFICIENT_EVIDENCE → SUPPORTED is allowed when new affirming evidence reaches threshold with no contradiction. Exercises B5 (prior_status + transition_reason declared), B6 (allowed pair), B7 (prior_artifact_hash present)."
+}

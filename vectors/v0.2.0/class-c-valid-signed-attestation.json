@@ -1,0 +1,54 @@
+{
+  "vector_id": "class-c-valid-signed-attestation",
+  "protocol_version": "0.2.0",
+  "class": "C",
+  "description": "A v0.2.0 Class C artifact whose evidence entry carries a real Ed25519 signature, verifying under the declared eligible_attester's pubkey over the canonical body of the evidence entry (signature field excluded), MUST satisfy C5/C6/C7. The keypair is derived from RFC 8032 §7.1 Test-1 seed; the signature is real.",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.2.0",
+      "required_quorum": 1,
+      "eligible_attesters": [
+        {
+          "kid": "If4x36FUomFia_hUBG_SJw",
+          "pubkey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+          "label": "RFC 8032 §7.1 Test-1 keypair"
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "claim_id": "wo-identity-claim-001",
+        "attester_kid": "If4x36FUomFia_hUBG_SJw",
+        "attested_at": "2026-05-23T12:00:00Z",
+        "vote": "approve",
+        "signature": "lgI-gFeDOJxctRkUIULSWEDJ3ZY2ihdIaYJ7CH-qPM6ceVDnypdFMN5wKhoxngygOIPOv_ohRLFDT3d-wk37Cw"
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Consensus reached but execution authorization is separately governed (AG1)."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-23T12:00:01Z"
+    }
+  },
+  "expected_status": "CONSENSUS_VALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "expected_reasons_contain": [],
+  "why": "SPEC_LOCK_v0.2.0 §2.7: real Ed25519 signature verifies under the declared eligible_attester's pubkey. Exercises C5 (signature verifies), C6 (attester_kid matches eligible_attesters[0].kid), C7 (kid equals SHA-256(pubkey)[:16] base64url). Quorum=1 met by one valid signed attestation → CONSENSUS_VALID. AG1 still holds: action_allowed=false."
+}

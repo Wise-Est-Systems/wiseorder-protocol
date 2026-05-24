@@ -1,0 +1,54 @@
+{
+  "vector_id": "class-c-invalid-signature",
+  "protocol_version": "0.2.0",
+  "class": "C",
+  "description": "A v0.2.0 Class C artifact whose evidence entry carries a signature that does NOT verify under the declared attester's pubkey (one byte of the valid signature XOR'd with 0x01) MUST be rejected as INVALID with reason SIGNATURE_VERIFY_FAILED. Same keypair as class-c-valid-signed-attestation; same body; only the signature is mutated.",
+  "input": {
+    "class": "C",
+    "regime": "protocol_bound_consensus",
+    "claim": "this action received the required approvals",
+    "protocol": {
+      "name": "required_reviewer_quorum",
+      "version": "0.2.0",
+      "required_quorum": 1,
+      "eligible_attesters": [
+        {
+          "kid": "If4x36FUomFia_hUBG_SJw",
+          "pubkey": "11qYAYKxCrfVS_7TyWQHOg7hcvPapiMlrwIaaPcHURo",
+          "label": "RFC 8032 §7.1 Test-1 keypair"
+        }
+      ]
+    },
+    "evidence": [
+      {
+        "claim_id": "wo-identity-claim-001",
+        "attester_kid": "If4x36FUomFia_hUBG_SJw",
+        "attested_at": "2026-05-23T12:00:00Z",
+        "vote": "approve",
+        "signature": "lwI-gFeDOJxctRkUIULSWEDJ3ZY2ihdIaYJ7CH-qPM6ceVDnypdFMN5wKhoxngygOIPOv_ohRLFDT3d-wk37Cw"
+      }
+    ],
+    "action_policy": {
+      "action_allowed": false,
+      "action_compelled": false,
+      "reason": "Signature did not verify; consensus invalid."
+    },
+    "proof": {
+      "type": "consensus_process_record",
+      "created_at": "2026-05-23T12:00:01Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "protocol",
+    "evidence",
+    "status",
+    "action_policy",
+    "proof"
+  ],
+  "expected_reasons_contain": ["SIGNATURE_VERIFY_FAILED"],
+  "why": "SPEC_LOCK_v0.2.0 §2.7 C5: the signature byte 0 was flipped (0x96 → 0x97 before base64 encoding). Ed25519 verification MUST fail. Exercises C5 (signature-verify failure detection) and the SIGNATURE_VERIFY_FAILED reason code. Adversarial: this is the bit-flip attack — any verifier that does not actually run Ed25519 verification would accept this artifact, breaking the entire consensus integrity story."
+}

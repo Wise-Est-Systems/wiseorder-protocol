@@ -1,0 +1,53 @@
+{
+  "vector_id": "class-b-transition-conflicted-to-supported",
+  "protocol_version": "0.2.0",
+  "class": "B",
+  "description": "A v0.2.0 Class B artifact transitioning from CONFLICTED to SUPPORTED, where the previously contradicting source was formally retracted (with the retraction preserved as an audit record, not deleted), MUST receive SUPPORTED status.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "sources": [
+      {"id": "src-runtime-log", "kind": "log", "uri": "file:///var/log/runtime.log"},
+      {"id": "src-external-monitor", "kind": "external_monitor", "uri": "https://example/monitor/aaaa", "retracted": true, "retraction_reason": "monitor mis-identified the wrong PID; corrected on re-scan"}
+    ],
+    "timestamps": [
+      {"source_id": "src-runtime-log", "value": "2026-05-06T12:00:00Z"},
+      {"source_id": "src-external-monitor", "value": "2026-05-06T12:00:01Z"}
+    ],
+    "observations": [
+      {"source_id": "src-runtime-log", "result": "exit_code=0", "supports_claim": true},
+      {"source_id": "src-external-monitor", "result": "process_terminated_with_signal=9", "supports_claim": false, "retracted": true}
+    ],
+    "structural_diff": {
+      "byte": {"size_match": true, "digest_match": true}
+    },
+    "prior_status": "CONFLICTED",
+    "transition_reason": {
+      "code": "CONTRADICTING_SOURCE_RETRACTED",
+      "narrative": "External monitor formally retracted its observation after re-scan revealed PID misidentification. Retraction preserved on src-external-monitor; observation not deleted."
+    },
+    "prior_artifact_hash": "0000000000000000000000000000000000000000000000000000000000000002",
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T13:00:00Z"
+    }
+  },
+  "expected_status": "SUPPORTED",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "prior_status",
+    "transition_reason",
+    "prior_artifact_hash",
+    "proof"
+  ],
+  "expected_reasons_contain": [],
+  "why": "SPEC_LOCK_v0.2.0 §2.6.1 row 3: CONFLICTED → SUPPORTED is allowed when the contradicting source is retracted AND the retraction is preserved (B2 extension). The contradicting observation is NOT deleted; it carries 'retracted': true."
+}

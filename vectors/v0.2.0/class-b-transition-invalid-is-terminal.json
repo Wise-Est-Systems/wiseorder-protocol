@@ -1,0 +1,50 @@
+{
+  "vector_id": "class-b-transition-invalid-is-terminal",
+  "protocol_version": "0.2.0",
+  "class": "B",
+  "description": "A v0.2.0 Class B artifact attempting to transition out of INVALID MUST be rejected. INVALID is terminal per invariant B4. The artifact MUST receive INVALID status with reason INVALID_TERMINAL_TRANSITION.",
+  "input": {
+    "class": "B",
+    "regime": "instrumented_empirical_verification",
+    "claim": "this execution occurred with the declared observed result",
+    "sources": [
+      {"id": "src-runtime-log", "kind": "log", "uri": "file:///var/log/runtime.log"}
+    ],
+    "timestamps": [
+      {"source_id": "src-runtime-log", "value": "2026-05-06T12:00:00Z"}
+    ],
+    "observations": [
+      {"source_id": "src-runtime-log", "result": "exit_code=0", "supports_claim": true}
+    ],
+    "structural_diff": {
+      "byte": {"size_match": true, "digest_match": true}
+    },
+    "prior_status": "INVALID",
+    "transition_reason": {
+      "code": "NEW_EVIDENCE_REACHED_THRESHOLD",
+      "narrative": "Attempting to recover from INVALID by re-attesting the artifact with corrected fields."
+    },
+    "prior_artifact_hash": "0000000000000000000000000000000000000000000000000000000000000003",
+    "proof": {
+      "type": "empirical_support_record",
+      "created_at": "2026-05-06T14:00:00Z"
+    }
+  },
+  "expected_status": "INVALID",
+  "expected_artifact_fields": [
+    "class",
+    "regime",
+    "claim",
+    "sources",
+    "timestamps",
+    "observations",
+    "structural_diff",
+    "status",
+    "prior_status",
+    "transition_reason",
+    "prior_artifact_hash",
+    "proof"
+  ],
+  "expected_reasons_contain": ["INVALID_TERMINAL_TRANSITION"],
+  "why": "SPEC_LOCK_v0.2.0 §2.6.1 forbidden rule: any transition out of INVALID is forbidden. Invariant B4 makes INVALID terminal. The artifact MUST be re-issued under a new vector_id; mutating an INVALID artifact is rejected with reason INVALID_TERMINAL_TRANSITION. Adversarial: this vector is the recovery-attack vector — a system that lets INVALID artifacts heal is non-conformant."
+}
