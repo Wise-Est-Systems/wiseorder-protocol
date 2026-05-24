@@ -71,3 +71,8 @@ rust_verifier/Cargo.lock
 # Go verifier build artifacts (WORK ORDER 013). Sources under go_verifier/
 # (go.mod, *.go) ARE tracked; the Go build cache and workspace lock are not.
 go.work.sum
+go_verifier/target/
+
+# Claude Code per-machine state (worktrees, local settings). Not portable
+# and not authoritative — personal workspace, not protocol artifact.
+.claude/
