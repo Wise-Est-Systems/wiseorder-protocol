@@ -309,3 +309,13 @@ archive-reports-dry-run:
 
 ci: no-pseudocode test work-order-parser-check workflow-grammar-check execution-plan-check audit-memory-check governed-run-check governed-run-pipeline-check chain-check conformance interop canonicalization-check minimal-verifier-check replay-diff-check binary-fixture-check sandbox-escape-check rust-verifier-check go-verifier-check
 	@echo "CI: documentation code standard + tooling tests + governed-runtime core (parser + grammar + plan + audit + governed-run self-check + pipeline-integration tests) + v0.2.0 chain (III digest + .win chain primitives + tamper detection) + protocol conformance + interoperability + canonicalization golden + minimal-verifier + replay-diff + binary-fixture + sandbox-escape + rust-verifier + go-verifier (first-party independent tracks; cargo test and go test each cover all 3 frozen fingerprints) all passed."
+
+.PHONY: lint lint-format chain-verify
+lint:
+	$(PYTHON) -m ruff check intellagent_runtime/ tools/ tests/
+
+lint-format:
+	$(PYTHON) -m ruff format --check intellagent_runtime/
+
+chain-verify:
+	@PYTHONPATH="$(CURDIR)" $(PYTHON) -c "from pathlib import Path; from intellagent_runtime.chain import verify_chain; s = verify_chain(Path('chain')); print(f'{s.status} count={s.count} head={s.head}'); raise SystemExit(0 if s.status == 'CHAIN_VALID' else 1)"
