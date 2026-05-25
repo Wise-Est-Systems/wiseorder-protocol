@@ -22,7 +22,24 @@ _NOW_FN: Callable[[], float] = time.time
 
 
 def utcnow_iso8601() -> str:
-    """Return current UTC time as a fixed-format ISO-8601 string.
+    """Return current UTC time as a fixed-format ISO-8601 string (SECOND precision).
+
+    Format: ``%Y-%m-%dT%H:%M:%SZ`` — no fractional seconds.
+
+    Used by: audit memory entries (``sealed_at`` in ``*.entry.json``),
+    refusal records, EpistemicState ``sealed_at``, and timestamps in
+    conformance vectors. These domains share an invariant: timestamps are
+    operator-readable to the second and compared/sorted at that precision.
+
+    NOT used by ``intellagent_runtime.chain._utc_iso``, which intentionally
+    uses MICROSECOND precision because chain triple filenames derive from
+    ``sealed_at`` and require sub-second uniqueness. Do not unify the two
+    functions — the precision difference is load-bearing. Three sealed
+    ``.win`` files on disk encode ``sealed_at`` at microsecond precision;
+    changing that format would change ``consequence_proof`` for future
+    triples and break the verifier compatibility claim.
+
+    See INVARIANT TS-1 in chain.py module docstring.
 
     Honors a clock injected via :func:`set_clock` (used by replay tests).
     """

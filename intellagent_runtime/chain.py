@@ -1,5 +1,21 @@
 """WiseOrder v0.2.0 chain: genesis + triple appending.
 
+INVARIANT TS-1 (timestamp precision):
+  This module uses MICROSECOND precision in ``sealed_at`` (``%H:%M:%S.%fZ``).
+  ``intellagent_runtime.canonical.utcnow_iso8601`` uses SECOND precision.
+  These two formats are NOT to be unified.
+
+  Why microseconds here: chain triple filenames are derived from
+  ``sealed_at`` (see ``append_triple``); two triples sealed in the same
+  second would collide on filename without microsecond differentiation.
+  Audit memory, refusal records, and conformance vectors have no such
+  constraint and use the shorter, operator-readable form.
+
+  Why this is load-bearing: three sealed ``.win`` files on disk encode
+  ``sealed_at`` at microsecond precision. Changing the format would change
+  ``consequence_proof`` for future triples and break the cross-language
+  verifier compatibility claim (Python, Rust, Go all expect this format).
+
 Every artifact in the v0.2.0 chain is a ``.win`` file. Each file is one
 triple. The triple shape (per ``SPEC_LOCK_v0.2.0.md §2.2``):
 
@@ -117,6 +133,11 @@ class ChainStatus:
 
 
 def _utc_iso() -> str:
+    """MICROSECOND-precision UTC timestamp for chain triples.
+
+    See INVARIANT TS-1 in module docstring — not to be unified with
+    ``intellagent_runtime.canonical.utcnow_iso8601`` (which uses seconds).
+    """
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
 
 
