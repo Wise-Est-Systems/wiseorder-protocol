@@ -1,0 +1,196 @@
+{
+  "artifact_count": 37,
+  "artifacts": [
+    {
+      "bytes": 4993,
+      "path": "ARTIFACTS.md",
+      "sha256": "1b10fd4d97bb7df4c4db2c3a3c53136fcfee53c1e6c8f00dbb50553be7bfea16"
+    },
+    {
+      "bytes": 3325,
+      "path": "CONFORMANCE.md",
+      "sha256": "bc5d903933fc2a5417fb1b74d0a91517cdcd4a12e8129a8f1327865a4c5f8ab0"
+    },
+    {
+      "bytes": 5532,
+      "path": "CONTRIBUTING.md",
+      "sha256": "ad19b5b9f1a2794a77f0db84c86480d5ef9710f65fbb0ed72e9660f6517c0718"
+    },
+    {
+      "bytes": 5053,
+      "path": "IMPLEMENTATIONS.md",
+      "sha256": "bba6d3b3d3e52390d1e0f627549b21c5881fe728177078c667949980dde091c6"
+    },
+    {
+      "bytes": 11358,
+      "path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "bytes": 14915,
+      "path": "Makefile",
+      "sha256": "f7b42fa29ad6b55851452e002de81cfe7aa81b2eea98d2d926a03080b781fae8"
+    },
+    {
+      "bytes": 17469,
+      "path": "README.md",
+      "sha256": "47e693c5442fda9a2718dd1c93a6ee4c302d9c6d5d98db2fef72562e983c15de"
+    },
+    {
+      "bytes": 14390,
+      "path": "SPEC.md",
+      "sha256": "fe838ea1167c9593181351691ed3392e8848bcc9f42d6a74440707f357f48de1"
+    },
+    {
+      "bytes": 8174,
+      "path": "SPEC_LOCK_v0.1.md",
+      "sha256": "8c5f646dce1c73afe54c5990d3280e67c7d4be58f5092539bb128f8d11a48bb5"
+    },
+    {
+      "bytes": 17835,
+      "path": "SPEC_LOCK_v0.2.0.md",
+      "sha256": "3fe1e1a8a4f8eb5f39c84a4b710c1254ec0bfd085d70256040807c50ea367cf8"
+    },
+    {
+      "bytes": 3531,
+      "path": "STATUS-REGISTRY.md",
+      "sha256": "b797574d407b1c1cda306002c0092031ae6752a9f015ff9e157b995da202bf13"
+    },
+    {
+      "bytes": 29001,
+      "path": "SYSTEM-MAP-v0.1.md",
+      "sha256": "33fb0d3ad0d9fb9d8307fedd32bff2da5caec3c5aa799555c1da86239d569cd6"
+    },
+    {
+      "bytes": 11794,
+      "path": "TOOLS.md",
+      "sha256": "24d4ec96dafbf26ff707da36cc65e22f4fc5e779414b67d4cd3eb4c3988b0703"
+    },
+    {
+      "bytes": 8313,
+      "path": "audit_bundle_v0.1/INDEX.md",
+      "sha256": "b5c46e8ef350b7dd1755e579efa0ea03f72f4df51c3c9bf5cc3198095082c03a"
+    },
+    {
+      "bytes": 716,
+      "path": "chain/2026-05-11T063325_563754Z-75e813e9.win",
+      "sha256": "0e4dd324288b0db2272ddf68f20a0057419698a7454e58686bcb3e7c78df4979"
+    },
+    {
+      "bytes": 1032,
+      "path": "chain/2026-05-23T071437_482327Z-5964497c.win",
+      "sha256": "bf710ed970e9a7d6a65b93961bb8c6ae711e720e8ba5973802260674bbcc0f94"
+    },
+    {
+      "bytes": 659,
+      "path": "chain/genesis.win",
+      "sha256": "9b2ecd2bf0d92db4d72d6879eaa6ebe2be74c566bbd8605f86a0798cd4d94f24"
+    },
+    {
+      "bytes": 9794,
+      "path": "docs/ADOPTION_REALITY.md",
+      "sha256": "92c9f6a3278228f7b963c8be52270b674f11e3374fc481151602a1a5ea18df30"
+    },
+    {
+      "bytes": 4012,
+      "path": "docs/BRANCH_PROTECTION.md",
+      "sha256": "4f6376fd8c7ce8ad2cde398daca735baa3c595e73fbb5684724245d623188099"
+    },
+    {
+      "bytes": 7707,
+      "path": "docs/CROSS_PLATFORM.md",
+      "sha256": "6946c60667765e8bc49fc3c5c9765e2bb75273a7a05be6bc80fdbc7c90b1cc86"
+    },
+    {
+      "bytes": 9050,
+      "path": "docs/ORG_STRUCTURE.md",
+      "sha256": "40fe27254e99e03f780d78e365d88406da8598119ebb48aa76f7c58f132b6f8d"
+    },
+    {
+      "bytes": 9463,
+      "path": "docs/PRIORITIZED_ACTIONS.md",
+      "sha256": "a0e0b71127a9e79384c0e9f4b9c75fe3b3758afe9ea25d4377f914d69a053cf5"
+    },
+    {
+      "bytes": 4974,
+      "path": "docs/RELEASE_CHECKLIST.md",
+      "sha256": "b161f78ecf92ab10499c79f9c17651fafb8b58f3e88d5e00a6d243a42b515144"
+    },
+    {
+      "bytes": 4365,
+      "path": "docs/RELEASE_PROCESS.md",
+      "sha256": "86609680c0d7a114c6767611e4e3c41cd16e6a14a4ac1d387a91e7c4ee4d9470"
+    },
+    {
+      "bytes": 6792,
+      "path": "docs/RELEASE_VERIFICATION.md",
+      "sha256": "e13c2a9db70eb6990fbe131c6d1d392ad40bfa72c2035a805fafd29f3e6ec0f7"
+    },
+    {
+      "bytes": 14546,
+      "path": "docs/REPO_HYGIENE_REPORT.md",
+      "sha256": "64f18a69cb878742291bdcd1e0d8fafbfc1688f50e18e33a05a673fb7e35e9e3"
+    },
+    {
+      "bytes": 6748,
+      "path": "docs/REVIEWER_GUIDE.md",
+      "sha256": "5285294d12b5b62588fb56b2fc8bc94f0e902b8ac4e3f5925688a2722e9cc1e0"
+    },
+    {
+      "bytes": 4316,
+      "path": "intellagent_runtime/canonical.py",
+      "sha256": "2afbdc81eac1fee0b9d0a431615036061556b6f3d50c612c6a14e2a41c22608b"
+    },
+    {
+      "bytes": 14015,
+      "path": "intellagent_runtime/chain.py",
+      "sha256": "447ff1a304f339c8f6f16154839cf74acaa30ed7887fe7d7b612a12b50c48725"
+    },
+    {
+      "bytes": 7525,
+      "path": "intellagent_runtime/iii.py",
+      "sha256": "4c584099bc2c3fab867bebbd7a3923128184462c4f97280c2b4d50820031ec1c"
+    },
+    {
+      "bytes": 12087,
+      "path": "intellagent_runtime/memory.py",
+      "sha256": "2d26f0bb694ba0e6c4f903267016aa18feb30717c7ed0cc35ef17a393cb6d81c"
+    },
+    {
+      "bytes": 8091,
+      "path": "intellagent_runtime/runtime.py",
+      "sha256": "e87e7da7b12ffd685b64ff6d2ebc6886e22f7d09990b9bb6215b085fd41e012a"
+    },
+    {
+      "bytes": 5999,
+      "path": "intellagent_runtime/state.py",
+      "sha256": "b2f81a57d251799ac095dc5d725252420a1f5e130254542f2361f12b8f18f398"
+    },
+    {
+      "bytes": 1572,
+      "path": "pyproject.toml",
+      "sha256": "3e1342b1b44de80b6c74106dd3cf3a5501d55f4e186d8de54e99b7cf837e7f76"
+    },
+    {
+      "bytes": 3591,
+      "path": "tests/_sigkill_helper.py",
+      "sha256": "a758fe3263b4cf9ec56b395248127c44dd20ac645fd1efb011721fa3aa2e951b"
+    },
+    {
+      "bytes": 10852,
+      "path": "tests/test_apply_transition_crash_safety.py",
+      "sha256": "e711123d6e17b996b0919756825cabbb815212014590edd9ff4218813c7df535"
+    },
+    {
+      "bytes": 5360,
+      "path": "tests/test_sigkill_recovery.py",
+      "sha256": "5c34f74db370cb644411ef277eed3118c74d90bc48fc6801ac42527785be49da"
+    }
+  ],
+  "bundle_id": "AUDIT_BUNDLE_v0.1",
+  "generated_at": "2026-05-25T15:51:27Z",
+  "missing_artifacts": [],
+  "purpose": "curated reviewer entry path; every artifact is at a stable repo path.",
+  "release_candidate": "v0.1.0-rc1",
+  "verification": "run sha256sum -c artifact_manifest.sha256sum (or: python3 -c \"...\" \u2014 see INDEX.md)"
+}
