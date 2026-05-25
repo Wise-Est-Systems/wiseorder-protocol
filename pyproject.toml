@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "WiseOrder Protocol v0.1.0 governance kernel + Intellagent Runtime v0.1 (legitimate transition search engine)."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "see LICENSE" }
+license = { text = "Apache-2.0" }
 keywords = ["wiseorder", "intellagent", "epistemic", "governance", "audit", "kernel"]
 classifiers = [
     "Programming Language :: Python :: 3",
