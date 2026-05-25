@@ -7,11 +7,12 @@ name = "intellagent-wiseorder"
 version = "0.1.0"
 description = "WiseOrder Protocol v0.1.0 governance kernel + Intellagent Runtime v0.1 (legitimate transition search engine)."
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 license = { text = "see LICENSE" }
 keywords = ["wiseorder", "intellagent", "epistemic", "governance", "audit", "kernel"]
 classifiers = [
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries :: Python Modules",
