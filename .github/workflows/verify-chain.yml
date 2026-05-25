@@ -1,0 +1,60 @@
+name: verify-chain
+
+on:
+  push:
+    paths:
+      - "chain/**"
+      - "intellagent_runtime/chain.py"
+      - "intellagent_runtime/iii.py"
+      - ".github/workflows/verify-chain.yml"
+  pull_request:
+
+jobs:
+  verify:
+    name: chain integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install runtime dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Verify chain end-to-end
+        run: |
+          PYTHONPATH="$PWD" python - <<'PY'
+          import sys
+          from pathlib import Path
+          from intellagent_runtime.chain import verify_chain, read_chain, triple_hash
+
+          status = verify_chain(Path("chain"))
+          print(f"status:  {status.status}")
+          print(f"count:   {status.count}")
+          print(f"head:    {status.head}")
+          if status.status != "CHAIN_VALID":
+              print(f"reason:  {status.reason}", file=sys.stderr)
+              raise SystemExit(1)
+
+          for i, t in enumerate(read_chain(Path("chain"))):
+              print(f"  [{i}] hash={triple_hash(t)[:32]}...  sealed_at={t.sealed_at}")
+          print("OK")
+          PY
+
+      - name: Record head hash to job summary
+        run: |
+          PYTHONPATH="$PWD" python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          from pathlib import Path
+          from intellagent_runtime.chain import verify_chain
+          s = verify_chain(Path("chain"))
+          print(f"## chain verification\n")
+          print(f"- status: `{s.status}`")
+          print(f"- triples: `{s.count}`")
+          print(f"- head: `{s.head}`")
+          PY
