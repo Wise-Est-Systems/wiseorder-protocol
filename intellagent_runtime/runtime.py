@@ -75,7 +75,17 @@ def apply_transition(
 ) -> tuple[EpistemicState, AuditEntry]:
     """Apply a (kernel-passed, gate-passed) transition and seal the audit entry.
 
-    Returns the new state and the audit entry that was just appended.
+    Crash-safe commit order (WO-RES-2026-05-24):
+      1. stage audit entry to ``<idx>.entry.json.staging``
+      2. atomically save new state (which references staged entry's hash)
+      3. rename staging file to final ``<idx>.entry.json``
+
+    A crash between (1) and (2) leaves an orphan staging file with no state
+    reference; ``audit.reconcile_pending(state.audit_head_sha256)`` discards
+    it at next startup. A crash between (2) and (3) leaves state pointing at
+    the staged hash; reconciliation finalizes the rename. See memory.py.
+
+    Returns the new state and the audit entry that was just sealed.
     """
     new_object_id: str | None = None
     if transition.object_added is not None:
@@ -88,12 +98,18 @@ def apply_transition(
 
     resulting_state_id = compute_state_id(new_objects)
 
-    entry = audit.append(
+    # (1) stage audit entry (write to .staging path)
+    entry = audit.stage_entry(
         transition=transition,
         prior_state_id=prior_state.state_id,
         resulting_state_id=resulting_state_id,
     )
 
+    # (2) commit state — atomically via write_atomic — with audit_head pointing
+    # at the staged entry. After this line returns, state.json on disk
+    # references the staged hash; the staging file is the only thing whose
+    # presence at the wrong filename distinguishes "crashed mid-commit" from
+    # "fully committed."
     new_state = EpistemicState(
         state_id=resulting_state_id,
         objects=new_objects,
@@ -101,6 +117,9 @@ def apply_transition(
         sealed_at=utcnow_iso8601(),
     )
     store.save(new_state)
+
+    # (3) finalize: rename .staging -> final. Idempotent.
+    audit.finalize_staged(entry)
     return new_state, entry
 
 

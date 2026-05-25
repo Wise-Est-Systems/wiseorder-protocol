@@ -19,7 +19,7 @@ from typing import Any
 from intellagent_runtime import canonical
 from intellagent_runtime.authorization import AuthorizationGate
 from intellagent_runtime.kernel import WiseOrderKernel
-from intellagent_runtime.memory import AuditMemory, ChainCorrupt
+from intellagent_runtime.memory import AuditMemory, ChainCorrupt, StateAuditDivergence
 from intellagent_runtime.refusal import RefusalStore
 from intellagent_runtime.runtime import apply_transition
 from intellagent_runtime.state import StateStore, StateTampered
@@ -145,15 +145,36 @@ def cmd_transition(args: argparse.Namespace) -> int:
         return 1
 
     try:
+        state = store.load()
+    except StateTampered as exc:
+        sys.stderr.write(f"STATE_TAMPERED: {exc}\n")
+        return 2
+
+    # Crash recovery (WO-RES-2026-05-24): resolve any staged audit entries
+    # left behind by a previously interrupted apply_transition, then verify
+    # state and audit head agree, then verify the chain itself.
+    recon = audit.reconcile_pending(state.audit_head_sha256)
+    if recon["finalized"]:
+        sys.stderr.write(
+            f"reconciled {len(recon['finalized'])} staged audit entr"
+            f"{'y' if len(recon['finalized']) == 1 else 'ies'} (crash recovery)\n"
+        )
+    if recon["discarded"]:
+        sys.stderr.write(
+            f"discarded {len(recon['discarded'])} orphan staging file"
+            f"{'' if len(recon['discarded']) == 1 else 's'}\n"
+        )
+
+    try:
         audit.verify_chain()
     except ChainCorrupt as exc:
         sys.stderr.write(f"CHAIN_CORRUPT: {exc}\n")
         return 2
 
     try:
-        state = store.load()
-    except StateTampered as exc:
-        sys.stderr.write(f"STATE_TAMPERED: {exc}\n")
+        audit.verify_state_consistency(state.audit_head_sha256)
+    except StateAuditDivergence as exc:
+        sys.stderr.write(f"STATE_AUDIT_DIVERGENCE: {exc}\n")
         return 2
 
     body = json.loads(queue_path.read_text(encoding="utf-8"))
