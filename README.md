@@ -1,6 +1,6 @@
 # wiseorder-protocol
 
-[![tests](https://github.com/Wise-Est-Systems/systems/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/test.yml)
+[![tests](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/test.yml)
 [![conformance](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/conformance.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/conformance.yml)
 [![verify-chain](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/verify-chain.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/verify-chain.yml)
 [![lint](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/lint.yml)
