@@ -184,6 +184,7 @@ class TransformerProposer:
         self._prompt_dir = prompt_dir or _PROMPT_DIR_DEFAULT
         self._fragments = _load_prompt_fragments(self._prompt_dir)
         self._last_candidates: list[ProposalCandidate] = []
+        self._last_provider_error: str | None = None
 
     # ---- Proposer protocol ---------------------------------------------
 
@@ -217,8 +218,19 @@ class TransformerProposer:
             prompt = self.build_prompt(state, query, rejected, attempt=attempts)
             try:
                 completion = self.provider.generate(prompt, self.params)
-            except Exception:
-                # Provider-side failure for this iteration; treat as no candidates.
+            except (TimeoutError, ConnectionError, OSError) as exc:
+                # Transport-layer failure (network, socket, provider unavailable).
+                # Surface as no candidates for this iteration; let the runtime
+                # loop decide whether to retry or seal a refusal.
+                self._last_provider_error = (
+                    f"provider_transport_error: {type(exc).__name__}: {exc}"
+                )
+                return []
+            except ValueError as exc:
+                # Provider returned a parse-stage error (e.g. invalid response
+                # shape that the provider client itself raised). Distinct from
+                # our own parse step which runs below.
+                self._last_provider_error = f"provider_value_error: {exc}"
                 return []
             transitions, parse_path = self.parse_candidates(completion, state)
             if transitions:

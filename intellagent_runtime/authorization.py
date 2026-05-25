@@ -9,6 +9,7 @@ returns ``authorized=True`` with rationale ``not-action-bearing``).
 from __future__ import annotations
 
 import json
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -42,13 +43,18 @@ class AuthorizationDecision:
 # ---------------------------------------------------------------------------
 
 
-class Policy:
-    """Base class for an authorization-source policy."""
+class Policy(ABC):
+    """Abstract base class for an authorization-source policy.
+
+    Subclasses MUST implement ``evaluate``. The ABC machinery prevents
+    instantiation of the base class itself.
+    """
 
     rationale: str = ""
 
+    @abstractmethod
     def evaluate(self, transition: EpistemicTransition) -> tuple[bool, str]:
-        raise NotImplementedError
+        """Return (authorized, rationale) for an action-bearing transition."""
 
 
 class AlwaysDenyPolicy(Policy):
@@ -82,15 +88,37 @@ class AllowlistPolicy(Policy):
         )
 
 
+class PolicySchemaError(ValueError):
+    """Raised when a policy JSON body fails surface-syntax validation."""
+
+
 def _load_policy(body: dict[str, Any]) -> Policy | None:
+    """Validate and construct a Policy. Returns None for unknown ``kind``;
+    raises PolicySchemaError for known kinds with malformed bodies."""
+    if not isinstance(body, dict):
+        raise PolicySchemaError(f"policy body must be a dict, got {type(body).__name__}")
+
     kind = body.get("kind")
+    rationale = body.get("rationale", "")
+    if not isinstance(rationale, str):
+        raise PolicySchemaError("policy.rationale must be a string")
+
     if kind == "always_deny":
-        return AlwaysDenyPolicy(rationale=str(body.get("rationale", "")))
+        return AlwaysDenyPolicy(rationale=rationale)
+
     if kind == "allowlist":
-        return AllowlistPolicy(
-            allowed=list(body.get("allowed") or []),
-            rationale=str(body.get("rationale", "")),
-        )
+        allowed = body.get("allowed") or []
+        if not isinstance(allowed, list):
+            raise PolicySchemaError("policy.allowed must be a list")
+        for i, entry in enumerate(allowed):
+            if not isinstance(entry, dict):
+                raise PolicySchemaError(f"policy.allowed[{i}] must be a dict, got {type(entry).__name__}")
+            if not isinstance(entry.get("kind"), str) or not entry["kind"]:
+                raise PolicySchemaError(f"policy.allowed[{i}].kind must be a non-empty string")
+            if not isinstance(entry.get("target"), str) or not entry["target"]:
+                raise PolicySchemaError(f"policy.allowed[{i}].target must be a non-empty string")
+        return AllowlistPolicy(allowed=list(allowed), rationale=rationale)
+
     return None
 
 
@@ -107,13 +135,21 @@ class AuthorizationGate:
         self.policies_dir = Path(policies_dir)
 
     def resolve_policy(self, source_id: str) -> Policy | None:
+        """Load and validate the policy file for the given source_id.
+
+        Returns None for "policy file not present" or "unknown policy kind"
+        (both legitimate — caller treats absence as AG2 refusal).
+        Raises :class:`PolicySchemaError` for malformed-but-known policies
+        so a typo in a known policy fails LOUDLY rather than silently
+        denying everything.
+        """
         path = self.policies_dir / f"{source_id}.json"
         if not path.is_file():
             return None
         try:
             body = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            return None
+        except json.JSONDecodeError as exc:
+            raise PolicySchemaError(f"policy {source_id!r} at {path}: invalid JSON: {exc}") from exc
         return _load_policy(body)
 
     def evaluate(

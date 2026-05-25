@@ -76,19 +76,73 @@ class EpistemicTransition:
 
     @classmethod
     def from_dict(cls, body: dict[str, Any]) -> "EpistemicTransition":
-        action = Action.from_dict(body["action"]) if body.get("action") else None
-        auth = Authorization.from_dict(body["authorization"]) if body.get("authorization") else None
+        """Construct from a dict, validating types and value constraints.
+
+        Raises :class:`TransitionSchemaError` if the body is malformed.
+        Validation happens HERE (at load time), not at kernel time, so a typo
+        in ``regime`` cannot bypass kernel checks by being silently coerced.
+        """
+        if not isinstance(body, dict):
+            raise TransitionSchemaError(f"transition body must be a dict, got {type(body).__name__}")
+
+        tid = body.get("transition_id")
+        if not isinstance(tid, str) or not tid:
+            raise TransitionSchemaError("transition_id must be a non-empty string")
+        if "/" in tid or ".." in tid or "\x00" in tid:
+            raise TransitionSchemaError(f"transition_id contains forbidden characters: {tid!r}")
+
+        from_state = body.get("from_state")
+        if not isinstance(from_state, str) or not from_state:
+            raise TransitionSchemaError("from_state must be a non-empty string")
+
+        regime = body.get("regime")
+        if regime not in {"A", "B", "C", "D"}:
+            raise TransitionSchemaError(f"regime must be one of A/B/C/D, got {regime!r}")
+
+        object_added = body.get("object_added")
+        if object_added is not None and not isinstance(object_added, dict):
+            raise TransitionSchemaError("object_added must be a dict or null")
+
+        objects_removed = body.get("objects_removed") or []
+        if not isinstance(objects_removed, list):
+            raise TransitionSchemaError("objects_removed must be a list")
+        for i, oid in enumerate(objects_removed):
+            if not isinstance(oid, str):
+                raise TransitionSchemaError(f"objects_removed[{i}] must be a string, got {type(oid).__name__}")
+
+        action_body = body.get("action")
+        if action_body is not None and not isinstance(action_body, dict):
+            raise TransitionSchemaError("action must be a dict or null")
+        action = Action.from_dict(action_body) if action_body else None
+
+        auth_body = body.get("authorization")
+        if auth_body is not None and not isinstance(auth_body, dict):
+            raise TransitionSchemaError("authorization must be a dict or null")
+        auth = Authorization.from_dict(auth_body) if auth_body else None
+
+        proposer = body.get("proposer", "unknown")
+        if not isinstance(proposer, str):
+            raise TransitionSchemaError("proposer must be a string")
+
+        proposed_at = body.get("proposed_at", "")
+        if not isinstance(proposed_at, str):
+            raise TransitionSchemaError("proposed_at must be a string")
+
         return cls(
-            transition_id=str(body["transition_id"]),
-            from_state=str(body["from_state"]),
-            regime=str(body["regime"]),
-            object_added=body.get("object_added"),
-            objects_removed=list(body.get("objects_removed") or []),
+            transition_id=tid,
+            from_state=from_state,
+            regime=regime,
+            object_added=object_added,
+            objects_removed=list(objects_removed),
             action=action,
             authorization=auth,
-            proposer=str(body.get("proposer", "unknown")),
-            proposed_at=str(body.get("proposed_at", "")),
+            proposer=proposer,
+            proposed_at=proposed_at,
         )
+
+
+class TransitionSchemaError(ValueError):
+    """Raised when a transition body fails surface-syntax validation."""
 
 
 @dataclass
