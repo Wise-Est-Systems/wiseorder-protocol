@@ -1,0 +1,28 @@
+name: verify-stack
+
+on:
+  push:
+    paths:
+      - 'STRUCTURE.md'
+      - 'STACK_ROLE.md'
+      - 'tools/verify_stack.py'
+      - '.github/workflows/verify-stack.yml'
+  pull_request:
+    paths:
+      - 'STRUCTURE.md'
+      - 'STACK_ROLE.md'
+      - 'tools/verify_stack.py'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 13 * * *'  # daily 13:00 UTC — catches drift on other repos
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: verify all canonical STACK_ROLE.md files
+        run: python tools/verify_stack.py
