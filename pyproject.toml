@@ -3,7 +3,7 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "intellagent-wiseorder"
+name = "wiseorder"
 version = "0.1.0"
 description = "WiseOrder — the kernel that governs how an AI's output is allowed to become an action, and seals every decision. One of three peers under Wise.Est Systems."
 readme = "README.md"
