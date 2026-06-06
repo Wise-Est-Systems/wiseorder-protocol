@@ -6,13 +6,15 @@
 [![lint](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/lint.yml/badge.svg?branch=main)](https://github.com/Wise-Est-Systems/wiseorder-protocol/actions/workflows/lint.yml)
 [![python](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue)](pyproject.toml)
 
-> A protocol for classifying claims into verification regimes, governing action with explicit authorization, and sealing the resulting transitions in a hash-chained audit memory that a third party can verify offline.
+> **WiseOrder governs how cognition becomes consequence** — the kernel that decides whether an AI's output is allowed to become an action, and seals every decision. It classifies each claim into a verification regime, runs a separate authorization gate before any action takes effect, and seals the resulting transitions in a hash-chained audit memory you can verify yourself, offline, with no account.
+>
+> One of three peers under Wise.Est Systems. A judgment can never be recorded as a proven fact, and an AI cannot rubber-stamp its own actions.
 
 ---
 
 ## 1. Purpose
 
-`wiseorder-protocol` is the **governance kernel** of the WiseOrder stack. It defines:
+`wiseorder-protocol` is the **kernel that governs how an AI's output is allowed to become an action** — one of three peers under Wise.Est Systems. It defines:
 
 - four artifact classes (A/B/C/D), each with a typed verification regime and a fixed set of status tokens
 - an append-only audit memory that hash-chains every committed transition
@@ -33,10 +35,10 @@
 ## 2. Architecture
 
 ```
-                  reasoning
+                  AI output
                       ↓
               ┌───────────────┐
-              │   WiseOrder   │   ← governance kernel (this repo)
+              │   WiseOrder   │   ← the kernel that governs what becomes an action (this repo)
               └───────────────┘
                       ↓
        ┌────────────────────────────┐
@@ -44,7 +46,7 @@
        └────────────────────────────┘
                       ↓
        ┌────────────────────────────┐
-       │   Winstack    │   WISEATA  │   ← proof substrate (separate repos)
+       │     WIN       │   WISEATA  │   ← proof substrate: seal + verify, then inspect (separate repos)
        └────────────────────────────┘
                       ↓
                   execution systems

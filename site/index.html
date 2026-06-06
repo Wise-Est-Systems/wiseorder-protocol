@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WiseOrder Protocol v0.1.0</title>
-<meta name="description" content="WiseOrder Protocol — governed execution infrastructure: replayable, deterministic, bounded, verifiable.">
+<meta name="description" content="WiseOrder — the kernel that governs how an AI's output is allowed to become an action, and seals every decision. Replayable, deterministic, bounded, verifiable offline.">
 <style>
   :root {
     --fg: #111;
@@ -55,7 +55,7 @@
 <body>
 
 <h1>WiseOrder Protocol v0.1.0</h1>
-<p class="tagline">Governed execution infrastructure for systems where cognition becomes consequence.</p>
+<p class="tagline">WiseOrder governs how cognition becomes consequence — the kernel that decides whether an AI's output is allowed to become an action, and seals every decision. One of three peers under Wise.Est Systems.</p>
 <p class="byline">Built by <strong>Henry Wayne Wise III</strong>, founder of Wise.Est Systems · <a href="./founder.html">read the founder story →</a></p>
 <div class="four">
   <span>Replayable</span>
@@ -64,7 +64,9 @@
   <span>Verifiable</span>
 </div>
 
-<p>WiseOrder is a protocol layer for classifying claims, assigning verification regimes, governing action, and producing auditable epistemic artifacts. It is not a model. It is not a runtime. It is the rules that an implementation MUST satisfy.</p>
+<p>Same input → same bytes → same result, proven three independent ways (Python, Rust, Go). Every transition is sealed in a tamper-evident, fail-closed audit chain you can verify yourself — offline, no server, no account. That is the concrete floor.</p>
+
+<p>The depth: every AI-proposed action is classified by the kind of claim it makes, judged by the right standard for that kind, and must clear a <strong>separate</strong> authorization gate before it takes effect — and a judgment can never be recorded as a proven fact. An AI cannot rubber-stamp its own actions. WiseOrder is not a model and not a network service; it is the rules an implementation MUST satisfy.</p>
 
 <p>This site is informational. The authoritative artifacts are <a href="https://github.com/" rel="noopener">in the repository</a>: the specification, the vector suite, the schemas, the conformance report, and the reference implementation.</p>
 
@@ -119,8 +121,8 @@ make pipeline-run-fixture   # one canonical valid run, end-to-end</pre>
 <h2>Interoperability</h2>
 <p>3 interop fixtures bind declared implementations to vector outputs:</p>
 <ul>
-  <li><code>winstack-class-a-valid-001</code> · Winstack · Class A</li>
-  <li><code>winstack-class-b-valid-001</code> · Winstack · Class B</li>
+  <li><code>winstack-class-a-valid-001</code> · WIN · Class A</li>
+  <li><code>winstack-class-b-valid-001</code> · WIN · Class B</li>
   <li><code>wiseata-class-b-valid-001</code> · WISEATA · Class B</li>
 </ul>
 <p>All implementations declared so far are first-party. External validation requires an independent implementation. See <a href="../docs/release/IMPLEMENTATION_TRACKER.md"><code>docs/release/IMPLEMENTATION_TRACKER.md</code></a>.</p>

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "intellagent-wiseorder"
 version = "0.1.0"
-description = "WiseOrder Protocol v0.1.0 governance kernel + Intellagent Runtime v0.1 (legitimate transition search engine)."
+description = "WiseOrder — the kernel that governs how an AI's output is allowed to become an action, and seals every decision. One of three peers under Wise.Est Systems."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
